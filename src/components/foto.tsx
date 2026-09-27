@@ -5,38 +5,45 @@ type Props = {
   descricao: string;
   src?: string;
   className?: string;
-  /** Onde fica o aviso: no centro, ou no alto quando há texto por cima da foto */
-  aviso?: "centro" | "topo" | "direita";
+  /** `ceu` para os painéis grandes com texto branco por cima */
+  tom?: "claro" | "ceu";
+  /** Onde fica o aviso do que fotografar */
+  aviso?: "centro" | "baixo" | "canto" | "nenhum";
 };
 
 /**
- * Espaço de foto. Sem `src`, mostra um aviso do que falta fotografar, nas
- * cores da marca, para o cliente saber exatamente o que mandar.
+ * Espaço de foto. Sem `src`, mostra o que falta fotografar, para o cliente
+ * saber exatamente o que mandar.
  *
  * Quando a foto real chegar: medir a proporção dela e ajustar o card à foto
  * (nunca cortar pessoa nem esticar).
  */
 const AVISO = {
   centro: "items-center",
-  topo: "items-start pt-10",
-  // Hero: alto no celular (o texto fica embaixo), lado direito no desktop
-  direita: "items-start pt-10 md:items-center md:justify-end md:pr-[12%] md:pt-0",
+  baixo: "items-end pb-[18%]",
+  // Painéis com texto e card por cima: o aviso vai para o canto de baixo
+  canto: "items-end justify-end p-4 [&>div]:items-end [&>div]:text-right",
+  // Hero: o texto do aviso competia com o título; fica só o céu
+  nenhum: "items-center [&>div]:hidden",
 };
 
-export default function Foto({ descricao, src, className = "", aviso = "centro" }: Props) {
+export default function Foto({ descricao, src, className = "", tom = "claro", aviso = "centro" }: Props) {
   if (src) {
     return <img src={src} alt={descricao} loading="lazy" decoding="async" className={`h-full w-full object-cover ${className}`} />;
   }
+  const ceu = tom === "ceu";
   return (
     <div
       role="img"
       aria-label={`Espaço para foto: ${descricao}`}
-      className={`flex h-full w-full justify-center ${AVISO[aviso]} bg-[linear-gradient(135deg,#CDEEF2_0%,#E7F4EE_55%,#F4EBC0_100%)] ${className}`}
+      className={`flex h-full w-full justify-center ${AVISO[aviso]} ${
+        ceu ? "bg-ceu text-white/75" : "bg-[linear-gradient(135deg,#DDF1F4_0%,#EEF5F1_55%,#F6EFCB_100%)] text-lagoa-forte/80"
+      } ${className}`}
     >
-      <div className="flex max-w-[16rem] flex-col items-center gap-2 px-4 text-center text-lagoa-forte/80">
-        <Camera aria-hidden className="h-6 w-6" strokeWidth={1.5} />
-        <span className="text-[10px] font-medium uppercase tracking-[0.25em]">Foto</span>
-        <span className="text-xs font-normal normal-case tracking-normal">{descricao}</span>
+      <div className="flex max-w-[15rem] flex-col items-center gap-1.5 px-4 text-center">
+        <Camera aria-hidden className="h-5 w-5" strokeWidth={1.5} />
+        <span className="font-mono text-[10px] uppercase tracking-[0.15em]">Foto</span>
+        <span className="text-xs">{descricao}</span>
       </div>
     </div>
   );

@@ -1,6 +1,5 @@
 import Navbar from "./components/navbar";
 import Hero from "./components/hero";
-import VentoAgora from "./components/vento-agora";
 import Categorias from "./components/categorias";
 import Produtos from "./components/produtos";
 import PorQueTs from "./components/por-que-ts";
@@ -14,10 +13,9 @@ export default function App() {
       <Navbar />
       <main>
         <Hero />
-        <VentoAgora />
         <Categorias />
-        <Produtos />
         <PorQueTs />
+        <Produtos />
         <Localizacao />
       </main>
       <Rodape />

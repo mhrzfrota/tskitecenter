@@ -17,16 +17,16 @@ const pontoCardeal = (graus: number) => PONTOS[Math.round(graus / 22.5) % 16];
  * referência geral de kite; FALTA validar com o instrutor da escola.
  */
 function veredito(nos: number) {
-  if (nos < 12) return "Vento fraco para velejar agora";
-  if (nos <= 28) return "Vento bom para velejar";
-  return "Vento forte, só para quem já veleja";
+  if (nos < 12) return "Vento fraco agora";
+  if (nos <= 28) return "Bom para velejar";
+  return "Forte, só para quem já veleja";
 }
 
 /**
  * Vento do Cumbuco em tempo real pelo Open-Meteo: gratuito, sem chave e
- * já devolve em nós. É o embrião da futura tela de previsão.
+ * já devolve em nós. É o embrião da futura página de previsão.
  */
-export default function VentoAgora() {
+function useVento() {
   const [leitura, setLeitura] = useState<Leitura | null>(null);
   const [falhou, setFalhou] = useState(false);
 
@@ -49,45 +49,43 @@ export default function VentoAgora() {
     return () => controle.abort();
   }, []);
 
-  // Faixa logo abaixo do hero: o embrião da futura página de previsão
-  return (
-    <section id="vento" aria-live="polite" className="border-b border-mar/10 bg-white">
-      <div className="shell flex flex-col gap-4 py-6 md:flex-row md:items-center md:justify-between md:gap-8">
-        <div className="flex items-center gap-3">
-          <span className={`h-2 w-2 rounded-full ${leitura ? "animate-pulse bg-lagoa" : "bg-maré/40"}`} />
-          <p className="eyebrow">Cumbuco agora</p>
-        </div>
+  return { leitura, falhou };
+}
 
+/** Bloco de vento para a faixa de vidro do hero (texto branco). */
+export default function VentoAgora() {
+  const { leitura, falhou } = useVento();
+
+  return (
+    <div id="vento" aria-live="polite" className="flex items-center gap-4">
+      <div>
+        <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-white/80">
+          <span className={`h-1.5 w-1.5 rounded-full ${leitura ? "animate-pulse bg-sol" : "bg-white/40"}`} />
+          Cumbuco agora
+        </p>
         {leitura ? (
-          <>
-            <div className="flex items-center gap-6">
-              <p className="flex items-baseline gap-2">
-                <span className="font-mono text-4xl font-semibold leading-none">{leitura.nos}</span>
-                <span className="font-mono text-sm">nós</span>
-              </p>
-              <p className="text-sm text-maré">rajadas de {leitura.rajada}</p>
-              <p className="flex items-center gap-2 text-sm text-maré">
-                {/* A seta aponta para onde o vento vai, não de onde vem */}
-                <ArrowUp
-                  aria-hidden
-                  className="h-5 w-5 text-lagoa-forte"
-                  style={{ transform: `rotate(${leitura.direcao + 180}deg)` }}
-                  strokeWidth={2.25}
-                />
-                de {pontoCardeal(leitura.direcao)}
-              </p>
-            </div>
-            <div className="md:text-right">
-              <p className="text-sm font-medium uppercase tracking-[0.15em]">{veredito(leitura.nos)}</p>
-              <p className="mt-1 font-mono text-[10px] text-maré">Open-Meteo, leitura das {leitura.hora}</p>
-            </div>
-          </>
+          <p className="mt-1 flex items-center gap-2 text-sm text-white">
+            <span className="text-2xl font-medium tracking-[-0.04em]">{leitura.nos}</span>
+            <span>nós · rajadas {leitura.rajada}</span>
+            {/* A seta aponta para onde o vento vai, não de onde vem */}
+            <ArrowUp
+              aria-label={`de ${pontoCardeal(leitura.direcao)}`}
+              className="h-4 w-4 text-sol"
+              style={{ transform: `rotate(${leitura.direcao + 180}deg)` }}
+              strokeWidth={2.5}
+            />
+          </p>
         ) : falhou ? (
-          <p className="text-sm text-maré">A leitura do vento não carregou agora. A temporada forte vai de julho a janeiro.</p>
+          <p className="mt-1 text-sm text-white/80">Temporada forte de julho a janeiro</p>
         ) : (
-          <div className="h-9 w-64 animate-pulse bg-mar/10" aria-label="Lendo o vento" />
+          <div className="mt-1.5 h-6 w-40 animate-pulse rounded-full bg-white/20" aria-label="Lendo o vento" />
         )}
       </div>
-    </section>
+      {leitura && (
+        <span className="hidden rounded-full bg-white/15 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-white lg:inline">
+          {veredito(leitura.nos)}
+        </span>
+      )}
+    </div>
   );
 }

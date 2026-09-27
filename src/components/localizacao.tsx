@@ -1,63 +1,59 @@
-import { ESCOLA, linkWhatsApp } from "@/marca";
+import { linkWhatsApp } from "@/marca";
+import Botao from "./botao";
 import Foto from "./foto";
 
 const BUSCA_MAPA = encodeURIComponent("Outro Beach Club, Av. Des. Jurema, 56, Cumbuco, Caucaia - CE");
 
+/** Painel de chamada da referência: foto de fundo arredondada, texto à esquerda e um card flutuando à direita. */
 export default function Localizacao() {
   return (
-    <section id="localizacao" className="bg-espuma py-16 sm:py-24">
-      <div className="shell grid items-center gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
-        <div>
-          <p className="eyebrow">Localização</p>
-          <h2 className="titulo-secao mt-4">
-            Estamos no <strong>Outro Beach Club</strong>
-          </h2>
-          <p className="mt-6 max-w-lg leading-relaxed tracking-normal text-maré">
-            Nossa base fica na beira da Praia do Cumbuco, com gramado para montar o kite, estacionamento,
-            chuveiros e espaço para a família passar o dia.
-          </p>
-
-          <div className="mt-8 grid gap-6 sm:grid-cols-2">
-            <div>
-              <p className="eyebrow text-[10px]">Endereço</p>
-              <p className="mt-2 leading-relaxed tracking-normal">
-                Av. Des. Jurema, 56
-                <br />
-                Praia do Cumbuco, Caucaia (CE)
-              </p>
-            </div>
-            <div>
-              <p className="eyebrow text-[10px]">Temporada</p>
-              <p className="mt-2 leading-relaxed tracking-normal">Vento forte de julho a janeiro</p>
-            </div>
-          </div>
-
-          <div className="mt-10 flex flex-wrap gap-3">
-            <a href={`https://www.google.com/maps?q=${BUSCA_MAPA}`} target="_blank" rel="noopener noreferrer" className="btn-primario">
-              Abrir no mapa
-            </a>
-            <a href={linkWhatsApp("Olá! Vim pelo site da TS Kite Center.")} target="_blank" rel="noopener noreferrer" className="btn-contorno">
-              Falar com a equipe
-            </a>
-          </div>
+    <section id="localizacao" className="p-2 sm:p-3">
+      <div className="relative isolate overflow-hidden rounded-painel">
+        <div className="absolute inset-0 -z-10">
+          <Foto tom="ceu" aviso="canto" descricao="Outro Beach Club visto da praia" />
         </div>
+        <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(6,34,43,0.45)_0%,rgba(6,34,43,0.1)_60%)]" />
 
-        <div className="bg-white shadow-[0_24px_48px_-24px_rgba(6,34,43,0.3)]">
-          <div className="grid grid-cols-[1fr_0.6fr]">
+        <div className="shell grid items-center gap-10 py-14 sm:py-20 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
+          <div className="text-white">
+            <p className="rotulo">Onde estamos</p>
+            <h2 className="titulo mt-5 text-[2.1rem] sm:text-5xl">
+              No Outro Beach Club, <span className="suave">na beira da praia</span>
+            </h2>
+            <p className="mt-5 max-w-md leading-relaxed text-white/90">
+              Gramado para montar o kite, estacionamento, chuveiros e espaço para a família passar o dia.
+              Av. Des. Jurema, 56, Praia do Cumbuco, Caucaia (CE).
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Botao href={`https://www.google.com/maps?q=${BUSCA_MAPA}`} externo>
+                Abrir no mapa
+              </Botao>
+              <a
+                href={linkWhatsApp("Olá! Vim pelo site da TS Kite Center.")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-12 items-center rounded-full bg-white/20 px-5 font-mono text-[13px] font-medium uppercase tracking-[0.12em] text-white backdrop-blur-md transition-colors hover:bg-white/30"
+              >
+                Falar com a equipe
+              </a>
+            </div>
+          </div>
+
+          <div className="rounded-3xl bg-white p-2 shadow-[0_30px_60px_-24px_rgba(6,34,43,0.5)] sm:p-3">
             <iframe
               src={`https://www.google.com/maps?q=${BUSCA_MAPA}&output=embed`}
-              title={`Mapa: ${ESCOLA.nome} no Outro Beach Club`}
+              title="Mapa: TS Kite Center no Outro Beach Club"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              className="aspect-[4/5] h-full w-full border-0"
+              className="aspect-[4/3] w-full rounded-2xl border-0 bg-bandeja"
             />
-            <div className="hidden sm:block">
-              <Foto descricao="Fachada ou gramado do Outro Beach Club" />
+            <div className="flex items-center justify-between px-3 pb-2 pt-4">
+              <div>
+                <p className="font-medium tracking-[-0.02em]">TS Kite Center</p>
+                <p className="text-sm text-maré">Cumbuco, Caucaia (CE)</p>
+              </div>
+              <span className="rounded-full bg-bandeja px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.1em]">Jul–Jan</span>
             </div>
-          </div>
-          <div className="px-6 py-5">
-            <p className="text-xs font-medium uppercase tracking-[0.3em]">TS Kite Center</p>
-            <p className="mt-1 text-sm tracking-normal text-maré">Outro Beach Club · Cumbuco, Caucaia (CE)</p>
           </div>
         </div>
       </div>

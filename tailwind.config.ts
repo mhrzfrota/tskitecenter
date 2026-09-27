@@ -1,49 +1,42 @@
 import type { Config } from "tailwindcss";
 
 /**
- * Paleta da TS Kite Center.
+ * Paleta da TS Kite Center, no estilo minimalista da referência Aeline.
  *
- * As duas cores de marca saem da própria logo, que é um degradê do amarelo
- * ao azul-piscina: o sol do Cumbuco e a água da lagoa. O fundo escuro não é
- * preto, é o azul fundo do mar no fim da tarde, para que o amarelo e o
- * turquesa pareçam luz e não neon.
+ * A referência usa quase só branco, cinzas claros e um acento vivo. Aqui o
+ * acento é o amarelo da logo (`sol`) e o escuro é o azul fundo do mar, não
+ * o preto. O turquesa entra pouco: ícones secundários e o céu das fotos.
  */
 const config: Config = {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        // Superfícies: mar fundo (escuro), espuma (claro)
         mar: { DEFAULT: "#06222B", 2: "#0B3440" },
-        espuma: "#EEF7F7",
-        // As duas cores da logo
         sol: "#E4C73D",
         lagoa: {
           DEFAULT: "#0FA3B8",
-          /**
-           * O turquesa da logo com texto branco por cima dá só 3,0 de
-           * contraste. Este é o mesmo tom mais fechado (5,1 com branco,
-           * 4,7 sobre a espuma): serve para botão e para texto em fundo claro.
-           */
+          // Turquesa com texto branco dá 3,0; este dá 5,1
           forte: "#08798A",
         },
-        // Texto secundário: `bruma` em fundo escuro (7,9), `maré` em fundo claro (5,3)
+        // Cinzas levemente frios, para conversar com o mar
+        bandeja: "#EFF3F3", // fundo que agrupa os cards
+        pilula: "#E4EBEB", // botão secundário
+        "maré": "#56676B", // texto secundário (5,6 sobre branco)
         bruma: "#9DB8BE",
-        "maré": "#4E6A70",
+        espuma: "#EEF7F7",
       },
       fontFamily: {
-        /**
-         * Padrão herdado do MG Aldeota: Roboto leve no corpo e títulos em
-         * caixa alta bem espaçada. A marca da TS entra no Archivo dos títulos
-         * e no itálico pesado da palavra de destaque, como o "TS" da logo.
-         */
-        display: ["Archivo", "ui-sans-serif", "system-ui", "sans-serif"],
-        sans: ["Roboto", "ui-sans-serif", "system-ui", "sans-serif"],
-        // Leitura de vento: número em fonte de instrumento
-        mono: ["'JetBrains Mono'", "ui-monospace", "monospace"],
+        display: ["'Plus Jakarta Sans'", "ui-sans-serif", "system-ui", "sans-serif"],
+        sans: ["'Plus Jakarta Sans'", "ui-sans-serif", "system-ui", "sans-serif"],
+        mono: ["'Geist Mono'", "ui-monospace", "monospace"],
+      },
+      borderRadius: {
+        painel: "28px",
       },
       backgroundImage: {
         marca: "linear-gradient(100deg, #E4C73D 0%, #7EAE89 45%, #0FA3B8 100%)",
+        ceu: "linear-gradient(180deg, #0A6A7C 0%, #1592A6 45%, #7FCFDA 100%)",
       },
     },
   },

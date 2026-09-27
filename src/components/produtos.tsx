@@ -1,10 +1,12 @@
 import { ESCOLA, linkWhatsApp } from "@/marca";
+import Botao from "./botao";
+import Cabecalho from "./cabecalho";
 import Foto from "./foto";
 
 type Produto = { categoria: string; nome: string; preco?: string; foto: string; src?: string };
 
 /**
- * Vitrine da loja: duas fileiras de três.
+ * Vitrine da loja: duas fileiras de três, na bandeja cinza.
  *
  * FALTA: produtos reais, fotos e preços da @tskiteshop_cumbuco. Os itens
  * abaixo são só a estrutura, com as categorias típicas de uma loja de kite.
@@ -21,48 +23,42 @@ const PRODUTOS: Produto[] = [
 
 export default function Produtos() {
   return (
-    <section id="loja" className="bg-espuma py-16 sm:py-24">
+    <section id="loja" className="py-20 sm:py-28">
       <div className="shell">
-        <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="eyebrow">TS Kite Shop</p>
-            <h2 className="titulo-secao mt-4">
-              Equipamentos <strong>da loja</strong>
-            </h2>
-          </div>
-          <p className="max-w-sm leading-relaxed tracking-normal text-maré">
-            Equipamento de ponta, com a parceria North Kiteboarding e quem entende do assunto para indicar.
-          </p>
-        </div>
+        <Cabecalho rotulo="TS Kite Shop" apoio="Parceria North Kiteboarding, com quem veleja todo dia para indicar o equipamento certo.">
+          Equipamento de ponta <span className="suave">para a sua sessão</span>
+        </Cabecalho>
 
-        <ul className="mt-12 grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-3 lg:gap-x-8">
+        <ul className="mx-auto mt-14 grid max-w-5xl grid-cols-2 gap-2 rounded-painel bg-bandeja p-2 sm:gap-3 sm:p-3 lg:grid-cols-3">
           {PRODUTOS.map((p) => (
-            <li key={p.nome} className="group flex flex-col">
-              <div className="aspect-square overflow-hidden bg-white">
+            <li key={p.nome} className="group flex flex-col rounded-3xl bg-white p-2 sm:p-3">
+              <div className="aspect-square overflow-hidden rounded-2xl">
                 <div className="h-full w-full transition-transform duration-500 group-hover:scale-[1.03]">
                   <Foto descricao={p.foto} src={p.src} />
                 </div>
               </div>
-              <p className="eyebrow mt-4 text-[10px]">{p.categoria}</p>
-              <h3 className="mt-1.5 text-base font-normal tracking-normal sm:text-lg">{p.nome}</h3>
-              <p className="mt-1 text-sm font-medium tracking-normal text-lagoa-forte">{p.preco ?? "Sob consulta"}</p>
-              <a
-                href={linkWhatsApp(`Olá! Tenho interesse no produto: ${p.nome}.`)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-3 self-start border-b border-mar/40 pb-0.5 text-[11px] font-medium uppercase tracking-[0.25em] transition-colors hover:border-lagoa-forte hover:text-lagoa-forte"
-              >
-                Consultar
-              </a>
+              <div className="flex flex-1 flex-col px-2 pb-2 pt-4 sm:px-3 sm:pb-3">
+                <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-maré">{p.categoria}</p>
+                <h3 className="mt-1 text-lg font-medium tracking-[-0.03em] sm:text-xl">{p.nome}</h3>
+                <p className="mt-0.5 text-sm text-maré">{p.preco ?? "Sob consulta"}</p>
+                <a
+                  href={linkWhatsApp(`Olá! Tenho interesse no produto: ${p.nome}.`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-flex h-10 items-center self-start rounded-full bg-pilula px-4 font-mono text-[12px] font-medium uppercase tracking-[0.12em] transition-colors hover:bg-[#D8E2E2]"
+                >
+                  Consultar
+                </a>
+              </div>
             </li>
           ))}
         </ul>
 
-        <div className="mt-14 flex justify-center">
+        <div className="mt-10 flex justify-center">
           {/* FALTA: trocar pela página /loja quando existir */}
-          <a href={ESCOLA.loja} target="_blank" rel="noopener noreferrer" className="btn-primario">
+          <Botao href={ESCOLA.loja} externo variante="mar">
             Ver todos os produtos
-          </a>
+          </Botao>
         </div>
       </div>
     </section>
