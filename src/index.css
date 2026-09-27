@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-espuma font-sans text-mar antialiased;
+  }
+  :focus-visible {
+    @apply outline outline-2 outline-offset-4 outline-sol;
+  }
+}
+
+@layer components {
+  /* O título da marca: Archivo no máximo da largura, itálico e pesado, como o "TS" da logo */
+  .titulo {
+    font-family: theme("fontFamily.display");
+    font-stretch: 125%;
+    font-style: italic;
+    font-weight: 850;
+    letter-spacing: -0.02em;
+    line-height: 0.92;
+  }
+  .rotulo {
+    @apply font-mono text-[11px] uppercase tracking-[0.18em];
+  }
+  .texto-marca {
+    @apply bg-marca bg-clip-text text-transparent;
+  }
+}
+
+/* Linhas de vento: correm da direita para a esquerda porque o vento no
+   Cumbuco vem de leste (ESE), então empurra tudo para oeste. */
+@keyframes sopro {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -1400; }
+}
+.linha-vento {
+  animation: sopro linear infinite;
+}
+
+@keyframes entrar {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+.entrar {
+  animation: entrar 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .linha-vento, .entrar { animation: none; }
+}
