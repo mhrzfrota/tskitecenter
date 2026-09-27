@@ -49,53 +49,45 @@ export default function VentoAgora() {
     return () => controle.abort();
   }, []);
 
+  // Faixa logo abaixo do hero: o embrião da futura página de previsão
   return (
-    <div
-      aria-live="polite"
-      className="w-full rounded-2xl border border-white/10 bg-mar-2/70 p-5 backdrop-blur-md sm:w-80"
-    >
-      <div className="flex items-center justify-between">
-        <span className="rotulo text-bruma">Cumbuco agora</span>
-        <span className="flex items-center gap-1.5 text-[11px] font-mono text-bruma">
-          <span className={`h-1.5 w-1.5 rounded-full ${leitura ? "bg-lagoa animate-pulse" : "bg-bruma/50"}`} />
-          ao vivo
-        </span>
-      </div>
-
-      {leitura ? (
-        <>
-          <div className="mt-4 flex items-end gap-4">
-            <p className="font-mono text-6xl font-semibold leading-none text-white">{leitura.nos}</p>
-            <div className="pb-1">
-              <p className="font-mono text-sm text-white">nós</p>
-              <p className="text-xs text-bruma">rajadas de {leitura.rajada}</p>
-            </div>
-            {/* A seta aponta para onde o vento vai, não de onde vem */}
-            <ArrowUp
-              aria-hidden
-              className="ml-auto h-10 w-10 text-sol transition-transform duration-700"
-              style={{ transform: `rotate(${leitura.direcao + 180}deg)` }}
-              strokeWidth={2.25}
-            />
-          </div>
-          <p className="mt-3 text-sm text-bruma">
-            Soprando de <span className="text-white">{pontoCardeal(leitura.direcao)}</span>
-          </p>
-          <p className="mt-4 border-t border-white/10 pt-3 text-sm font-semibold text-white">
-            {veredito(leitura.nos)}
-          </p>
-          <p className="mt-1 font-mono text-[10px] text-bruma/80">Open-Meteo, leitura das {leitura.hora}</p>
-        </>
-      ) : falhou ? (
-        <p className="mt-4 text-sm leading-relaxed text-bruma">
-          A leitura do vento não carregou agora. A temporada forte vai de julho a janeiro.
-        </p>
-      ) : (
-        <div className="mt-4 space-y-2" aria-label="Lendo o vento">
-          <div className="h-14 w-32 animate-pulse rounded-lg bg-white/10" />
-          <div className="h-4 w-40 animate-pulse rounded bg-white/10" />
+    <section id="vento" aria-live="polite" className="border-b border-mar/10 bg-white">
+      <div className="shell flex flex-col gap-4 py-6 md:flex-row md:items-center md:justify-between md:gap-8">
+        <div className="flex items-center gap-3">
+          <span className={`h-2 w-2 rounded-full ${leitura ? "animate-pulse bg-lagoa" : "bg-maré/40"}`} />
+          <p className="eyebrow">Cumbuco agora</p>
         </div>
-      )}
-    </div>
+
+        {leitura ? (
+          <>
+            <div className="flex items-center gap-6">
+              <p className="flex items-baseline gap-2">
+                <span className="font-mono text-4xl font-semibold leading-none">{leitura.nos}</span>
+                <span className="font-mono text-sm">nós</span>
+              </p>
+              <p className="text-sm text-maré">rajadas de {leitura.rajada}</p>
+              <p className="flex items-center gap-2 text-sm text-maré">
+                {/* A seta aponta para onde o vento vai, não de onde vem */}
+                <ArrowUp
+                  aria-hidden
+                  className="h-5 w-5 text-lagoa-forte"
+                  style={{ transform: `rotate(${leitura.direcao + 180}deg)` }}
+                  strokeWidth={2.25}
+                />
+                de {pontoCardeal(leitura.direcao)}
+              </p>
+            </div>
+            <div className="md:text-right">
+              <p className="text-sm font-medium uppercase tracking-[0.15em]">{veredito(leitura.nos)}</p>
+              <p className="mt-1 font-mono text-[10px] text-maré">Open-Meteo, leitura das {leitura.hora}</p>
+            </div>
+          </>
+        ) : falhou ? (
+          <p className="text-sm text-maré">A leitura do vento não carregou agora. A temporada forte vai de julho a janeiro.</p>
+        ) : (
+          <div className="h-9 w-64 animate-pulse bg-mar/10" aria-label="Lendo o vento" />
+        )}
+      </div>
+    </section>
   );
 }

@@ -32,9 +32,13 @@ const config: Config = {
         "maré": "#4E6A70",
       },
       fontFamily: {
-        // Archivo largo e itálico conversa com o "TS" da logo, que é pesado e inclinado
+        /**
+         * Padrão herdado do MG Aldeota: Roboto leve no corpo e títulos em
+         * caixa alta bem espaçada. A marca da TS entra no Archivo dos títulos
+         * e no itálico pesado da palavra de destaque, como o "TS" da logo.
+         */
         display: ["Archivo", "ui-sans-serif", "system-ui", "sans-serif"],
-        sans: ["Manrope", "ui-sans-serif", "system-ui", "sans-serif"],
+        sans: ["Roboto", "ui-sans-serif", "system-ui", "sans-serif"],
         // Leitura de vento: número em fonte de instrumento
         mono: ["'JetBrains Mono'", "ui-monospace", "monospace"],
       },

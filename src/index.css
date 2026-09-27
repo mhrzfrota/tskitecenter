@@ -2,55 +2,81 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Padrão visual da TS Kite Center
+ *
+ * A estrutura vem do MG Aldeota (header branco com a logo no centro, títulos
+ * em caixa alta espaçada, botões retos, cards de foto com texto por cima,
+ * rodapé escuro). As cores e o destaque em itálico vêm da logo da TS.
+ *
+ *   Fundo claro ........ branco e espuma (#EEF7F7), alternando por seção
+ *   Destaque em fundo claro ... lagoa-forte (#08798A)
+ *   Destaque em fundo escuro .. sol (#E4C73D)
+ *   Botão principal ..... sol com texto mar
+ *   Escuro .............. mar (#06222B), só no rodapé e em cima de foto
+ */
+
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 72px;
   }
   body {
-    @apply bg-espuma font-sans text-mar antialiased;
+    @apply bg-white font-sans font-light tracking-[0.02em] text-mar antialiased;
   }
   :focus-visible {
-    @apply outline outline-2 outline-offset-4 outline-sol;
+    @apply outline outline-2 outline-offset-4 outline-lagoa;
   }
 }
 
 @layer components {
-  /* O título da marca: Archivo no máximo da largura, itálico e pesado, como o "TS" da logo */
+  .shell {
+    @apply mx-auto w-full max-w-[1312px] px-5 sm:px-8;
+  }
+  .eyebrow {
+    @apply font-sans text-xs font-medium uppercase tracking-[0.3em] text-maré;
+  }
+  /* Título de seção: leve e espaçado; o <strong> é a palavra da marca */
+  .titulo-secao {
+    @apply font-display text-[1.55rem] font-light uppercase leading-snug tracking-[0.16em] sm:text-[2rem];
+  }
+  .titulo-secao strong {
+    @apply font-extrabold italic tracking-[0.1em] text-lagoa-forte;
+  }
+  .btn {
+    @apply inline-flex h-[3.25rem] items-center justify-center border px-8 text-center text-xs font-medium uppercase tracking-[0.3em] transition-colors duration-300 active:scale-[0.97] sm:px-10;
+  }
+  .btn-primario {
+    @apply btn border-sol bg-sol text-mar hover:border-mar hover:bg-mar hover:text-white;
+  }
+  .btn-contorno {
+    @apply btn border-mar text-mar hover:bg-mar hover:text-white;
+  }
+  .btn-claro {
+    @apply btn border-white text-white hover:bg-white hover:text-mar;
+  }
+  /* Mantido para a seção de temporada (spot.tsx), ainda fora da página */
   .titulo {
     font-family: theme("fontFamily.display");
     font-stretch: 125%;
     font-style: italic;
     font-weight: 850;
-    letter-spacing: -0.02em;
     line-height: 0.92;
   }
   .rotulo {
     @apply font-mono text-[11px] uppercase tracking-[0.18em];
   }
-  .texto-marca {
-    @apply bg-marca bg-clip-text text-transparent;
-  }
-}
-
-/* Linhas de vento: correm da direita para a esquerda porque o vento no
-   Cumbuco vem de leste (ESE), então empurra tudo para oeste. */
-@keyframes sopro {
-  from { stroke-dashoffset: 0; }
-  to { stroke-dashoffset: -1400; }
-}
-.linha-vento {
-  animation: sopro linear infinite;
 }
 
 @keyframes entrar {
-  from { opacity: 0; transform: translateY(18px); }
+  from { opacity: 0; transform: translateY(14px); }
   to { opacity: 1; transform: none; }
 }
 .entrar {
-  animation: entrar 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation: entrar 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .linha-vento, .entrar { animation: none; }
+  .entrar { animation: none; }
 }
