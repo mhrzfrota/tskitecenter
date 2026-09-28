@@ -66,7 +66,7 @@ const CATEGORIAS: Categoria[] = [
     texto: "Veja como está o vento no Cumbuco agora, antes de sair de casa.",
     foto: "Kites no céu do Cumbuco com vento forte",
     botao: "Ver o vento",
-    href: "#vento",
+    href: "#previsao",
   },
   {
     icone: ShoppingBag,

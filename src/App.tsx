@@ -1,6 +1,7 @@
 import Navbar from "./components/navbar";
 import Hero from "./components/hero";
 import Categorias from "./components/categorias";
+import Previsao from "./components/previsao";
 import Produtos from "./components/produtos";
 import PorQueTs from "./components/por-que-ts";
 import Localizacao from "./components/localizacao";
@@ -14,6 +15,7 @@ export default function App() {
       <main>
         <Hero />
         <Categorias />
+        <Previsao />
         <PorQueTs />
         <Produtos />
         <Localizacao />

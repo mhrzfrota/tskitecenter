@@ -35,18 +35,29 @@ function useVento() {
       `https://api.open-meteo.com/v1/forecast?latitude=${CUMBUCO.lat}&longitude=${CUMBUCO.lon}` +
       "&current=wind_speed_10m,wind_direction_10m,wind_gusts_10m&wind_speed_unit=kn&timezone=America%2FFortaleza";
     const controle = new AbortController();
-    fetch(url, { signal: controle.signal })
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((d) =>
-        setLeitura({
-          nos: Math.round(d.current.wind_speed_10m),
-          rajada: Math.round(d.current.wind_gusts_10m),
-          direcao: d.current.wind_direction_10m,
-          hora: String(d.current.time).slice(11, 16),
-        }),
-      )
-      .catch((e) => e?.name !== "AbortError" && setFalhou(true));
-    return () => controle.abort();
+
+    // Se uma atualização falhar, a última leitura boa continua na tela
+    const ler = () =>
+      fetch(url, { signal: controle.signal })
+        .then((r) => (r.ok ? r.json() : Promise.reject()))
+        .then((d) => {
+          setLeitura({
+            nos: Math.round(d.current.wind_speed_10m),
+            rajada: Math.round(d.current.wind_gusts_10m),
+            direcao: d.current.wind_direction_10m,
+            hora: String(d.current.time).slice(11, 16),
+          });
+          setFalhou(false);
+        })
+        .catch((e) => e?.name !== "AbortError" && setFalhou(true));
+
+    ler();
+    // Mesmo ritmo do widget do Windguru: a cada 15 minutos
+    const relogio = setInterval(ler, 15 * 60 * 1000);
+    return () => {
+      clearInterval(relogio);
+      controle.abort();
+    };
   }, []);
 
   return { leitura, falhou };
