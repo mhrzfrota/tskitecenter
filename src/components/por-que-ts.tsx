@@ -2,7 +2,7 @@ import { ArrowUp, Wind } from "lucide-react";
 import Foto from "./foto";
 
 const ETIQUETAS = [
-  ["Segurança", "Instrutores qualificados", "Equipamento North", "Plano sob medida"],
+  ["Segurança", "Certificado IKO", "Instrutores qualificados", "Equipamento North", "Plano sob medida"],
   ["Espaço kids", "Chuveiros", "Estacionamento", "Gramado para montar"],
 ];
 

@@ -5,6 +5,7 @@ import Botao from "./botao";
 
 export const MENU = [
   { href: "#servicos", rotulo: "Serviços" },
+  { href: "#precos", rotulo: "Preços" },
   { href: "#previsao", rotulo: "Vento" },
   { href: "#loja", rotulo: "Loja" },
   { href: "#sobre", rotulo: "Sobre" },
