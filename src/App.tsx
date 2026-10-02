@@ -17,11 +17,11 @@ export default function App() {
       <main>
         <Hero />
         <Categorias />
-        <Precos />
-        <Inscricao />
+        <Produtos />
         <Previsao />
         <PorQueTs />
-        <Produtos />
+        <Precos />
+        <Inscricao />
         <Localizacao />
       </main>
       <Rodape />

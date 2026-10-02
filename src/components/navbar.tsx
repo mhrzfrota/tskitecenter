@@ -15,10 +15,10 @@ export function linkMenu(href: string, pagina: "inicio" | "loja") {
 
 export const MENU = [
   { href: "#servicos", pt: "Serviços", en: "Services" },
-  { href: "#precos", pt: "Preços", en: "Prices" },
-  { href: "#previsao", pt: "Vento", en: "Wind" },
   { href: "#loja", pt: "Loja", en: "Shop" },
+  { href: "#previsao", pt: "Vento", en: "Wind" },
   { href: "#sobre", pt: "Sobre", en: "About" },
+  { href: "#precos", pt: "Preços", en: "Prices" },
   { href: "#localizacao", pt: "Onde estamos", en: "Location" },
 ];
 

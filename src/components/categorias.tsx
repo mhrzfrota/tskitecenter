@@ -15,13 +15,12 @@ type Categoria = {
   botao: string;
   href: string;
   externo?: boolean;
-  largo?: boolean;
 };
 
 /**
- * As frentes do site, na bandeja de cards da referência: um card largo em
- * cima e quatro em grade. A previsão não entra aqui: tem seção própria logo
- * abaixo. Quando existirem páginas
+ * As frentes do site, lado a lado: no desktop os cinco numa fileira dentro da
+ * bandeja; no celular e no tablet, rolando para o lado, para a seção não
+ * esticar a página. A previsão não entra aqui: tem seção própria. Quando existirem páginas
  * próprias (loja, previsão), o link muda aqui.
  */
 const CATEGORIAS = (t: <T>(pt: T, en: T) => T): Categoria[] => [
@@ -35,7 +34,6 @@ const CATEGORIAS = (t: <T>(pt: T, en: T) => T): Categoria[] => [
     foto: t("Instrutor e aluno com o kite na areia", "Instructor and student with the kite on the sand"),
     botao: t("Reservar aula", "Book a lesson"),
     href: "#reservar",
-    largo: true,
   },
   {
     icone: Wind,
@@ -88,34 +86,22 @@ const CATEGORIAS = (t: <T>(pt: T, en: T) => T): Categoria[] => [
 
 function Card({ c }: { c: Categoria }) {
   const Icone = c.icone;
-  const texto = (
-    <div className="flex flex-col items-start">
-      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-sol">
-        <Icone aria-hidden className="h-5 w-5" strokeWidth={2} />
-      </span>
-      <h3 className="titulo mt-6 text-[1.75rem] sm:text-[2rem]">{c.nome}</h3>
-      <p className="mt-2 max-w-md leading-relaxed text-maré">{c.texto}</p>
-      <Botao href={c.href} externo={c.externo} variante="cinza" className="mt-7">
-        {c.botao}
-      </Botao>
-    </div>
-  );
-
-  if (c.largo) {
-    return (
-      <li className="grid gap-6 rounded-3xl bg-white p-5 sm:p-6 md:col-span-2 md:grid-cols-2 md:items-center md:gap-10">
-        <div className="md:py-4 md:pl-2">{texto}</div>
-        <div className="aspect-[4/3] overflow-hidden rounded-2xl">
-          <Foto descricao={c.foto} src={c.src} />
-        </div>
-      </li>
-    );
-  }
   return (
-    <li className="flex flex-col gap-8 rounded-3xl bg-white p-5 sm:p-6">
-      {texto}
-      <div className="mt-auto aspect-[2/1] overflow-hidden rounded-2xl">
+    <li className="flex w-[78%] shrink-0 snap-start flex-col rounded-3xl bg-white p-2 sm:w-[44%] sm:p-3 lg:w-auto">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
         <Foto descricao={c.foto} src={c.src} />
+        <span className="absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-xl bg-sol">
+          <Icone aria-hidden className="h-[18px] w-[18px]" strokeWidth={2} />
+        </span>
+      </div>
+      <div className="flex flex-1 flex-col items-start px-2 pb-2 pt-4 sm:px-3 sm:pb-3">
+        <h3 className="titulo text-[1.4rem]">{c.nome}</h3>
+        <p className="mt-2 text-[15px] leading-relaxed text-maré">{c.texto}</p>
+        <div className="mt-auto pt-5">
+          <Botao href={c.href} externo={c.externo} variante="cinza" className="!h-10 !px-4 !text-[12px]">
+            {c.botao}
+          </Botao>
+        </div>
       </div>
     </li>
   );
@@ -133,7 +119,8 @@ export default function Categorias() {
           {t("Tudo o que a TS oferece", "Everything TS offers")} <span className="suave">{t("dentro e fora da água", "on and off the water")}</span>
         </Cabecalho>
 
-        <ul className="mx-auto mt-14 grid max-w-5xl gap-2 rounded-painel bg-bandeja p-2 sm:gap-3 sm:p-3 md:grid-cols-2">
+        {/* Cards lado a lado: no desktop numa fileira só; no celular e tablet, rolando para o lado */}
+        <ul className="-mx-5 mt-12 flex snap-x snap-mandatory scroll-px-5 gap-2 overflow-x-auto bg-bandeja px-5 py-3 sm:-mx-8 sm:scroll-px-8 sm:gap-3 sm:px-8 lg:mx-0 lg:grid lg:snap-none lg:grid-cols-5 lg:overflow-visible lg:rounded-painel lg:bg-bandeja lg:p-3">
           {CATEGORIAS(t).map((c) => (
             <Card key={c.nome} c={c} />
           ))}
