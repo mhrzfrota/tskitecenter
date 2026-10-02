@@ -13,7 +13,9 @@ export type Idioma = "pt" | "en";
 
 const CHAVE = "ts:idioma";
 
-const META = {
+export type Meta = Record<Idioma, { lang: string; titulo: string; descricao: string }>;
+
+const META: Meta = {
   pt: {
     lang: "pt-BR",
     titulo: "TS Kite Center | Escola de kitesurf no Cumbuco",
@@ -48,11 +50,12 @@ type ValorContexto = {
 
 const Contexto = createContext<ValorContexto | null>(null);
 
-export function ProvedorIdioma({ children }: { children: ReactNode }) {
+/** `meta` troca título e descrição numa página que não seja a inicial. */
+export function ProvedorIdioma({ children, meta = META }: { children: ReactNode; meta?: Meta }) {
   const [idioma, setIdioma] = useState<Idioma>(inicial);
 
   useEffect(() => {
-    const m = META[idioma];
+    const m = meta[idioma];
     document.documentElement.lang = m.lang;
     document.title = m.titulo;
     document.querySelector('meta[name="description"]')?.setAttribute("content", m.descricao);
@@ -61,7 +64,7 @@ export function ProvedorIdioma({ children }: { children: ReactNode }) {
     } catch {
       // vale só nesta visita
     }
-  }, [idioma]);
+  }, [idioma, meta]);
 
   const t = <T,>(pt: T, en: T) => (idioma === "en" ? en : pt);
   return <Contexto.Provider value={{ idioma, setIdioma, t }}>{children}</Contexto.Provider>;
