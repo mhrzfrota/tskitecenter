@@ -9,7 +9,7 @@ type Props = {
   /** `ceu` para os painéis grandes com texto branco por cima */
   tom?: "claro" | "ceu";
   /** Onde fica o aviso do que fotografar */
-  aviso?: "centro" | "baixo" | "canto" | "nenhum";
+  aviso?: "centro" | "topo" | "baixo" | "canto" | "nenhum";
 };
 
 /**
@@ -21,6 +21,8 @@ type Props = {
  */
 const AVISO = {
   centro: "items-center",
+  // Cards com texto por cima na metade de baixo: o aviso sobe
+  topo: "items-start pt-[20%]",
   baixo: "items-end pb-[18%]",
   // Painéis com texto e card por cima: o aviso vai para o canto de baixo
   canto: "items-end justify-end p-4 [&>div]:items-end [&>div]:text-right",
