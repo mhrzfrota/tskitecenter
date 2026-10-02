@@ -1,11 +1,13 @@
 import { ESCOLA, linkWhatsApp } from "@/marca";
 import { MENU } from "./navbar";
+import { useIdioma } from "@/idioma";
 import Botao from "./botao";
 
 const telefone = (n: string) => `(${n.slice(2, 4)}) ${n.slice(4, 9)}-${n.slice(9)}`;
 
 /** Rodapé em painel escuro arredondado, com margem, como na referência. */
 export default function Rodape() {
+  const { t } = useIdioma();
   return (
     <footer id="contato" className="p-2 sm:p-3">
       <div className="rounded-painel bg-mar px-6 pb-8 pt-10 text-white sm:px-10 sm:pt-14">
@@ -16,28 +18,28 @@ export default function Rodape() {
               <span className="text-xl font-medium tracking-[-0.04em]">TS Kite Center</span>
             </a>
             <p className="mt-5 max-w-sm leading-relaxed text-white/85">
-              Aprenda kitesurf com quem vive isso todos os dias. Vem pra TS.
+              {t("Aprenda kitesurf com quem vive isso todos os dias. Vem pra TS.", "Learn kitesurfing with locals who live it every day. Come ride with TS.")}
             </p>
-            <Botao href={linkWhatsApp("Olá! Vim pelo site da TS Kite Center.")} externo className="mt-7">
-              Chamar no WhatsApp
+            <Botao href={linkWhatsApp(t("Olá! Vim pelo site da TS Kite Center.", "Hi! I found TS Kite Center through the website."))} externo className="mt-7">
+              {t("Chamar no WhatsApp", "Message us on WhatsApp")}
             </Botao>
           </div>
 
           <div className="grid grid-cols-2 gap-10 sm:grid-cols-3">
             <div>
-              <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-sol">Navegação</p>
+              <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-sol">{t("Navegação", "Navigation")}</p>
               <ul className="mt-5 space-y-3 text-white/80">
                 {MENU.map((l) => (
                   <li key={l.href}>
                     <a href={l.href} className="transition-colors hover:text-white">
-                      {l.rotulo}
+                      {t(l.pt, l.en)}
                     </a>
                   </li>
                 ))}
               </ul>
             </div>
             <div>
-              <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-sol">Contato</p>
+              <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-sol">{t("Contato", "Contact")}</p>
               <ul className="mt-5 space-y-3 text-white/80 [overflow-wrap:anywhere]">
                 {ESCOLA.whatsapps.map((n) => (
                   <li key={n}>
@@ -59,23 +61,23 @@ export default function Rodape() {
               </ul>
             </div>
             <div>
-              <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-sol">Endereço</p>
+              <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-sol">{t("Endereço", "Address")}</p>
               <p className="mt-5 leading-relaxed text-white/80">
                 Outro Beach Club
                 <br />
                 Av. Des. Jurema, 56
                 <br />
-                Praia do Cumbuco
+                {t("Praia do Cumbuco", "Cumbuco Beach")}
                 <br />
-                Caucaia (CE)
+                {t("Caucaia (CE)", "Caucaia, Ceará, Brazil")}
               </p>
             </div>
           </div>
         </div>
 
         <div className="mt-14 flex flex-col gap-2 border-t border-white/10 pt-6 text-sm text-white/60 sm:flex-row sm:justify-between">
-          <p>© {new Date().getFullYear()} TS Kite Center. Todos os direitos reservados.</p>
-          <p>Desenvolvido por MF Services</p>
+          <p>© {new Date().getFullYear()} TS Kite Center. {t("Todos os direitos reservados.", "All rights reserved.")}</p>
+          <p>{t("Desenvolvido por MF Services", "Built by MF Services")}</p>
         </div>
       </div>
     </footer>

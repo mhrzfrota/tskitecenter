@@ -2,11 +2,14 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { semearTeste, semearTeste2 } from "@/loja/teste";
+import { ProvedorIdioma } from "./idioma";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <App />
+    <ProvedorIdioma>
+      <App />
+    </ProvedorIdioma>
   </React.StrictMode>,
 );
 

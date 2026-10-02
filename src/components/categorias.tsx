@@ -1,6 +1,7 @@
 import type { LucideIcon } from "lucide-react";
-import { GraduationCap, Map, Sailboat, ShoppingBag, Wind, Waves } from "lucide-react";
+import { GraduationCap, Map, Sailboat, ShoppingBag, Wind } from "lucide-react";
 import { linkWhatsApp } from "@/marca";
+import { useIdioma } from "@/idioma";
 import Botao from "./botao";
 import Cabecalho from "./cabecalho";
 import Foto from "./foto";
@@ -19,63 +20,69 @@ type Categoria = {
 
 /**
  * As frentes do site, na bandeja de cards da referência: um card largo em
- * cima, quatro em grade, outro largo embaixo. Quando existirem páginas
+ * cima e quatro em grade. A previsão não entra aqui: tem seção própria logo
+ * abaixo. Quando existirem páginas
  * próprias (loja, previsão), o link muda aqui.
  */
-const CATEGORIAS: Categoria[] = [
+const CATEGORIAS = (t: <T>(pt: T, en: T) => T): Categoria[] => [
   {
     icone: GraduationCap,
-    nome: "Aulas de kitesurf",
-    texto: "Do primeiro velejo ao avançado. A gente avalia você antes e monta o plano. Iniciante faz o curso de 10h.",
-    foto: "Instrutor e aluno com o kite na areia",
-    botao: "Reservar aula",
-    href: linkWhatsApp("Olá! Quero saber sobre as aulas de kitesurf."),
-    externo: true,
+    nome: t("Aulas de kitesurf", "Kitesurf lessons"),
+    texto: t(
+      "Do primeiro velejo ao avançado. A gente avalia você antes e monta o plano. Iniciante faz o curso de 10h.",
+      "From your first ride to advanced. We assess you first and build the plan. Beginners take the 10-hour course.",
+    ),
+    foto: t("Instrutor e aluno com o kite na areia", "Instructor and student with the kite on the sand"),
+    botao: t("Reservar aula", "Book a lesson"),
+    href: "#reservar",
     largo: true,
   },
   {
     icone: Wind,
     nome: "Downwind",
-    texto: "Lagoinha → Guajiru e Pecém → Taíba, com 4x4 de apoio, resgate e suporte na água e em terra.",
-    foto: "Kiters velejando juntos no mar aberto",
-    botao: "Saiba mais",
-    href: linkWhatsApp("Olá! Quero saber sobre o downwind."),
+    texto: t(
+      "Lagoinha → Guajiru e Pecém → Taíba, com 4x4 de apoio, resgate e suporte na água e em terra.",
+      "Lagoinha → Guajiru and Pecém → Taíba, with a 4x4 support car, rescue and backup on the water and on land.",
+    ),
+    foto: t("Kiters velejando juntos no mar aberto", "Kiters riding together on the open sea"),
+    botao: t("Saiba mais", "Learn more"),
+    href: linkWhatsApp(t("Olá! Quero saber sobre o downwind.", "Hi! I'd like to know about the downwind.")),
     externo: true,
   },
   {
     icone: Map,
     nome: "Kite Trip",
-    texto: "Circuito dos Ventos: viagem guiada pelo litoral cearense, velejando de spot em spot.",
-    foto: "Grupo da Kite Trip em uma praia do Ceará",
-    botao: "Saiba mais",
-    href: linkWhatsApp("Olá! Quero saber sobre a Kite Trip, o Circuito dos Ventos."),
+    texto: t(
+      "Circuito dos Ventos: viagem guiada pelo litoral cearense, velejando de spot em spot.",
+      "Circuito dos Ventos: a guided trip along the Ceará coast, riding from spot to spot.",
+    ),
+    foto: t("Grupo da Kite Trip em uma praia do Ceará", "Kite Trip group on a beach in Ceará"),
+    botao: t("Saiba mais", "Learn more"),
+    href: linkWhatsApp(t("Olá! Quero saber sobre a Kite Trip, o Circuito dos Ventos.", "Hi! I'd like to know about the Kite Trip (Circuito dos Ventos).")),
     externo: true,
   },
   {
     icone: Sailboat,
-    nome: "Wingfoil e kite foil",
-    texto: "Aulas personalizadas de controle da asa, equilíbrio e transições.",
-    foto: "Aluno de wingfoil sobre a água",
-    botao: "Saiba mais",
-    href: linkWhatsApp("Olá! Quero saber sobre as aulas de wingfoil e kite foil."),
+    nome: t("Wingfoil e kite foil", "Wingfoil and kite foil"),
+    texto: t(
+      "Aulas personalizadas de controle da asa, equilíbrio e transições.",
+      "Personalized lessons on wing control, balance and transitions.",
+    ),
+    foto: t("Aluno de wingfoil sobre a água", "Wingfoil student on the water"),
+    botao: t("Saiba mais", "Learn more"),
+    href: linkWhatsApp(t("Olá! Quero saber sobre as aulas de wingfoil e kite foil.", "Hi! I'd like to know about wingfoil and kite foil lessons.")),
     externo: true,
-  },
-  {
-    icone: Waves,
-    nome: "Previsão de vento",
-    texto: "Veja como está o vento no Cumbuco agora, antes de sair de casa.",
-    foto: "Kites no céu do Cumbuco com vento forte",
-    botao: "Ver o vento",
-    href: "#previsao",
   },
   {
     icone: ShoppingBag,
     nome: "TS Kite Shop",
-    texto: "Kites, pranchas e acessórios com a parceria North Kiteboarding, e quem entende para indicar.",
-    foto: "Vitrine da loja com kites e pranchas",
-    botao: "Ver produtos",
+    texto: t(
+      "Kites, pranchas e acessórios com a parceria North Kiteboarding, e quem entende para indicar.",
+      "Kites, boards and accessories through our North Kiteboarding partnership, with experts to advise you.",
+    ),
+    foto: t("Vitrine da loja com kites e pranchas", "Shop display with kites and boards"),
+    botao: t("Ver produtos", "See products"),
     href: "#loja",
-    largo: true,
   },
 ];
 
@@ -107,7 +114,7 @@ function Card({ c }: { c: Categoria }) {
   return (
     <li className="flex flex-col gap-8 rounded-3xl bg-white p-5 sm:p-6">
       {texto}
-      <div className="mt-auto aspect-[16/10] overflow-hidden rounded-2xl">
+      <div className="mt-auto aspect-[2/1] overflow-hidden rounded-2xl">
         <Foto descricao={c.foto} src={c.src} />
       </div>
     </li>
@@ -115,15 +122,19 @@ function Card({ c }: { c: Categoria }) {
 }
 
 export default function Categorias() {
+  const { t } = useIdioma();
   return (
-    <section id="servicos" className="py-20 sm:py-28">
+    <section id="servicos" className="py-16 sm:py-24">
       <div className="shell">
-        <Cabecalho rotulo="Serviços" apoio="Escola, viagem, foil e loja no mesmo lugar, na Praia do Cumbuco.">
-          Tudo o que a TS oferece <span className="suave">dentro e fora da água</span>
+        <Cabecalho
+          rotulo={t("Serviços", "Services")}
+          apoio={t("Escola, viagem, foil e loja no mesmo lugar, na Praia do Cumbuco.", "School, trips, foil and shop in one place, on Cumbuco Beach.")}
+        >
+          {t("Tudo o que a TS oferece", "Everything TS offers")} <span className="suave">{t("dentro e fora da água", "on and off the water")}</span>
         </Cabecalho>
 
         <ul className="mx-auto mt-14 grid max-w-5xl gap-2 rounded-painel bg-bandeja p-2 sm:gap-3 sm:p-3 md:grid-cols-2">
-          {CATEGORIAS.map((c) => (
+          {CATEGORIAS(t).map((c) => (
             <Card key={c.nome} c={c} />
           ))}
         </ul>

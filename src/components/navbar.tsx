@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
-import { linkWhatsApp } from "@/marca";
+import { useIdioma } from "@/idioma";
 import Botao from "./botao";
+import SeletorIdioma from "./seletor-idioma";
 
 export const MENU = [
-  { href: "#servicos", rotulo: "Serviços" },
-  { href: "#precos", rotulo: "Preços" },
-  { href: "#previsao", rotulo: "Vento" },
-  { href: "#loja", rotulo: "Loja" },
-  { href: "#sobre", rotulo: "Sobre" },
-  { href: "#localizacao", rotulo: "Onde estamos" },
+  { href: "#servicos", pt: "Serviços", en: "Services" },
+  { href: "#precos", pt: "Preços", en: "Prices" },
+  { href: "#previsao", pt: "Vento", en: "Wind" },
+  { href: "#loja", pt: "Loja", en: "Shop" },
+  { href: "#sobre", pt: "Sobre", en: "About" },
+  { href: "#localizacao", pt: "Onde estamos", en: "Location" },
 ];
 
 /**
@@ -18,6 +19,7 @@ export const MENU = [
  * branca arredondada quando a página rola.
  */
 export default function Navbar() {
+  const { t } = useIdioma();
   const [rolou, setRolou] = useState(false);
   const [aberto, setAberto] = useState(false);
 
@@ -48,30 +50,29 @@ export default function Navbar() {
           <span className="text-lg font-medium tracking-[-0.04em]">TS Kite Center</span>
         </a>
 
-        <nav className="hidden items-center gap-8 md:flex" aria-label="Principal">
+        <nav className="hidden items-center gap-6 lg:flex xl:gap-8" aria-label={t("Principal", "Main")}>
           {MENU.map((l) => (
             <a key={l.href} href={l.href} className="font-mono text-[13px] uppercase tracking-[0.12em] opacity-90 transition-opacity hover:opacity-100">
-              {l.rotulo}
+              {t(l.pt, l.en)}
             </a>
           ))}
         </nav>
 
         <div className="flex items-center gap-2">
+          <SeletorIdioma claro={claro} />
           <a
-            href={linkWhatsApp("Olá! Vim pelo site e quero reservar uma aula de kite.")}
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#reservar"
             className="hidden h-10 items-center rounded-full bg-sol px-5 font-mono text-[13px] font-medium uppercase tracking-[0.12em] text-mar sm:flex"
           >
-            Reservar aula
+            {t("Reservar aula", "Book a lesson")}
           </a>
           <button
             type="button"
-            aria-label={aberto ? "Fechar menu" : "Abrir menu"}
+            aria-label={aberto ? t("Fechar menu", "Close menu") : t("Abrir menu", "Open menu")}
             aria-expanded={aberto}
             aria-controls="menu-celular"
             onClick={() => setAberto(!aberto)}
-            className="flex h-11 w-11 items-center justify-center rounded-full md:hidden"
+            className="flex h-11 w-11 items-center justify-center rounded-full lg:hidden"
           >
             {aberto ? (
               <X aria-hidden className="h-6 w-6" />
@@ -88,7 +89,7 @@ export default function Navbar() {
       <div
         id="menu-celular"
         hidden={!aberto}
-        className="mx-auto mt-2 max-w-[1400px] rounded-2xl bg-white p-3 text-mar shadow-[0_20px_40px_-16px_rgba(6,34,43,0.3)] md:hidden"
+        className="mx-auto mt-2 max-w-[1400px] rounded-2xl bg-white p-3 text-mar shadow-[0_20px_40px_-16px_rgba(6,34,43,0.3)] lg:hidden"
       >
         {MENU.map((l) => (
           <a
@@ -97,15 +98,11 @@ export default function Navbar() {
             onClick={() => setAberto(false)}
             className="block rounded-xl px-4 py-3.5 font-mono text-sm uppercase tracking-[0.12em] hover:bg-bandeja"
           >
-            {l.rotulo}
+            {t(l.pt, l.en)}
           </a>
         ))}
-        <Botao
-          href={linkWhatsApp("Olá! Vim pelo site e quero reservar uma aula de kite.")}
-          externo
-          className="mt-2 w-full justify-between"
-        >
-          Reservar aula
+        <Botao href="#reservar" className="mt-2 w-full justify-between">
+          {t("Reservar aula", "Book a lesson")}
         </Botao>
       </div>
     </header>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { linkWhatsApp } from "@/marca";
+import { useIdioma } from "@/idioma";
 import { IconeWhatsApp } from "./icones";
 
 /**
@@ -8,6 +9,7 @@ import { IconeWhatsApp } from "./icones";
  * reservar.
  */
 export default function WhatsAppFlutuante() {
+  const { t } = useIdioma();
   const [visivel, setVisivel] = useState(false);
   useEffect(() => {
     const ver = () => setVisivel(window.scrollY > window.innerHeight * 0.6);
@@ -18,10 +20,10 @@ export default function WhatsAppFlutuante() {
 
   return (
     <a
-      href={linkWhatsApp("Olá! Vim pelo site da TS Kite Center.")}
+      href={linkWhatsApp(t("Olá! Vim pelo site da TS Kite Center.", "Hi! I found TS Kite Center through the website."))}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Falar pelo WhatsApp"
+      aria-label={t("Falar pelo WhatsApp", "Chat on WhatsApp")}
       tabIndex={visivel ? 0 : -1}
       className={`fixed bottom-5 right-5 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_4px_16px_rgba(37,211,102,0.4)] transition-all duration-500 hover:scale-105 sm:bottom-6 sm:right-6 ${
         visivel ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0"

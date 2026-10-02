@@ -1,25 +1,30 @@
 import { useEffect, useState } from "react";
 import { ArrowUp } from "lucide-react";
 import { CUMBUCO } from "@/marca";
+import { useIdioma, type Idioma } from "@/idioma";
 
 type Leitura = { nos: number; rajada: number; direcao: number; hora: string };
 
-const PONTOS = [
-  "norte", "nor-nordeste", "nordeste", "lés-nordeste",
-  "leste", "lés-sudeste", "sudeste", "su-sudeste",
-  "sul", "su-sudoeste", "sudoeste", "oés-sudoeste",
-  "oeste", "oés-noroeste", "noroeste", "nor-noroeste",
-];
-const pontoCardeal = (graus: number) => PONTOS[Math.round(graus / 22.5) % 16];
+const PONTOS = {
+  pt: [
+    "norte", "nor-nordeste", "nordeste", "lés-nordeste",
+    "leste", "lés-sudeste", "sudeste", "su-sudeste",
+    "sul", "su-sudoeste", "sudoeste", "oés-sudoeste",
+    "oeste", "oés-noroeste", "noroeste", "nor-noroeste",
+  ],
+  en: ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"],
+};
+const pontoCardeal = (graus: number, idioma: Idioma) => PONTOS[idioma][Math.round(graus / 22.5) % 16];
 
 /**
  * Leitura em linguagem de aluno, não de meteorologista. As faixas são
  * referência geral de kite; FALTA validar com o instrutor da escola.
  */
-function veredito(nos: number) {
-  if (nos < 12) return "Vento fraco agora";
-  if (nos <= 28) return "Bom para velejar";
-  return "Forte, só para quem já veleja";
+function veredito(nos: number, idioma: Idioma) {
+  const en = idioma === "en";
+  if (nos < 12) return en ? "Light wind now" : "Vento fraco agora";
+  if (nos <= 28) return en ? "Good to ride" : "Bom para velejar";
+  return en ? "Strong, experienced riders only" : "Forte, só para quem já veleja";
 }
 
 /**
@@ -66,35 +71,36 @@ function useVento() {
 /** Bloco de vento para a faixa de vidro do hero (texto branco). */
 export default function VentoAgora() {
   const { leitura, falhou } = useVento();
+  const { idioma, t } = useIdioma();
 
   return (
     <div id="vento" aria-live="polite" className="flex items-center gap-4">
       <div>
-        <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-white/80">
+        <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-white/90">
           <span className={`h-1.5 w-1.5 rounded-full ${leitura ? "animate-pulse bg-sol" : "bg-white/40"}`} />
-          Cumbuco agora
+          {t("Cumbuco agora", "Cumbuco now")}
         </p>
         {leitura ? (
           <p className="mt-1 flex items-center gap-2 text-sm text-white">
             <span className="text-2xl font-medium tracking-[-0.04em]">{leitura.nos}</span>
-            <span>nós · rajadas {leitura.rajada}</span>
+            <span>{t("nós · rajadas", "knots · gusts")} {leitura.rajada}</span>
             {/* A seta aponta para onde o vento vai, não de onde vem */}
             <ArrowUp
-              aria-label={`de ${pontoCardeal(leitura.direcao)}`}
+              aria-label={t(`de ${pontoCardeal(leitura.direcao, idioma)}`, `from ${pontoCardeal(leitura.direcao, idioma)}`)}
               className="h-4 w-4 text-sol"
               style={{ transform: `rotate(${leitura.direcao + 180}deg)` }}
               strokeWidth={2.5}
             />
           </p>
         ) : falhou ? (
-          <p className="mt-1 text-sm text-white/80">Temporada forte de julho a janeiro</p>
+          <p className="mt-1 text-sm text-white/80">{t("Temporada forte de julho a janeiro", "Strong season from July to January")}</p>
         ) : (
-          <div className="mt-1.5 h-6 w-40 animate-pulse rounded-full bg-white/20" aria-label="Lendo o vento" />
+          <div className="mt-1.5 h-6 w-40 animate-pulse rounded-full bg-white/20" aria-label={t("Lendo o vento", "Reading the wind")} />
         )}
       </div>
       {leitura && (
-        <span className="hidden rounded-full bg-white/15 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-white lg:inline">
-          {veredito(leitura.nos)}
+        <span className="hidden rounded-full bg-white px-3 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.1em] text-mar lg:inline">
+          {veredito(leitura.nos, idioma)}
         </span>
       )}
     </div>

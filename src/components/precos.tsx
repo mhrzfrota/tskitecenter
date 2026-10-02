@@ -4,6 +4,9 @@ import { Award, Banknote, CreditCard, Info, Package, QrCode, Shirt, UserRound } 
 import { linkWhatsApp } from "@/marca";
 import Botao from "./botao";
 import Cabecalho from "./cabecalho";
+import { useIdioma } from "@/idioma";
+
+type T = <V>(pt: V, en: V) => V;
 
 /**
  * Tabela de preços enviada pela escola em 2026-09-29.
@@ -16,59 +19,67 @@ import Cabecalho from "./cabecalho";
 const AVULSA = { horas: 2, preco: 650 };
 const POR_HORA_AVULSA = AVULSA.preco / AVULSA.horas;
 
-const AULAS = [
-  { nome: "Aula avulsa", resumo: "Para experimentar", ...AVULSA },
-  { nome: "Pacote 8 horas", resumo: "Quatro aulas de 2 horas", horas: 8, preco: 2500 },
-  { nome: "Pacote 10 horas", resumo: "Cinco aulas de 2 horas", horas: 10, preco: 3000 },
-  { nome: "Pacote 12 horas", resumo: "Seis aulas de 2 horas", horas: 12, preco: 3500 },
+const AULAS = (t: T) => [
+  { nome: t("Aula avulsa", "Single lesson"), resumo: t("Para experimentar", "To try it out"), ...AVULSA },
+  { nome: t("Pacote 8 horas", "8-hour package"), resumo: t("Quatro aulas de 2 horas", "Four 2-hour lessons"), horas: 8, preco: 2500 },
+  { nome: t("Pacote 10 horas", "10-hour package"), resumo: t("Cinco aulas de 2 horas", "Five 2-hour lessons"), horas: 10, preco: 3000 },
+  { nome: t("Pacote 12 horas", "12-hour package"), resumo: t("Seis aulas de 2 horas", "Six 2-hour lessons"), horas: 12, preco: 3500 },
 ];
+type Aula = ReturnType<typeof AULAS>[number];
 const MAX_HORAS = 12;
-const MENOR_POR_HORA = Math.min(...AULAS.map((a) => a.preco / a.horas));
+const MENOR_POR_HORA = Math.min(...AULAS((pt) => pt).map((a) => a.preco / a.horas));
 
-const INCLUSO: { icone: LucideIcon; nome: string; explica: string }[] = [
-  { icone: Package, nome: "Equipamento completo", explica: "Kite, prancha e acessórios da escola" },
-  { icone: UserRound, nome: "Instrutor particular", explica: "A aula é só sua, sem dividir" },
-  { icone: Award, nome: "Certificado IKO", explica: "Reconhecido por escolas do mundo todo" },
-  { icone: Shirt, nome: "Lycra UV", explica: "Protege do sol enquanto você veleja" },
+const INCLUSO = (t: T): { icone: LucideIcon; nome: string; explica: string }[] => [
+  { icone: Package, nome: t("Equipamento completo", "Full equipment"), explica: t("Kite, prancha e acessórios da escola", "The school's kite, board and accessories") },
+  { icone: UserRound, nome: t("Instrutor particular", "Private instructor"), explica: t("A aula é só sua, sem dividir", "The lesson is all yours, no sharing") },
+  { icone: Award, nome: t("Certificado IKO", "IKO certificate"), explica: t("Reconhecido por escolas do mundo todo", "Recognized by schools worldwide") },
+  { icone: Shirt, nome: t("Lycra UV", "UV rash guard"), explica: t("Protege do sol enquanto você veleja", "Sun protection while you ride") },
 ];
 
-const PAGAMENTO: { icone: LucideIcon; forma: string; detalhe: string; desconto: number }[] = [
-  { icone: CreditCard, forma: "Crédito em 2x ou débito", detalhe: "Valor da tabela", desconto: 0 },
-  { icone: QrCode, forma: "Pix", detalhe: "5% de desconto", desconto: 0.05 },
-  { icone: Banknote, forma: "Dinheiro", detalhe: "10% de desconto", desconto: 0.1 },
+const PAGAMENTO = (t: T): { icone: LucideIcon; forma: string; detalhe: string; desconto: number }[] => [
+  { icone: CreditCard, forma: t("Crédito em 2x ou débito", "Credit (2 installments) or debit"), detalhe: t("Valor da tabela", "List price"), desconto: 0 },
+  { icone: QrCode, forma: "Pix", detalhe: t("5% de desconto", "5% off"), desconto: 0.05 },
+  { icone: Banknote, forma: t("Dinheiro", "Cash"), detalhe: t("10% de desconto", "10% off"), desconto: 0.1 },
 ];
 
-const PARA_QUEM_VELEJA = [
+const PARA_QUEM_VELEJA = (t: T): { nome: string; explica: string; preco: number; unidade: string; aviso?: string }[] => [
   {
-    nome: "Aluguel de equipamento completo",
-    explica: "Kite com barra, prancha, trapézio e colete. Equipamentos novos, modelos 2027.",
+    nome: t("Aluguel de equipamento completo", "Full equipment rental"),
+    explica: t(
+      "Kite com barra, prancha, trapézio e colete. Equipamentos novos, modelos 2027.",
+      "Kite with bar, board, harness and vest. New gear, 2027 models.",
+    ),
     preco: 250,
-    unidade: "por hora",
-    aviso: "Só é permitido velejar em frente à escola.",
+    unidade: t("por hora", "per hour"),
+    aviso: t("Só é permitido velejar em frente à escola.", "Riding is only allowed in front of the school."),
   },
   {
-    nome: "Suporte de downwind",
-    explica: "Downwind é velejar de uma praia a outra a favor do vento. O instrutor vai com você na água.",
+    nome: t("Suporte de downwind", "Downwind support"),
+    explica: t(
+      "Downwind é velejar de uma praia a outra a favor do vento. O instrutor vai com você na água.",
+      "Downwind means riding from one beach to another with the wind. The instructor rides with you.",
+    ),
     preco: 300,
-    unidade: "por hora",
+    unidade: t("por hora", "per hour"),
   },
   {
     nome: "Transfer Cumbuco ↔ Cauípe",
-    explica: "Levamos você até a lagoa do Cauípe e trazemos de volta.",
+    explica: t("Levamos você até a lagoa do Cauípe e trazemos de volta.", "We take you to the Cauípe lagoon and bring you back."),
     preco: 200,
-    unidade: "ida e volta",
+    unidade: t("ida e volta", "round trip"),
   },
 ];
 
-const ACESSORIOS = [
-  { nome: "Prancha", explica: "Onde você fica em pé", preco: 120 },
-  { nome: "Trapézio", explica: "Cinto que prende você ao kite", preco: 80 },
-  { nome: "Colete", explica: "Flutuação e proteção", preco: 50 },
-  { nome: "Leash", explica: "Cordinha de segurança", preco: 50 },
+const ACESSORIOS = (t: T) => [
+  { nome: t("Prancha", "Board"), explica: t("Onde você fica em pé", "What you stand on"), preco: 120 },
+  { nome: t("Trapézio", "Harness"), explica: t("Cinto que prende você ao kite", "Belt that connects you to the kite"), preco: 80 },
+  { nome: t("Colete", "Vest"), explica: t("Flutuação e proteção", "Flotation and protection"), preco: 50 },
+  { nome: "Leash", explica: t("Cordinha de segurança", "Safety line"), preco: 50 },
 ];
 
-const reais = (valor: number) =>
-  valor.toLocaleString("pt-BR", {
+/** Sempre em reais; em inglês só muda a pontuação (R$3,500). */
+const reais = (valor: number, idioma: "pt" | "en" = "pt") =>
+  valor.toLocaleString(idioma === "en" ? "en-US" : "pt-BR", {
     style: "currency",
     currency: "BRL",
     minimumFractionDigits: Number.isInteger(valor) ? 0 : 2,
@@ -91,7 +102,9 @@ function ReguaHoras({ horas, escuro }: { horas: number; escuro: boolean }) {
   );
 }
 
-function CardAula({ aula }: { aula: (typeof AULAS)[number] }) {
+function CardAula({ aula }: { aula: Aula }) {
+  const { idioma, t } = useIdioma();
+  const brl = (v: number) => reais(v, idioma);
   const porHora = aula.preco / aula.horas;
   const destaque = porHora === MENOR_POR_HORA;
   const economia = POR_HORA_AVULSA * aula.horas - aula.preco;
@@ -104,63 +117,69 @@ function CardAula({ aula }: { aula: (typeof AULAS)[number] }) {
           destaque ? "bg-sol text-mar" : "invisible max-sm:hidden"
         }`}
       >
-        Menor valor por hora
+        {t("Menor valor por hora", "Best value per hour")}
       </span>
       <p className={`${rotuloMini} ${destaque ? "text-white/70" : "text-maré"}`}>{aula.nome}</p>
       <p className="mt-1 text-sm">{aula.resumo}</p>
 
       <ReguaHoras horas={aula.horas} escuro={destaque} />
-      <p className={`mt-2 text-xs ${destaque ? "text-white/70" : "text-maré"}`}>{aula.horas} horas de aula</p>
+      <p className={`mt-2 text-xs ${destaque ? "text-white/70" : "text-maré"}`}>{aula.horas} {t("horas de aula", "hours of lessons")}</p>
 
-      <p className="titulo mt-5 text-[2.2rem] sm:text-[2.5rem]">{reais(aula.preco)}</p>
-      <p className={`text-sm ${destaque ? "text-white/80" : "text-maré"}`}>{reais(porHora)} por hora</p>
+      <p className="titulo mt-5 text-[2.2rem] sm:text-[2.5rem]">{brl(aula.preco)}</p>
+      <p className={`text-sm ${destaque ? "text-white/80" : "text-maré"}`}>{brl(porHora)} {t("por hora", "per hour")}</p>
 
       {/* Só aparece quando existe economia de verdade (o pacote contra aulas avulsas) */}
       <p className={`mt-3 min-h-[1.5rem] text-sm font-medium ${destaque ? "text-sol" : "text-lagoa-forte"}`}>
-        {economia > 0 ? `Economia de ${reais(economia)}` : ""}
+        {economia > 0 ? t(`Economia de ${brl(economia)}`, `You save ${brl(economia)}`) : ""}
       </p>
 
       <dl
         className={`mt-4 space-y-1.5 border-t pt-4 text-sm ${destaque ? "border-white/15 text-white/80" : "border-bandeja text-maré"}`}
       >
         <div className="flex justify-between gap-2">
-          <dt>No Pix</dt>
-          <dd className={`font-medium ${destaque ? "text-white" : "text-mar"}`}>{reais(aula.preco * 0.95)}</dd>
+          <dt>{t("No Pix", "With Pix")}</dt>
+          <dd className={`font-medium ${destaque ? "text-white" : "text-mar"}`}>{brl(aula.preco * 0.95)}</dd>
         </div>
         <div className="flex justify-between gap-2">
-          <dt>Em dinheiro</dt>
-          <dd className={`font-medium ${destaque ? "text-white" : "text-mar"}`}>{reais(aula.preco * 0.9)}</dd>
+          <dt>{t("Em dinheiro", "In cash")}</dt>
+          <dd className={`font-medium ${destaque ? "text-white" : "text-mar"}`}>{brl(aula.preco * 0.9)}</dd>
         </div>
       </dl>
 
       <a
-        href={linkWhatsApp(`Olá! Quero reservar: ${aula.nome.toLowerCase()} (${aula.horas} horas, ${reais(aula.preco)}).`)}
+        href={linkWhatsApp(
+          t(
+            `Olá! Quero reservar: ${aula.nome.toLowerCase()} (${aula.horas} horas, ${brl(aula.preco)}).`,
+            `Hi! I'd like to book: ${aula.nome.toLowerCase()} (${aula.horas} hours, ${brl(aula.preco)}).`,
+          ),
+        )}
         target="_blank"
         rel="noopener noreferrer"
         className={`mt-6 inline-flex h-11 items-center justify-center rounded-full font-mono text-[12px] font-medium uppercase tracking-[0.12em] transition-colors ${
           destaque ? "bg-sol text-mar hover:bg-[#EDD35B]" : "bg-pilula text-mar hover:bg-[#D8E2E2]"
         }`}
       >
-        Reservar
+        {t("Reservar", "Book")}
       </a>
     </li>
   );
 }
 
 function QueroAprender() {
+  const { t } = useIdioma();
   return (
     <>
       <ul className="grid gap-2 sm:grid-cols-2 sm:gap-3 xl:grid-cols-4">
-        {AULAS.map((a) => (
+        {AULAS(t).map((a) => (
           <CardAula key={a.nome} aula={a} />
         ))}
       </ul>
 
       <div className="mt-2 grid gap-2 sm:mt-3 sm:gap-3 lg:grid-cols-[1.4fr_1fr]">
         <div className="rounded-3xl bg-white p-5 sm:p-6">
-          <p className={`${rotuloMini} text-maré`}>Incluso em todas as aulas</p>
+          <p className={`${rotuloMini} text-maré`}>{t("Incluso em todas as aulas", "Included in every lesson")}</p>
           <ul className="mt-5 grid gap-5 sm:grid-cols-2">
-            {INCLUSO.map(({ icone: Icone, nome, explica }) => (
+            {INCLUSO(t).map(({ icone: Icone, nome, explica }) => (
               <li key={nome} className="flex gap-3">
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sol">
                   <Icone aria-hidden className="h-5 w-5" strokeWidth={1.75} />
@@ -175,15 +194,15 @@ function QueroAprender() {
         </div>
 
         <div className="rounded-3xl bg-white p-5 sm:p-6">
-          <p className={`${rotuloMini} text-maré`}>Formas de pagamento</p>
+          <p className={`${rotuloMini} text-maré`}>{t("Formas de pagamento", "Payment options")}</p>
           <ul className="mt-3 divide-y divide-bandeja">
-            {PAGAMENTO.map(({ icone: Icone, forma, detalhe, desconto }) => (
+            {PAGAMENTO(t).map(({ icone: Icone, forma, detalhe, desconto }) => (
               <li key={forma} className="flex items-center gap-3 py-3">
                 <Icone aria-hidden className="h-5 w-5 shrink-0 text-maré" strokeWidth={1.75} />
                 <span className="flex-1 text-[15px]">{forma}</span>
                 <span
                   className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ${
-                    desconto ? "bg-lagoa-forte/10 text-lagoa-forte" : "text-maré"
+                    desconto ? "bg-lagoa-forte/10 text-lagoa-forte" : "bg-bandeja text-maré"
                   }`}
                 >
                   {detalhe}
@@ -198,10 +217,12 @@ function QueroAprender() {
 }
 
 function JaVelejo() {
+  const { idioma, t } = useIdioma();
+  const brl = (v: number) => reais(v, idioma);
   return (
     <div className="grid gap-2 sm:gap-3 lg:grid-cols-[1.5fr_1fr]">
       <ul className="grid gap-2 sm:gap-3">
-        {PARA_QUEM_VELEJA.map((s) => (
+        {PARA_QUEM_VELEJA(t).map((s) => (
           <li key={s.nome} className="rounded-3xl bg-white p-5 sm:p-6">
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -209,7 +230,7 @@ function JaVelejo() {
                 <p className="mt-1 max-w-md text-sm leading-relaxed text-maré">{s.explica}</p>
               </div>
               <p className="shrink-0 text-right">
-                <span className="titulo block text-[1.7rem]">{reais(s.preco)}</span>
+                <span className="titulo block text-[1.7rem]">{brl(s.preco)}</span>
                 <span className="text-xs text-maré">{s.unidade}</span>
               </p>
             </div>
@@ -224,26 +245,26 @@ function JaVelejo() {
       </ul>
 
       <div className="flex flex-col rounded-3xl bg-white p-5 sm:p-6">
-        <p className={`${rotuloMini} text-maré`}>Aluguel de acessórios</p>
-        <p className="mt-1 text-sm text-maré">Valores por diária</p>
+        <p className={`${rotuloMini} text-maré`}>{t("Aluguel de acessórios", "Accessory rental")}</p>
+        <p className="mt-1 text-sm text-maré">{t("Valores por diária", "Prices per day")}</p>
         <ul className="mt-3 divide-y divide-bandeja">
-          {ACESSORIOS.map((a) => (
+          {ACESSORIOS(t).map((a) => (
             <li key={a.nome} className="flex items-center justify-between gap-4 py-3.5">
               <div>
                 <p className="text-[15px] font-medium">{a.nome}</p>
                 <p className="text-xs text-maré">{a.explica}</p>
               </div>
-              <span className="shrink-0 text-[17px] font-medium">{reais(a.preco)}</span>
+              <span className="shrink-0 text-[17px] font-medium">{brl(a.preco)}</span>
             </li>
           ))}
         </ul>
         <div className="mt-auto pt-6">
           <Botao
-            href={linkWhatsApp("Olá! Quero saber sobre aluguel de equipamento e disponibilidade.")}
+            href={linkWhatsApp(t("Olá! Quero saber sobre aluguel de equipamento e disponibilidade.", "Hi! I'd like to know about equipment rental and availability."))}
             externo
             variante="mar"
           >
-            Consultar
+            {t("Consultar", "Ask us")}
           </Botao>
         </div>
       </div>
@@ -252,23 +273,28 @@ function JaVelejo() {
 }
 
 const ABAS = [
-  { id: "aprender", rotulo: "Quero aprender" },
-  { id: "velejo", rotulo: "Já velejo" },
+  { id: "aprender", pt: "Quero aprender", en: "I want to learn" },
+  { id: "velejo", pt: "Já velejo", en: "I already ride" },
 ] as const;
 
 export default function Precos() {
+  const { t } = useIdioma();
   const [aba, setAba] = useState<(typeof ABAS)[number]["id"]>("aprender");
 
   return (
-    <section id="precos" className="py-20 sm:py-28">
+    <section id="precos" className="py-16 sm:py-24">
       <div className="shell">
-        <Cabecalho rotulo="Preços" apoio="Aulas individuais, com o equipamento e o instrutor só para você.">
-          Aulas com tudo incluso <span className="suave">do primeiro bordo ao certificado</span>
+        <Cabecalho
+          rotulo={t("Preços", "Prices")}
+          apoio={t("Aulas individuais, com o equipamento e o instrutor só para você.", "Private lessons, with the equipment and the instructor just for you.")}
+        >
+          {t("Aulas com tudo incluso", "All-inclusive lessons")}{" "}
+          <span className="suave">{t("do primeiro bordo ao certificado", "from your first ride to your certificate")}</span>
         </Cabecalho>
 
         {/* Dois caminhos: quem nunca velejou não precisa ver preço de leash */}
         <div className="mt-10 flex justify-center">
-          <div role="tablist" aria-label="Tipo de preço" className="inline-flex rounded-full bg-bandeja p-1">
+          <div role="tablist" aria-label={t("Tipo de preço", "Price type")} className="inline-flex rounded-full bg-bandeja p-1">
             {ABAS.map((a) => (
               <button
                 key={a.id}
@@ -282,7 +308,7 @@ export default function Precos() {
                   aba === a.id ? "bg-mar text-white" : "text-maré hover:text-mar"
                 }`}
               >
-                {a.rotulo}
+                {t(a.pt, a.en)}
               </button>
             ))}
           </div>

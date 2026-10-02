@@ -1,4 +1,5 @@
 import { Camera } from "lucide-react";
+import { useIdioma } from "@/idioma";
 
 type Props = {
   /** O que a foto precisa mostrar. Vira o alt quando a foto real chegar. */
@@ -28,6 +29,7 @@ const AVISO = {
 };
 
 export default function Foto({ descricao, src, className = "", tom = "claro", aviso = "centro" }: Props) {
+  const { t } = useIdioma();
   if (src) {
     return <img src={src} alt={descricao} loading="lazy" decoding="async" className={`h-full w-full object-cover ${className}`} />;
   }
@@ -35,14 +37,14 @@ export default function Foto({ descricao, src, className = "", tom = "claro", av
   return (
     <div
       role="img"
-      aria-label={`Espaço para foto: ${descricao}`}
+      aria-label={`${t("Espaço para foto", "Photo placeholder")}: ${descricao}`}
       className={`flex h-full w-full justify-center ${AVISO[aviso]} ${
         ceu ? "bg-ceu text-white/75" : "bg-[linear-gradient(135deg,#DDF1F4_0%,#EEF5F1_55%,#F6EFCB_100%)] text-lagoa-forte/80"
       } ${className}`}
     >
       <div className="flex max-w-[15rem] flex-col items-center gap-1.5 px-4 text-center">
         <Camera aria-hidden className="h-5 w-5" strokeWidth={1.5} />
-        <span className="font-mono text-[10px] uppercase tracking-[0.15em]">Foto</span>
+        <span className="font-mono text-[10px] uppercase tracking-[0.15em]">{t("Foto", "Photo")}</span>
         <span className="text-xs">{descricao}</span>
       </div>
     </div>
