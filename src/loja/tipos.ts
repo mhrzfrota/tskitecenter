@@ -7,6 +7,10 @@ export type Produto = {
   descricao: string;
   precoCentavos: number | null;
   opcoes: string[];
+  /** Cores à venda, pelo nome ("Azul", "Preto"). Vazio se não tiver escolha de cor. */
+  cores: string[];
+  /** Detalhes técnicos, um por linha; "Material: Dacron" vira rótulo e valor. */
+  detalhes: string[];
   fotos: string[];
   disponivel: boolean;
   destaque: boolean;
@@ -16,7 +20,12 @@ export type Produto = {
   atualizadoEm: string;
 };
 
-export type NovoProduto = Omit<Produto, "id" | "criadoEm" | "atualizadoEm" | "ordem"> & { id?: string };
+export type NovoProduto = Omit<Produto, "id" | "criadoEm" | "atualizadoEm" | "ordem" | "cores" | "detalhes"> & {
+  id?: string;
+  // Opcionais: produtos e backups de antes destes campos não os têm
+  cores?: string[];
+  detalhes?: string[];
+};
 
 export class ErroLoja extends Error {
   codigo: "dados_invalidos" | "nao_encontrado" | "armazenamento";

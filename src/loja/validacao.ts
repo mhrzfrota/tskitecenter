@@ -42,6 +42,40 @@ export function normalizarOpcoes(entrada: string | string[]): string[] {
   return opcoes;
 }
 
+export function normalizarCores(entrada: string | string[]): string[] {
+  if (typeof entrada !== "string" && !Array.isArray(entrada)) invalido("Informe as cores como texto ou lista.");
+  const partes = typeof entrada === "string" ? entrada.split(/[,;\r\n]/) : entrada;
+  const vistas = new Set<string>();
+  const cores: string[] = [];
+  for (const parte of partes) {
+    if (typeof parte !== "string") invalido("Cada cor deve ser um texto.");
+    const cor = parte.trim().replace(/\s+/g, " ");
+    if (cor.length > 24) invalido("Cada cor pode ter até 24 caracteres.");
+    const chave = cor.toLocaleLowerCase("pt-BR");
+    if (!cor || vistas.has(chave)) continue;
+    vistas.add(chave);
+    cores.push(cor);
+  }
+  if (cores.length > 12) invalido("Informe no máximo 12 cores.");
+  return cores;
+}
+
+/** Um detalhe por linha. Linhas vazias saem. */
+export function normalizarDetalhes(entrada: string | string[]): string[] {
+  if (typeof entrada !== "string" && !Array.isArray(entrada)) invalido("Informe os detalhes como texto ou lista.");
+  const partes = typeof entrada === "string" ? entrada.split(/\r?\n/) : entrada;
+  const detalhes: string[] = [];
+  for (const parte of partes) {
+    if (typeof parte !== "string") invalido("Cada detalhe deve ser um texto.");
+    const linha = parte.trim().replace(/^[-•*]\s*/, "").replace(/\s+/g, " ");
+    if (!linha) continue;
+    if (linha.length > 120) invalido("Cada detalhe pode ter até 120 caracteres.");
+    detalhes.push(linha);
+  }
+  if (detalhes.length > 20) invalido("Informe no máximo 20 detalhes.");
+  return detalhes;
+}
+
 export function validarProduto(entrada: NovoProduto): NovoProduto {
   if (!entrada || typeof entrada !== "object") invalido("Informe os dados do produto.");
   if (typeof entrada.nome !== "string") invalido("Informe o nome do produto.");
@@ -59,6 +93,10 @@ export function validarProduto(entrada: NovoProduto): NovoProduto {
   }
   if (!Array.isArray(entrada.opcoes)) invalido("As opções devem ser uma lista.");
   const opcoes = normalizarOpcoes(entrada.opcoes);
+  if (entrada.cores !== undefined && !Array.isArray(entrada.cores)) invalido("As cores devem ser uma lista.");
+  const cores = normalizarCores(entrada.cores ?? []);
+  if (entrada.detalhes !== undefined && !Array.isArray(entrada.detalhes)) invalido("Os detalhes devem ser uma lista.");
+  const detalhes = normalizarDetalhes(entrada.detalhes ?? []);
   if (!Array.isArray(entrada.fotos) || entrada.fotos.length > 8) {
     invalido("Informe uma lista com no máximo 8 fotos.");
   }
@@ -80,6 +118,8 @@ export function validarProduto(entrada: NovoProduto): NovoProduto {
     descricao,
     precoCentavos: preco,
     opcoes,
+    cores,
+    detalhes,
     fotos: [...entrada.fotos],
     disponivel: entrada.disponivel,
     destaque: entrada.destaque,

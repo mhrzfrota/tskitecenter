@@ -11,6 +11,8 @@ const produto = (): NovoProduto => ({
   descricao: "",
   precoCentavos: null,
   opcoes: [],
+  cores: [],
+  detalhes: [],
   fotos: [],
   disponivel: true,
   destaque: false,

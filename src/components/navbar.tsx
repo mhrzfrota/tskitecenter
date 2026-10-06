@@ -8,7 +8,9 @@ import SeletorIdioma from "./seletor-idioma";
  * Links do menu fora da página inicial: as âncoras voltam para "/#secao" e,
  * na página da loja, "Loja" aponta para ela mesma e fica marcado.
  */
-export function linkMenu(href: string, pagina: "inicio" | "loja") {
+export type Pagina = "inicio" | "loja" | "produto";
+
+export function linkMenu(href: string, pagina: Pagina) {
   if (pagina === "inicio") return href;
   return href === "#loja" ? "/loja" : `/${href}`;
 }
@@ -27,7 +29,7 @@ export const MENU = [
  * ação à direita. Começa transparente sobre o céu do hero e vira uma barra
  * branca arredondada quando a página rola.
  */
-export default function Navbar({ pagina = "inicio" }: { pagina?: "inicio" | "loja" }) {
+export default function Navbar({ pagina = "inicio" }: { pagina?: Pagina }) {
   const { t } = useIdioma();
   const [rolou, setRolou] = useState(false);
   const [aberto, setAberto] = useState(false);
@@ -45,7 +47,7 @@ export default function Navbar({ pagina = "inicio" }: { pagina?: "inicio" | "loj
     return () => window.removeEventListener("keydown", esc);
   }, []);
 
-  const claro = rolou || aberto;
+  const claro = rolou || aberto || pagina === "produto";
 
   return (
     <header className="fixed inset-x-0 top-3 z-40 px-3 sm:top-4 sm:px-4">
@@ -64,7 +66,7 @@ export default function Navbar({ pagina = "inicio" }: { pagina?: "inicio" | "loj
             <a
               key={l.href}
               href={linkMenu(l.href, pagina)}
-              aria-current={pagina === "loja" && l.href === "#loja" ? "page" : undefined}
+              aria-current={pagina !== "inicio" && l.href === "#loja" ? "page" : undefined}
               className="font-mono text-[13px] uppercase tracking-[0.12em] opacity-90 transition-opacity hover:opacity-100 aria-[current=page]:underline aria-[current=page]:decoration-sol aria-[current=page]:decoration-2 aria-[current=page]:underline-offset-8"
             >
               {t(l.pt, l.en)}

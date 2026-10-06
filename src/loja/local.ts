@@ -141,6 +141,11 @@ async function transacionar<T>(
   }
 }
 
+/** Produtos gravados antes de cores e detalhes existirem chegam sem esses campos. */
+function completar(produto: Produto): Produto {
+  return { ...produto, cores: produto.cores ?? [], detalhes: produto.detalhes ?? [] };
+}
+
 function ordenar(produtos: Produto[]): Produto[] {
   return produtos.sort((a, b) => a.ordem - b.ordem || a.nome.localeCompare(b.nome, "pt-BR")
     || a.id.localeCompare(b.id));
@@ -204,6 +209,8 @@ async function lerBackup(arquivo: Blob): Promise<{ produtos: Produto[]; fotos: F
     idsProdutos.add(limpo.id);
     return {
       ...limpo,
+      cores: limpo.cores ?? [],
+      detalhes: limpo.detalhes ?? [],
       id: limpo.id,
       ordem: produto.ordem as number,
       criadoEm: produto.criadoEm,
@@ -226,14 +233,17 @@ export const lojaLocal: RepositorioLoja = {
   async listar(filtro = {}) {
     const produtos = await transacionar("readonly", (transacao) =>
       pedir<Produto[]>(transacao.objectStore("produtos").getAll()));
-    return ordenar(produtos.filter((produto) => (filtro.incluirInativos || produto.ativo)
+    return ordenar(produtos.map(completar).filter((produto) => (filtro.incluirInativos || produto.ativo)
       && (!filtro.categoria || produto.categoria === filtro.categoria)
       && (!filtro.somenteDestaques || produto.destaque)));
   },
 
   async obter(id) {
     return transacionar("readonly", async (transacao) =>
-      (await pedir<Produto | undefined>(transacao.objectStore("produtos").get(id))) ?? null);
+    {
+      const produto = await pedir<Produto | undefined>(transacao.objectStore("produtos").get(id));
+      return produto ? completar(produto) : null;
+    });
   },
 
   async salvar(entrada) {
@@ -255,6 +265,8 @@ export const lojaLocal: RepositorioLoja = {
       }
       const salvo: Produto = {
         ...limpo,
+        cores: limpo.cores ?? [],
+        detalhes: limpo.detalhes ?? [],
         id: anterior?.id ?? crypto.randomUUID(),
         ordem,
         criadoEm: anterior?.criadoEm ?? agora,

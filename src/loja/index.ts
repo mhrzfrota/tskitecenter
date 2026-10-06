@@ -4,3 +4,4 @@ export * from "./categorias.ts";
 export * from "./validacao.ts";
 export * from "./repositorio.ts";
 export * from "./fotos.ts";
+export * from "./vitrine.ts";

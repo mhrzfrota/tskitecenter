@@ -1,6 +1,6 @@
 import { useRef, useState, type FormEvent } from "react";
 import { ArrowLeft, ArrowRight, ImagePlus, X } from "lucide-react";
-import { CATEGORIAS, ErroLoja, formatarPreco, lerPreco, loja, normalizarOpcoes, prepararFoto, type CategoriaId, type Produto } from "@/loja";
+import { CATEGORIAS, ErroLoja, formatarPreco, lerPreco, loja, nomeDaCor, normalizarCores, normalizarDetalhes, normalizarOpcoes, prepararFoto, tonsDaCor, type CategoriaId, type Produto } from "@/loja";
 import FotoLoja from "./FotoLoja";
 import Interruptor from "./Interruptor";
 
@@ -18,6 +18,8 @@ export default function Editor({ produto, aoFechar }: { produto: Produto | null;
   const [categoria, setCategoria] = useState<CategoriaId | "">(produto?.categoria ?? "");
   const [preco, setPreco] = useState(centavosParaTexto(produto?.precoCentavos ?? null));
   const [opcoes, setOpcoes] = useState((produto?.opcoes ?? []).join(", "));
+  const [cores, setCores] = useState((produto?.cores ?? []).join(", "));
+  const [detalhes, setDetalhes] = useState((produto?.detalhes ?? []).join("\n"));
   const [descricao, setDescricao] = useState(produto?.descricao ?? "");
   const [fotos, setFotos] = useState<string[]>(produto?.fotos ?? []);
   const [disponivel, setDisponivel] = useState(produto?.disponivel ?? true);
@@ -35,6 +37,14 @@ export default function Editor({ produto, aoFechar }: { produto: Produto | null;
   const opcoesLidas = (() => {
     try {
       return normalizarOpcoes(opcoes);
+    } catch {
+      return [];
+    }
+  })();
+
+  const coresLidas = (() => {
+    try {
+      return normalizarCores(cores);
     } catch {
       return [];
     }
@@ -88,6 +98,14 @@ export default function Editor({ produto, aoFechar }: { produto: Produto | null;
     } catch (err) {
       return setErro(err instanceof ErroLoja ? err.message : "Confira as opções.");
     }
+    let coresFinais: string[];
+    let detalhesFinais: string[];
+    try {
+      coresFinais = normalizarCores(cores);
+      detalhesFinais = normalizarDetalhes(detalhes);
+    } catch (err) {
+      return setErro(err instanceof ErroLoja ? err.message : "Confira as cores e os detalhes.");
+    }
     setSalvando(true);
     try {
       const salvo = await loja.salvar({
@@ -97,6 +115,8 @@ export default function Editor({ produto, aoFechar }: { produto: Produto | null;
         descricao,
         precoCentavos: precoLido,
         opcoes: opcoesFinais,
+        cores: coresFinais,
+        detalhes: detalhesFinais,
         fotos,
         disponivel,
         destaque,
@@ -197,6 +217,54 @@ export default function Editor({ produto, aoFechar }: { produto: Produto | null;
             ) : (
               <p className="mt-2 text-sm text-maré">Separe por vírgula. Vazio se não tiver.</p>
             )}
+          </div>
+        </section>
+
+        {/* Cores e detalhes: aparecem na página do produto */}
+        <section className="grid gap-3 sm:grid-cols-2">
+          <div className="rounded-3xl bg-white p-5 sm:p-6">
+            <label htmlFor="cores" className="rotulo">
+              Cores
+            </label>
+            <input
+              id="cores"
+              value={cores}
+              onChange={(e) => setCores(e.target.value)}
+              placeholder="Ex.: Azul, Preto/Amarelo, Branco"
+              className="mt-3 block h-14 w-full rounded-2xl bg-bandeja px-4 text-[16px] outline-none placeholder:text-maré/60 focus:ring-2 focus:ring-mar"
+            />
+            {coresLidas.length > 0 ? (
+              <ul className="mt-2 flex flex-wrap gap-1.5">
+                {coresLidas.map((c) => {
+                  const tons = tonsDaCor(c);
+                  return (
+                    <li key={c} className="flex items-center gap-1.5 rounded-full bg-bandeja py-1 pl-1 pr-2.5 text-[13px] font-medium">
+                      <span
+                        className="h-5 w-5 rounded-full ring-1 ring-black/15"
+                        style={{ background: tons.length > 1 ? `linear-gradient(135deg, ${tons[0]} 50%, ${tons[1]} 50%)` : tons[0] ?? "repeating-linear-gradient(45deg,#ddd 0 3px,#fff 3px 6px)" }}
+                      />
+                      {nomeDaCor(c)}
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              <p className="mt-2 text-sm text-maré">Separe por vírgula. Cor fora do comum: escreva o nome e o código, ex.: "Petróleo #0F5560".</p>
+            )}
+          </div>
+          <div className="rounded-3xl bg-white p-5 sm:p-6">
+            <label htmlFor="detalhes" className="rotulo">
+              Detalhes técnicos
+            </label>
+            <textarea
+              id="detalhes"
+              value={detalhes}
+              onChange={(e) => setDetalhes(e.target.value)}
+              rows={5}
+              placeholder={"Um por linha. Ex.:\nMaterial: Dacron\nNível: iniciante a avançado\nAcompanha bolsa"}
+              className="mt-3 block w-full resize-y rounded-2xl bg-bandeja p-4 text-[15px] leading-relaxed outline-none placeholder:text-maré/60 focus:ring-2 focus:ring-mar"
+            />
+            <p className="mt-2 text-sm text-maré">Com dois-pontos vira tabela (Material | Dacron). Sem, vira item da lista.</p>
           </div>
         </section>
 

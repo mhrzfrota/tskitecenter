@@ -1,12 +1,12 @@
 import { ESCOLA, linkWhatsApp } from "@/marca";
-import { MENU, linkMenu } from "./navbar";
+import { MENU, linkMenu, type Pagina } from "./navbar";
 import { useIdioma } from "@/idioma";
 import Botao from "./botao";
 
 const telefone = (n: string) => `(${n.slice(2, 4)}) ${n.slice(4, 9)}-${n.slice(9)}`;
 
 /** Rodapé em painel escuro arredondado, com margem, como na referência. */
-export default function Rodape({ pagina = "inicio" }: { pagina?: "inicio" | "loja" }) {
+export default function Rodape({ pagina = "inicio" }: { pagina?: Pagina }) {
   const { t } = useIdioma();
   return (
     <footer id="contato" className="p-2 sm:p-3">
