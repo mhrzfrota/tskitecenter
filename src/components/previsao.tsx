@@ -1,5 +1,6 @@
 import Botao from "./botao";
 import Cabecalho from "./cabecalho";
+import Mare from "./mare";
 import { useIdioma, type Idioma } from "@/idioma";
 
 const SPOT = 68535; // Windguru: Brazil - Cumbuco
@@ -54,8 +55,8 @@ export default function Previsao() {
         <Cabecalho
           rotulo={t("Previsão do vento", "Wind forecast")}
           apoio={t(
-            "Previsão do Windguru para a Praia do Cumbuco, com vento, ondas e a nota do dia para os próximos 5 dias.",
-            "Windguru forecast for Cumbuco Beach, with wind, waves and the daily rating for the next 5 days.",
+            "Vento, ondas e a nota do dia pelo Windguru para os próximos 5 dias, e a maré do Cumbuco.",
+            "Wind, waves and the daily rating from Windguru for the next 5 days, plus the Cumbuco tide.",
           )}
         >
           {t("Veja o vento", "Check the wind")} <span className="suave">{t("antes de sair de casa", "before you leave home")}</span>
@@ -66,6 +67,7 @@ export default function Previsao() {
             {TABELAS.map((tab) => (
               <WidgetWindguru key={`${tab.modelo}-${idioma}`} {...tab} idioma={idioma} />
             ))}
+            <Mare />
           </div>
           <div className="flex flex-wrap items-center justify-between gap-4 px-3 pb-2 pt-5 sm:px-4">
             <p className="max-w-md text-sm leading-relaxed text-maré">

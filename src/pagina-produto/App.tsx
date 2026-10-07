@@ -18,7 +18,7 @@ type Estado = { tipo: "carregando" } | { tipo: "ok"; produto: Produto; todos: Pr
  * e as sanfonas de descrição e especificações. A compra fecha no WhatsApp,
  * com cor e tamanho já escritos na mensagem.
  *
- * FALTA: como a vitrine, lê o cadastro deste navegador até a loja ir ao Supabase.
+ * Lê o catálogo fixo (src/loja/catalogo.ts) até a loja ir ao Supabase.
  */
 export default function App() {
   const [estado, setEstado] = useState<Estado>({ tipo: "carregando" });

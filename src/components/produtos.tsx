@@ -13,12 +13,10 @@ type Exemplo = { categoria: string; nome: string; foto: string };
 /**
  * Vitrine da loja: duas fileiras de três, na bandeja cinza.
  *
- * Os produtos vêm do painel (/admin): destaques primeiro, depois a ordem da
- * vitrine. O card é o mesmo da página /loja (card-produto). Enquanto nada foi cadastrado, ficam os exemplos abaixo, só para a
- * seção não nascer vazia.
- *
- * FALTA: hoje o cadastro fica no navegador de quem cadastrou (sem Supabase).
- * O visitante só vai ver os produtos reais quando a loja for ligada ao banco.
+ * Os produtos vêm do catálogo fixo (src/loja/catalogo.ts): destaques
+ * primeiro, depois a ordem do catálogo. O card é o mesmo da página /loja
+ * (card-produto). Se o catálogo ficar vazio, entram os exemplos abaixo, só
+ * para a seção não nascer vazia.
  */
 const EXEMPLOS: { pt: Exemplo[]; en: Exemplo[] } = {
   pt: [

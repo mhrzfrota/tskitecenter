@@ -36,12 +36,19 @@ export default function FotoLoja({
     };
   }, [id]);
 
-  // Foto tirada com cenário: inteira, sem o respiro de produto recortado, sobre ela mesma desfocada
+  // Foto tirada com cenário (grama, plantas): aparece inteira, com o próprio contorno
+  // arredondado e respiro em volta, para ficar claro que nada foi cortado
   if (url && id && fotoComCenario(id)) {
+    const extra = imgClassName.replace(/(^|\s)(p-\S+|mix-blend-multiply)(?=\s|$)/g, " ");
     return (
-      <div className={`relative isolate flex items-center justify-center overflow-hidden ${fundo} ${className}`}>
-        <img src={url} alt="" aria-hidden className="absolute inset-0 -z-10 h-full w-full scale-125 object-cover opacity-70 blur-2xl" />
-        <img src={url} alt={alt} loading="lazy" decoding="async" className={`h-full w-full object-contain ${imgClassName.replace(/\bp-\[[^\]]+\]|\bmix-blend-multiply\b/g, "")}`} />
+      <div className={`flex items-center justify-center p-[7%] ${fundo} ${className}`}>
+        <img
+          src={url}
+          alt={alt}
+          loading="lazy"
+          decoding="async"
+          className={`h-auto max-h-full w-auto max-w-full rounded-xl object-contain shadow-[0_10px_24px_-14px_rgba(6,34,43,0.45)] ${extra}`}
+        />
       </div>
     );
   }

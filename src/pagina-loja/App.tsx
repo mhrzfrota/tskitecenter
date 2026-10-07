@@ -43,8 +43,8 @@ function ordenar(lista: Produto[], ordem: Ordem, idioma: string) {
  * categoria e busca vão para a URL, então dá para mandar o link já filtrado
  * (ex.: /loja?categoria=kites).
  *
- * FALTA: como a vitrine, só mostra o que foi cadastrado neste navegador até a
- * loja ser ligada ao Supabase.
+ * Os produtos vêm do catálogo fixo (src/loja/catalogo.ts) até a loja ir ao
+ * Supabase; o que é cadastrado no painel ainda não aparece aqui.
  */
 export default function PaginaLoja() {
   const { idioma, t } = useIdioma();
