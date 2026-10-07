@@ -1,7 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import { Clock, Star, Users, Wind } from "lucide-react";
 import { useIdioma } from "@/idioma";
-import Foto from "./foto";
 
 const ETIQUETAS = {
   pt: [
@@ -37,6 +36,11 @@ function Faixa({ itens, inverso }: { itens: string[]; inverso?: boolean }) {
   );
 }
 
+const IRMAOS = [
+  { nome: "Set Teixeira", foto: "/fotos/set.webp" },
+  { nome: "Tomás Teixeira", foto: "/fotos/tomas.webp" },
+];
+
 /**
  * "Sobre" no formato da referência: título grande com um ícone no meio da
  * frase, dois cards (etiquetas + foto) e a fileira de números.
@@ -64,7 +68,7 @@ export default function PorQueTs() {
           </p>
         </div>
 
-        <div className="mx-auto mt-14 grid max-w-3xl gap-4 sm:grid-cols-2">
+        <div className="mx-auto mt-14 grid max-w-4xl gap-4 lg:grid-cols-[1fr_2fr]">
           <div className="flex min-w-0 flex-col justify-between gap-10 overflow-hidden rounded-3xl bg-bandeja py-5">
             <div className="space-y-2">
               <Faixa key={`a-${idioma}`} itens={ETIQUETAS[idioma][0]} />
@@ -76,17 +80,31 @@ export default function PorQueTs() {
             </div>
           </div>
 
-          <div className="relative isolate aspect-[4/3] overflow-hidden rounded-3xl sm:aspect-auto sm:min-h-[260px]">
-            <div className="absolute inset-0 -z-10">
-              <Foto tom="ceu" descricao={t("Set e Tomás Teixeira na praia do Cumbuco", "Set and Tomás Teixeira on Cumbuco beach")} />
-            </div>
-            <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(6,34,43,0)_40%,rgba(6,34,43,0.75)_100%)]" />
-            <div className="absolute inset-x-0 bottom-0 p-5 text-white">
-              <p className="titulo text-4xl">{t("Desde criança", "Since childhood")}</p>
-              <p className="mt-1 text-sm text-white/90">{t("no mar do Cumbuco, onde Set e Tomás cresceram e competiram.", "in the Cumbuco sea, where Set and Tomás grew up and competed.")}</p>
-            </div>
+          {/* Retratos em 3:4, a proporção das fotos: nada é cortado */}
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
+            {IRMAOS.map((irmao) => (
+              <figure key={irmao.nome} className="group relative isolate aspect-[3/4] overflow-hidden rounded-3xl bg-ceu">
+                <img
+                  src={irmao.foto}
+                  alt={t(`${irmao.nome} na praia do Cumbuco`, `${irmao.nome} on Cumbuco beach`)}
+                  width={1200}
+                  height={1600}
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 -z-10 h-full w-full transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04] motion-reduce:transition-none"
+                />
+                <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(6,34,43,0)_55%,rgba(6,34,43,0.8)_100%)]" />
+                <figcaption className="absolute inset-x-0 bottom-0 p-4 text-white sm:p-5">
+                  <p className="titulo text-[1.3rem] leading-tight sm:text-3xl">{irmao.nome}</p>
+                  <p className="mt-0.5 text-[13px] text-white/85 sm:text-sm">{t("Fundador da TS", "TS founder")}</p>
+                </figcaption>
+              </figure>
+            ))}
           </div>
         </div>
+        <p className="mx-auto mt-5 max-w-xl text-center text-sm text-maré">
+          {t("Desde criança no mar do Cumbuco, onde cresceram e competiram.", "In the Cumbuco sea since childhood, where they grew up and competed.")}
+        </p>
 
         <ul className="mt-16 grid grid-cols-2 gap-y-10 lg:grid-cols-4">
           {NUMEROS(t).map(({ icone: Icone, ...n }) => (

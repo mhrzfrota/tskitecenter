@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ImageIcon } from "lucide-react";
-import { loja } from "@/loja";
+import { fotoComCenario, loja } from "@/loja";
 
 /**
  * Foto guardada no navegador (IndexedDB). A imagem entra inteira
@@ -35,6 +35,16 @@ export default function FotoLoja({
       cancelar();
     };
   }, [id]);
+
+  // Foto tirada com cenário: inteira, sem o respiro de produto recortado, sobre ela mesma desfocada
+  if (url && id && fotoComCenario(id)) {
+    return (
+      <div className={`relative isolate flex items-center justify-center overflow-hidden ${fundo} ${className}`}>
+        <img src={url} alt="" aria-hidden className="absolute inset-0 -z-10 h-full w-full scale-125 object-cover opacity-70 blur-2xl" />
+        <img src={url} alt={alt} loading="lazy" decoding="async" className={`h-full w-full object-contain ${imgClassName.replace(/\bp-\[[^\]]+\]|\bmix-blend-multiply\b/g, "")}`} />
+      </div>
+    );
+  }
 
   return (
     <div className={`flex items-center justify-center ${fundo} ${className}`}>

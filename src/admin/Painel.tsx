@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowDown, ArrowUp, Download, ExternalLink, LogOut, Pencil, Plus, Search, Trash2, Upload } from "lucide-react";
-import { CATEGORIAS, ErroLoja, formatarPreco, loja, nomeCategoria, type CategoriaId, type Produto } from "@/loja";
+import { CATEGORIAS, ErroLoja, formatarPreco, lojaLocal as loja, nomeCategoria, type CategoriaId, type Produto } from "@/loja";
 import Editor from "./Editor";
 import FotoLoja from "./FotoLoja";
 import Interruptor from "./Interruptor";

@@ -1,6 +1,6 @@
 import { useRef, useState, type FormEvent } from "react";
 import { ArrowLeft, ArrowRight, ImagePlus, X } from "lucide-react";
-import { CATEGORIAS, ErroLoja, formatarPreco, lerPreco, loja, nomeDaCor, normalizarCores, normalizarDetalhes, normalizarOpcoes, prepararFoto, tonsDaCor, type CategoriaId, type Produto } from "@/loja";
+import { CATEGORIAS, ErroLoja, formatarPreco, lerPreco, lojaLocal as loja, nomeDaCor, normalizarCores, normalizarDetalhes, normalizarOpcoes, prepararFoto, tonsDaCor, type CategoriaId, type Produto } from "@/loja";
 import FotoLoja from "./FotoLoja";
 import Interruptor from "./Interruptor";
 

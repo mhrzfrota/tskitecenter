@@ -2,3 +2,8 @@ node_modules
 dist
 .DS_Store
 .env*
+
+# Originais enviados pela escola (as versões web ficam em public/)
+/IMG_*
+/set.jpg
+/tomas.jpg
