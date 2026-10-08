@@ -49,9 +49,9 @@ export function distribuir(produtos: Produto[], n: number): Produto[][] {
 export default function GradeProdutos({ produtos, colunas, className = "" }: { produtos: Produto[]; colunas: Colunas; className?: string }) {
   const n = useColunas(colunas);
   return (
-    <div className={`flex items-start gap-2 rounded-painel bg-bandeja p-2 sm:gap-3 sm:p-3 ${className}`}>
+    <div className={`flex items-start gap-3 sm:gap-5 ${className}`}>
       {distribuir(produtos, n).map((lista, i) => (
-        <ul key={i} className="flex min-w-0 flex-1 flex-col gap-2 sm:gap-3">
+        <ul key={i} className="flex min-w-0 flex-1 flex-col gap-8 sm:gap-10">
           {lista.map((p) => <CardProduto key={p.id} p={p} />)}
         </ul>
       ))}

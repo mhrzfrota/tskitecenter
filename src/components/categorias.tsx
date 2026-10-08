@@ -1,13 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import type { LucideIcon } from "lucide-react";
-import { ArrowUpRight, GraduationCap, Map, Sailboat, ShoppingBag, Wind } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { linkWhatsApp } from "@/marca";
 import { useIdioma } from "@/idioma";
 import Cabecalho from "./cabecalho";
 import Foto from "./foto";
 
 type Categoria = {
-  icone: LucideIcon;
   nome: string;
   texto: string;
   foto: string;
@@ -18,15 +16,15 @@ type Categoria = {
 };
 
 /**
- * As frentes do site em cards de foto inteira. No tablet e no desktop, duas
- * fileiras quase de borda a borda (2 em cima, 3 embaixo); o card sob o mouse
- * cresce e empurra os vizinhos. No celular, carrossel com indicador. Os cards
+ * As frentes do site em cards de foto inteira, como os de Kite, Foil e
+ * Windsurf da North: só a foto, o nome embaixo à esquerda e um botão discreto.
+ * No tablet e no desktop, duas fileiras de borda a borda (2 em cima, 3
+ * embaixo); o card sob o mouse cresce e empurra os vizinhos. No celular, carrossel com indicador. Os cards
  * entram em cascata quando a seção aparece. A previsão não entra aqui: tem seção própria. Quando existirem páginas
  * próprias (loja, previsão), o link muda aqui.
  */
 const CATEGORIAS = (t: <T>(pt: T, en: T) => T): Categoria[] => [
   {
-    icone: GraduationCap,
     nome: t("Aulas de kitesurf", "Kitesurf lessons"),
     texto: t(
       "Do primeiro velejo ao avançado. A gente avalia você antes e monta o plano. Iniciante faz o curso de 10h.",
@@ -38,7 +36,6 @@ const CATEGORIAS = (t: <T>(pt: T, en: T) => T): Categoria[] => [
     href: "#reservar",
   },
   {
-    icone: Wind,
     nome: "Downwind",
     texto: t(
       "Lagoinha → Guajiru e Pecém → Taíba, com 4x4 de apoio, resgate e suporte na água e em terra.",
@@ -51,7 +48,6 @@ const CATEGORIAS = (t: <T>(pt: T, en: T) => T): Categoria[] => [
     externo: true,
   },
   {
-    icone: Map,
     nome: "Kite Trip",
     texto: t(
       "Circuito dos Ventos: viagem guiada pelo litoral cearense, velejando de spot em spot.",
@@ -64,7 +60,6 @@ const CATEGORIAS = (t: <T>(pt: T, en: T) => T): Categoria[] => [
     externo: true,
   },
   {
-    icone: Sailboat,
     nome: t("Wingfoil e kite foil", "Wingfoil and kite foil"),
     texto: t(
       "Aulas personalizadas de controle da asa, equilíbrio e transições.",
@@ -76,7 +71,6 @@ const CATEGORIAS = (t: <T>(pt: T, en: T) => T): Categoria[] => [
     externo: true,
   },
   {
-    icone: ShoppingBag,
     nome: "TS Kite Shop",
     texto: t(
       "Kites, pranchas e acessórios com a parceria North Kiteboarding, e quem entende para indicar.",
@@ -95,48 +89,35 @@ type Revelar = { visivel: boolean; atraso: number };
  * é que entra com a animação de revelar, para o atraso da cascata não pesar
  * no hover.
  */
-function Card({ c, n, destaque, revelar, className = "" }: { c: Categoria; n: number; destaque?: boolean; revelar: Revelar; className?: string }) {
-  const Icone = c.icone;
+function Card({ c, destaque, revelar, className = "" }: { c: Categoria; destaque?: boolean; revelar: Revelar; className?: string }) {
   return (
     <li className={`group relative ${className}`}>
       <div
-        className={`absolute inset-0 isolate flex flex-col justify-end overflow-hidden rounded-[28px] transition-[opacity,transform] duration-[900ms] ease-[cubic-bezier(0.2,0.7,0.2,1)] motion-reduce:transition-none ${
-          revelar.visivel ? "translate-y-0 scale-100 opacity-100" : "translate-y-10 scale-[0.97] opacity-0"
+        className={`absolute inset-0 isolate flex flex-col justify-end overflow-hidden rounded-cartao transition-[opacity,transform] duration-[900ms] ease-[cubic-bezier(0.2,0.7,0.2,1)] motion-reduce:transition-none ${
+          revelar.visivel ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
         }`}
         style={{ transitionDelay: revelar.visivel ? `${revelar.atraso}ms` : "0ms" }}
       >
         {/* Foto ocupando o card inteiro, com zoom lento no hover */}
-        <div className="absolute inset-0 -z-10 transition-transform duration-[1400ms] ease-out group-hover:scale-[1.08] motion-reduce:transition-none">
+        <div className="absolute inset-0 -z-10 transition-transform duration-[1400ms] ease-out group-hover:scale-[1.06] motion-reduce:transition-none">
           <Foto tom="ceu" aviso="topo" descricao={c.foto} src={c.src} />
         </div>
         <div
           aria-hidden
-          className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(6,34,43,0.15)_0%,rgba(6,34,43,0)_25%,rgba(6,34,43,0.55)_58%,rgba(6,34,43,0.92)_100%)] transition-opacity duration-700"
+          className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(3,22,28,0)_35%,rgba(3,22,28,0.55)_65%,rgba(3,22,28,0.92)_100%)]"
         />
-        <div aria-hidden className="absolute inset-0 -z-10 bg-mar/0 transition-colors duration-700 group-hover:bg-mar/15" />
-
-        <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-6 sm:top-6">
-          <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-sol transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-110">
-            <Icone aria-hidden className="h-5 w-5" strokeWidth={2} />
-          </span>
-          <span className="rounded-full bg-white/15 px-3 py-1 font-mono text-[11px] tracking-[0.12em] text-white backdrop-blur-md">
-            {String(n).padStart(2, "0")}
-          </span>
-        </div>
 
         {/* Largura fixa no texto: o card cresce no hover sem o parágrafo pular de linha */}
-        <div className="flex flex-col items-start p-5 text-white sm:p-7">
-          <h3 className={`titulo ${destaque ? "text-[2rem] sm:text-[2.6rem]" : "text-[1.8rem] sm:text-[2rem]"}`}>{c.nome}</h3>
-          <p className={`mt-2 leading-relaxed text-white/85 ${destaque ? "max-w-[30rem] text-[15px] sm:text-base" : "max-w-[22rem] text-[15px]"}`}>{c.texto}</p>
+        <div className="flex flex-col items-start p-6 text-white sm:p-8">
+          <h3 className={`titulo ${destaque ? "text-[2.1rem] sm:text-[2.75rem]" : "text-[1.9rem] sm:text-[2.1rem]"}`}>{c.nome}</h3>
+          <p className={`mt-2 leading-relaxed text-white/75 ${destaque ? "max-w-[30rem] text-[15px] sm:text-base" : "max-w-[22rem] text-[15px]"}`}>{c.texto}</p>
           <a
             href={c.href}
             {...(c.externo && { target: "_blank", rel: "noopener noreferrer" })}
-            className="mt-6 inline-flex h-11 items-center gap-3 rounded-full bg-white pl-5 pr-1.5 font-mono text-[12px] font-medium uppercase tracking-[0.12em] text-mar transition-colors duration-300 hover:bg-sol"
+            className="mt-6 inline-flex h-11 items-center gap-2 rounded-full bg-white/10 px-5 text-[14px] font-semibold ring-1 ring-inset ring-white/25 backdrop-blur-md transition-colors duration-300 hover:bg-sol hover:text-mar hover:ring-sol"
           >
             {c.botao}
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-mar text-white transition-transform duration-500 group-hover:rotate-45">
-              <ArrowUpRight aria-hidden className="h-4 w-4" />
-            </span>
+            <ArrowRight aria-hidden className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
           </a>
         </div>
       </div>
@@ -168,8 +149,8 @@ function useRevelar<T extends Element>() {
 
 // Duas fileiras: aulas (o carro-chefe) e downwind em cima; o resto embaixo
 const FILEIRAS = [
-  { itens: [0, 1], altura: "h-[560px]" },
-  { itens: [2, 3, 4], altura: "h-[480px]" },
+  { itens: [0, 1], altura: "h-[620px]" },
+  { itens: [2, 3, 4], altura: "h-[500px]" },
 ];
 
 export default function Categorias() {
@@ -195,7 +176,7 @@ export default function Categorias() {
   }
 
   return (
-    <section id="servicos" className="py-16 sm:py-24">
+    <section id="servicos" className="escuro py-20 sm:py-28">
       <div className="shell">
         <Cabecalho
           rotulo={t("Serviços", "Services")}
@@ -206,14 +187,13 @@ export default function Categorias() {
       </div>
 
       {/* Tablet e desktop: duas fileiras quase de borda a borda; o card sob o mouse se expande */}
-      <div ref={desktop.ref} className="mx-auto mt-14 hidden max-w-[1440px] flex-col gap-3 px-3 md:flex">
+      <div ref={desktop.ref} className="mt-14 hidden flex-col gap-2 px-2 md:flex sm:mt-16">
         {FILEIRAS.map((f, fi) => (
-          <ul key={fi} className={`flex gap-3 ${f.altura}`}>
+          <ul key={fi} className={`flex gap-2 ${f.altura}`}>
             {f.itens.map((i, k) => (
               <Card
                 key={lista[i].nome}
                 c={lista[i]}
-                n={i + 1}
                 destaque={i === 0}
                 revelar={{ visivel: desktop.visivel, atraso: (fi * 2 + k) * 110 }}
                 className={`min-w-0 basis-0 transition-[flex-grow] duration-700 ease-[cubic-bezier(0.2,0.7,0.2,1)] hover:grow-[1.9] motion-reduce:transition-none ${
@@ -236,7 +216,6 @@ export default function Categorias() {
             <Card
               key={c.nome}
               c={c}
-              n={i + 1}
               revelar={{ visivel: celular.visivel, atraso: i * 110 }}
               className="h-[540px] w-[86%] shrink-0 snap-start"
             />
@@ -252,7 +231,7 @@ export default function Categorias() {
               onClick={() => irPara(i)}
               className="flex h-6 items-center"
             >
-              <span className={`block h-1.5 rounded-full transition-all duration-500 ${atual === i ? "w-7 bg-mar" : "w-1.5 bg-mar/20"}`} />
+              <span className={`block h-0.5 transition-all duration-500 ${atual === i ? "w-8 bg-sol" : "w-4 bg-white/25"}`} />
             </button>
           ))}
         </div>

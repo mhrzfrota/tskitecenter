@@ -25,9 +25,9 @@ export const MENU = [
 ];
 
 /**
- * Header da referência: logo à esquerda, links em mono no centro, pílula de
- * ação à direita. Começa transparente sobre o céu do hero e vira uma barra
- * branca arredondada quando a página rola.
+ * Barra da North: logo à esquerda, links no centro, idioma e reserva à
+ * direita, de borda a borda. Na página inicial começa transparente sobre o
+ * vídeo e escurece quando a página rola; nas outras páginas já nasce escura.
  */
 export default function Navbar({ pagina = "inicio" }: { pagina?: Pagina }) {
   const { t } = useIdioma();
@@ -47,27 +47,27 @@ export default function Navbar({ pagina = "inicio" }: { pagina?: Pagina }) {
     return () => window.removeEventListener("keydown", esc);
   }, []);
 
-  const claro = rolou || aberto || pagina === "produto";
+  const solida = rolou || aberto || pagina !== "inicio";
 
   return (
-    <header className="fixed inset-x-0 top-3 z-40 px-3 sm:top-4 sm:px-4">
-      <div
-        className={`mx-auto flex h-16 max-w-[1400px] items-center justify-between rounded-2xl px-4 transition-all duration-300 sm:px-6 lg:px-10 ${
-          claro ? "bg-white/90 text-mar shadow-[0_10px_30px_-12px_rgba(6,34,43,0.25)] backdrop-blur-md" : "text-white"
-        }`}
-      >
-        <a href={pagina === "inicio" ? "#inicio" : "/"} className="flex items-center gap-2.5">
-          <img src="/logo-ts.png" alt="" width={36} height={36} className="h-9 w-9 rounded-full" />
-          <span className="text-lg font-medium tracking-[-0.04em]">TS Kite Center</span>
+    <header
+      className={`fixed inset-x-0 top-0 z-40 text-white transition-colors duration-300 ${
+        solida ? "border-b border-white/10 bg-abismo/90 backdrop-blur-md" : "border-b border-transparent"
+      }`}
+    >
+      <div className="shell flex h-[72px] items-center justify-between gap-6">
+        <a href={pagina === "inicio" ? "#inicio" : "/"} className="flex shrink-0 items-center gap-2.5">
+          <img src="/logo-ts.png" alt="" width={34} height={34} className="h-[34px] w-[34px] rounded-full" />
+          <span className="text-[17px] font-semibold tracking-[-0.03em]">TS Kite Center</span>
         </a>
 
-        <nav className="hidden items-center gap-6 lg:flex xl:gap-8" aria-label={t("Principal", "Main")}>
+        <nav className="hidden items-center gap-7 lg:flex xl:gap-9" aria-label={t("Principal", "Main")}>
           {MENU.map((l) => (
             <a
               key={l.href}
               href={linkMenu(l.href, pagina)}
               aria-current={pagina !== "inicio" && l.href === "#loja" ? "page" : undefined}
-              className="font-mono text-[13px] uppercase tracking-[0.12em] opacity-90 transition-opacity hover:opacity-100 aria-[current=page]:underline aria-[current=page]:decoration-sol aria-[current=page]:decoration-2 aria-[current=page]:underline-offset-8"
+              className="text-[15px] text-white/75 transition-colors hover:text-white aria-[current=page]:text-white aria-[current=page]:underline aria-[current=page]:decoration-sol aria-[current=page]:decoration-2 aria-[current=page]:underline-offset-[10px]"
             >
               {t(l.pt, l.en)}
             </a>
@@ -75,10 +75,10 @@ export default function Navbar({ pagina = "inicio" }: { pagina?: Pagina }) {
         </nav>
 
         <div className="flex items-center gap-2">
-          <SeletorIdioma claro={claro} />
+          <SeletorIdioma claro={false} />
           <a
             href={linkMenu("#reservar", pagina)}
-            className="hidden h-10 items-center rounded-full bg-sol px-5 font-mono text-[13px] font-medium uppercase tracking-[0.12em] text-mar sm:flex"
+            className="hidden h-10 items-center rounded-full bg-sol px-5 text-[14px] font-semibold text-mar transition-colors hover:bg-[#EDD35B] sm:flex"
           >
             {t("Reservar aula", "Book a lesson")}
           </a>
@@ -88,38 +88,35 @@ export default function Navbar({ pagina = "inicio" }: { pagina?: Pagina }) {
             aria-expanded={aberto}
             aria-controls="menu-celular"
             onClick={() => setAberto(!aberto)}
-            className="flex h-11 w-11 items-center justify-center rounded-full lg:hidden"
+            className="-mr-2 flex h-11 w-11 items-center justify-center lg:hidden"
           >
             {aberto ? (
               <X aria-hidden className="h-6 w-6" />
             ) : (
-              <svg width="22" height="14" viewBox="0 0 22 14" fill="none" aria-hidden>
-                <path d="M0 1H22M0 7H22M0 13H22" stroke="currentColor" strokeWidth="1.75" />
+              <svg width="22" height="12" viewBox="0 0 22 12" fill="none" aria-hidden>
+                <path d="M0 1H22M0 11H22" stroke="currentColor" strokeWidth="1.75" />
               </svg>
             )}
           </button>
         </div>
       </div>
 
-      {/* Menu do celular: painel branco arredondado logo abaixo da barra */}
-      <div
-        id="menu-celular"
-        hidden={!aberto}
-        className="mx-auto mt-2 max-w-[1400px] rounded-2xl bg-white p-3 text-mar shadow-[0_20px_40px_-16px_rgba(6,34,43,0.3)] lg:hidden"
-      >
-        {MENU.map((l) => (
-          <a
-            key={l.href}
-            href={linkMenu(l.href, pagina)}
-            onClick={() => setAberto(false)}
-            className="block rounded-xl px-4 py-3.5 font-mono text-sm uppercase tracking-[0.12em] hover:bg-bandeja"
-          >
-            {t(l.pt, l.en)}
-          </a>
-        ))}
-        <Botao href={linkMenu("#reservar", pagina)} className="mt-2 w-full justify-between">
-          {t("Reservar aula", "Book a lesson")}
-        </Botao>
+      {/* Menu do celular: lista grande com linhas finas, como a gaveta da North */}
+      <div id="menu-celular" hidden={!aberto} className="border-t border-white/10 lg:hidden">
+        <nav className="shell pb-6 pt-2" aria-label={t("Principal", "Main")}>
+          <ul className="divide-y divide-white/10">
+            {MENU.map((l) => (
+              <li key={l.href}>
+                <a href={linkMenu(l.href, pagina)} onClick={() => setAberto(false)} className="block py-4 text-xl font-medium tracking-[-0.02em]">
+                  {t(l.pt, l.en)}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <Botao href={linkMenu("#reservar", pagina)} className="mt-4 w-full">
+            {t("Reservar aula", "Book a lesson")}
+          </Botao>
+        </nav>
       </div>
     </header>
   );

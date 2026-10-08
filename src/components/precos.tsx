@@ -86,7 +86,7 @@ const reais = (valor: number, idioma: "pt" | "en" = "pt") =>
     maximumFractionDigits: 2,
   });
 
-const rotuloMini = "font-mono text-[11px] uppercase tracking-[0.12em]";
+const rotuloMini = "text-[11px] font-semibold uppercase tracking-[0.16em]";
 
 /** Régua de horas: um tracinho por hora, de 0 a 12, preenchido até o pacote. */
 function ReguaHoras({ horas, escuro }: { horas: number; escuro: boolean }) {
@@ -95,7 +95,7 @@ function ReguaHoras({ horas, escuro }: { horas: number; escuro: boolean }) {
       {Array.from({ length: MAX_HORAS }, (_, i) => (
         <span
           key={i}
-          className={`h-1.5 flex-1 rounded-full ${i < horas ? "bg-sol" : escuro ? "bg-white/15" : "bg-bandeja"}`}
+          className={`h-1 flex-1 rounded-full ${i < horas ? "bg-sol" : escuro ? "bg-white/15" : "bg-mar/10"}`}
         />
       ))}
     </div>
@@ -109,11 +109,11 @@ function CardAula({ aula }: { aula: Aula }) {
   const destaque = porHora === MENOR_POR_HORA;
   const economia = POR_HORA_AVULSA * aula.horas - aula.preco;
   return (
-    <li className={`flex flex-col rounded-3xl p-5 sm:p-6 ${destaque ? "bg-mar text-white" : "bg-white"}`}>
+    <li className={`flex flex-col rounded-cartao p-5 sm:p-6 ${destaque ? "bg-abismo text-white" : "bg-white ring-1 ring-inset ring-mar/10"}`}>
       {/* Os outros cards reservam a mesma altura, para os preços ficarem na mesma linha */}
       <span
         aria-hidden={!destaque}
-        className={`mb-4 self-start rounded-full px-2.5 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.1em] ${
+        className={`mb-4 self-start rounded-full px-2.5 py-1 text-[11px] font-semibold ${
           destaque ? "bg-sol text-mar" : "invisible max-sm:hidden"
         }`}
       >
@@ -134,7 +134,7 @@ function CardAula({ aula }: { aula: Aula }) {
       </p>
 
       <dl
-        className={`mt-4 space-y-1.5 border-t pt-4 text-sm ${destaque ? "border-white/15 text-white/80" : "border-bandeja text-maré"}`}
+        className={`mt-4 space-y-1.5 border-t pt-4 text-sm ${destaque ? "border-white/15 text-white/80" : "border-mar/10 text-maré"}`}
       >
         <div className="flex justify-between gap-2">
           <dt>{t("No Pix", "With Pix")}</dt>
@@ -155,8 +155,8 @@ function CardAula({ aula }: { aula: Aula }) {
         )}
         target="_blank"
         rel="noopener noreferrer"
-        className={`mt-6 inline-flex h-11 items-center justify-center rounded-full font-mono text-[12px] font-medium uppercase tracking-[0.12em] transition-colors ${
-          destaque ? "bg-sol text-mar hover:bg-[#EDD35B]" : "bg-pilula text-mar hover:bg-[#D8E2E2]"
+        className={`mt-6 inline-flex h-11 items-center justify-center rounded-full text-[14px] font-semibold transition-colors ${
+          destaque ? "bg-sol text-mar hover:bg-[#EDD35B]" : "text-mar ring-1 ring-inset ring-mar/20 hover:bg-mar/5"
         }`}
       >
         {t("Reservar", "Book")}
@@ -169,19 +169,19 @@ function QueroAprender() {
   const { t } = useIdioma();
   return (
     <>
-      <ul className="grid gap-2 sm:grid-cols-2 sm:gap-3 xl:grid-cols-4">
+      <ul className="grid gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-4">
         {AULAS(t).map((a) => (
           <CardAula key={a.nome} aula={a} />
         ))}
       </ul>
 
-      <div className="mt-2 grid gap-2 sm:mt-3 sm:gap-3 lg:grid-cols-[1.4fr_1fr]">
-        <div className="rounded-3xl bg-white p-5 sm:p-6">
+      <div className="mt-3 grid gap-3 sm:mt-4 sm:gap-4 lg:grid-cols-[1.4fr_1fr]">
+        <div className="rounded-cartao bg-white p-5 ring-1 ring-inset ring-mar/10 sm:p-6">
           <p className={`${rotuloMini} text-maré`}>{t("Incluso em todas as aulas", "Included in every lesson")}</p>
           <ul className="mt-5 grid gap-5 sm:grid-cols-2">
             {INCLUSO(t).map(({ icone: Icone, nome, explica }) => (
               <li key={nome} className="flex gap-3">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sol">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-nevoa">
                   <Icone aria-hidden className="h-5 w-5" strokeWidth={1.75} />
                 </span>
                 <div>
@@ -193,16 +193,16 @@ function QueroAprender() {
           </ul>
         </div>
 
-        <div className="rounded-3xl bg-white p-5 sm:p-6">
+        <div className="rounded-cartao bg-white p-5 ring-1 ring-inset ring-mar/10 sm:p-6">
           <p className={`${rotuloMini} text-maré`}>{t("Formas de pagamento", "Payment options")}</p>
-          <ul className="mt-3 divide-y divide-bandeja">
+          <ul className="mt-3 divide-y divide-mar/10">
             {PAGAMENTO(t).map(({ icone: Icone, forma, detalhe, desconto }) => (
               <li key={forma} className="flex items-center gap-3 py-3">
                 <Icone aria-hidden className="h-5 w-5 shrink-0 text-maré" strokeWidth={1.75} />
                 <span className="flex-1 text-[15px]">{forma}</span>
                 <span
                   className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ${
-                    desconto ? "bg-lagoa-forte/10 text-lagoa-forte" : "bg-bandeja text-maré"
+                    desconto ? "bg-lagoa-forte/10 text-lagoa-forte" : "bg-nevoa text-maré"
                   }`}
                 >
                   {detalhe}
@@ -220,10 +220,10 @@ function JaVelejo() {
   const { idioma, t } = useIdioma();
   const brl = (v: number) => reais(v, idioma);
   return (
-    <div className="grid gap-2 sm:gap-3 lg:grid-cols-[1.5fr_1fr]">
-      <ul className="grid gap-2 sm:gap-3">
+    <div className="grid gap-3 sm:gap-4 lg:grid-cols-[1.5fr_1fr]">
+      <ul className="grid gap-3 sm:gap-4">
         {PARA_QUEM_VELEJA(t).map((s) => (
-          <li key={s.nome} className="rounded-3xl bg-white p-5 sm:p-6">
+          <li key={s.nome} className="rounded-cartao bg-white p-5 ring-1 ring-inset ring-mar/10 sm:p-6">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-lg font-medium tracking-[-0.02em]">{s.nome}</p>
@@ -235,7 +235,7 @@ function JaVelejo() {
               </p>
             </div>
             {s.aviso && (
-              <p className="mt-4 flex items-start gap-2 rounded-2xl bg-sol/20 px-4 py-3 text-sm">
+              <p className="mt-4 flex items-start gap-2 rounded-lg bg-sol/20 px-4 py-3 text-sm">
                 <Info aria-hidden className="mt-0.5 h-4 w-4 shrink-0" />
                 {s.aviso}
               </p>
@@ -244,10 +244,10 @@ function JaVelejo() {
         ))}
       </ul>
 
-      <div className="flex flex-col rounded-3xl bg-white p-5 sm:p-6">
+      <div className="flex flex-col rounded-cartao bg-white p-5 ring-1 ring-inset ring-mar/10 sm:p-6">
         <p className={`${rotuloMini} text-maré`}>{t("Aluguel de acessórios", "Accessory rental")}</p>
         <p className="mt-1 text-sm text-maré">{t("Valores por diária", "Prices per day")}</p>
-        <ul className="mt-3 divide-y divide-bandeja">
+        <ul className="mt-3 divide-y divide-mar/10">
           {ACESSORIOS(t).map((a) => (
             <li key={a.nome} className="flex items-center justify-between gap-4 py-3.5">
               <div>
@@ -282,7 +282,7 @@ export default function Precos() {
   const [aba, setAba] = useState<(typeof ABAS)[number]["id"]>("aprender");
 
   return (
-    <section id="precos" className="py-16 sm:py-24">
+    <section id="precos" className="py-20 sm:py-28">
       <div className="shell">
         <Cabecalho
           rotulo={t("Preços", "Prices")}
@@ -293,8 +293,8 @@ export default function Precos() {
         </Cabecalho>
 
         {/* Dois caminhos: quem nunca velejou não precisa ver preço de leash */}
-        <div className="mt-10 flex justify-center">
-          <div role="tablist" aria-label={t("Tipo de preço", "Price type")} className="inline-flex rounded-full bg-bandeja p-1">
+        <div className="mt-12 flex">
+          <div role="tablist" aria-label={t("Tipo de preço", "Price type")} className="inline-flex rounded-full p-1 ring-1 ring-inset ring-mar/15">
             {ABAS.map((a) => (
               <button
                 key={a.id}
@@ -304,7 +304,7 @@ export default function Precos() {
                 aria-selected={aba === a.id}
                 aria-controls={`painel-${a.id}`}
                 onClick={() => setAba(a.id)}
-                className={`h-11 rounded-full px-5 font-mono text-[12px] font-medium uppercase tracking-[0.12em] transition-colors sm:px-7 ${
+                className={`h-11 rounded-full px-5 text-[14px] font-semibold transition-colors sm:px-7 ${
                   aba === a.id ? "bg-mar text-white" : "text-maré hover:text-mar"
                 }`}
               >
@@ -318,7 +318,7 @@ export default function Precos() {
           id={`painel-${aba}`}
           role="tabpanel"
           aria-labelledby={`aba-${aba}`}
-          className="mx-auto mt-6 max-w-6xl rounded-painel bg-bandeja p-2 sm:p-3"
+          className="mt-6"
         >
           {aba === "aprender" ? <QueroAprender /> : <JaVelejo />}
         </div>

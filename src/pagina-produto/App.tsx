@@ -102,7 +102,7 @@ function Pagina({ p, todos }: { p: Produto; todos: Produto[] }) {
     <>
       <div className="shell">
         {/* Caminho */}
-        <nav aria-label={t("Você está em", "You are here")} className="flex flex-wrap items-center gap-1.5 font-mono text-[12px] uppercase tracking-[0.12em] text-maré">
+        <nav aria-label={t("Você está em", "You are here")} className="flex flex-wrap items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-maré">
           <a href="/loja" className="hover:text-mar">{t("Loja", "Shop")}</a>
           <ChevronRight aria-hidden className="h-3 w-3" />
           <a href={`/loja?categoria=${p.categoria}`} className="hover:text-mar">{t(nomeCategoria(p.categoria), CATEGORIA_EN_PLURAL[p.categoria])}</a>
@@ -124,23 +124,23 @@ function Pagina({ p, todos }: { p: Produto; todos: Produto[] }) {
                       aria-current={i === foto}
                       // Miniatura na proporção da foto (altura fixa), como a foto grande
                       style={proporcaoDaFoto(f) ? { aspectRatio: String(proporcaoDaFoto(f)) } : undefined}
-                      className={`block h-[72px] overflow-hidden rounded-xl bg-bandeja ring-2 transition-[box-shadow] sm:h-20 ${proporcaoDaFoto(f) ? "w-auto" : "w-[72px] sm:w-20"} ${i === foto ? "ring-mar" : "ring-transparent hover:ring-mar/25"}`}
+                      className={`block h-[72px] overflow-hidden rounded-lg bg-nevoa ring-2 transition-[box-shadow] sm:h-20 ${proporcaoDaFoto(f) ? "w-auto" : "w-[72px] sm:w-20"} ${i === foto ? "ring-mar" : "ring-transparent hover:ring-mar/25"}`}
                     >
-                      <FotoLoja id={f} alt="" fundo="bg-bandeja" className="h-full w-full" imgClassName={proporcaoDaFoto(f) ? "" : "p-1.5 mix-blend-multiply"} />
+                      <FotoLoja id={f} alt="" fundo="bg-nevoa" className="h-full w-full" imgClassName={proporcaoDaFoto(f) ? "" : "p-1.5 mix-blend-multiply"} />
                     </button>
                   </li>
                 ))}
               </ul>
             )}
             <div
-              className={`relative min-w-0 flex-1 overflow-hidden rounded-painel bg-bandeja ${proporcao ? "" : "aspect-square"}`}
+              className={`relative min-w-0 flex-1 overflow-hidden rounded-cartao bg-nevoa ${proporcao ? "" : "aspect-square"}`}
               style={proporcao ? { aspectRatio: String(proporcao) } : undefined}
               onTouchStart={(e) => (toque.current = e.touches[0].clientX)}
               onTouchEnd={fimToque}
             >
-              <FotoLoja id={fotos[foto]} alt={p.nome} fundo="bg-bandeja" className="h-full w-full" imgClassName={proporcao ? "" : "p-[8%] mix-blend-multiply"} />
+              <FotoLoja id={fotos[foto]} alt={p.nome} fundo="bg-nevoa" className="h-full w-full" imgClassName={proporcao ? "" : "p-[8%] mix-blend-multiply"} />
               {!p.disponivel && (
-                <span className="absolute left-4 top-4 rounded-full bg-mar px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-white">{t("Esgotado", "Sold out")}</span>
+                <span className="absolute left-4 top-4 rounded-full bg-mar px-3 py-1.5 text-[11px] font-semibold text-white">{t("Esgotado", "Sold out")}</span>
               )}
               {fotos.length > 1 && (
                 <>
@@ -150,7 +150,7 @@ function Pagina({ p, todos }: { p: Produto; todos: Produto[] }) {
                   <button type="button" onClick={() => trocarFoto(1)} aria-label={t("Próxima foto", "Next photo")} className="absolute right-3 top-1/2 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-white/90 shadow-sm hover:bg-white sm:grid">
                     <ChevronRight className="h-5 w-5" />
                   </button>
-                  <span className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-white/90 px-2.5 py-1 font-mono text-[11px] tabular-nums">
+                  <span className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-white/90 px-2.5 py-1 text-[12px] font-semibold tabular-nums">
                     {foto + 1} / {fotos.length}
                   </span>
                 </>
@@ -176,7 +176,7 @@ function Pagina({ p, todos }: { p: Produto; todos: Produto[] }) {
             {/* Cor */}
             {p.cores.length > 0 && (
               <fieldset className="mt-8">
-                <legend className="flex w-full items-baseline gap-2 font-mono text-[12px] uppercase tracking-[0.12em]">
+                <legend className="flex w-full items-baseline gap-2 text-[12px] font-semibold uppercase tracking-[0.14em]">
                   {t("Selecionar cor", "Select colour")}
                   <span className="normal-case tracking-normal text-maré">{cor ? nomeDaCor(cor) : ""}</span>
                 </legend>
@@ -206,7 +206,7 @@ function Pagina({ p, todos }: { p: Produto; todos: Produto[] }) {
             {/* Tamanho */}
             {p.opcoes.length > 0 && (
               <fieldset className="mt-7">
-                <legend className="flex w-full items-baseline justify-between gap-2 font-mono text-[12px] uppercase tracking-[0.12em]">
+                <legend className="flex w-full items-baseline justify-between gap-2 text-[12px] font-semibold uppercase tracking-[0.14em]">
                   <span>
                     {t("Selecionar tamanho", "Select size")} <span className="normal-case tracking-normal text-maré">{tamanho}</span>
                   </span>
@@ -245,7 +245,7 @@ function Pagina({ p, todos }: { p: Produto; todos: Produto[] }) {
               <button
                 type="button"
                 onClick={comprar}
-                className={`flex h-14 items-center justify-center gap-2 rounded-full font-mono text-[13px] font-medium uppercase tracking-[0.12em] transition-colors ${p.disponivel ? "bg-sol text-mar hover:bg-[#EDD45A]" : "bg-mar text-white hover:bg-mar-2"}`}
+                className={`flex h-14 items-center justify-center gap-2 rounded-full text-[16px] font-semibold transition-colors ${p.disponivel ? "bg-sol text-mar hover:bg-[#EDD45A]" : "bg-mar text-white hover:bg-mar-2"}`}
               >
                 <MessageCircle className="h-5 w-5" />
                 {p.disponivel ? t("Comprar pelo WhatsApp", "Buy on WhatsApp") : t("Avise-me quando chegar", "Notify me when it's back")}
@@ -287,7 +287,7 @@ function Pagina({ p, todos }: { p: Produto; todos: Produto[] }) {
                   href={linkWhatsApp(t(`Olá! Tenho uma dúvida sobre o ${p.nome}.`, `Hi! I have a question about the ${p.nome}.`))}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-3 inline-flex h-10 items-center rounded-full bg-pilula px-4 font-mono text-[12px] font-medium uppercase tracking-[0.12em] hover:bg-[#D8E2E2]"
+                  className="mt-3 inline-flex h-10 items-center rounded-full px-4 text-[14px] font-semibold ring-1 ring-inset ring-mar/20 hover:bg-mar/5"
                 >
                   {t("Tirar dúvida", "Ask a question")}
                 </a>
@@ -305,7 +305,7 @@ function Pagina({ p, todos }: { p: Produto; todos: Produto[] }) {
               <h2 className="titulo text-3xl sm:text-4xl">
                 {t("Você também", "You may")} <span className="suave">{t("pode gostar", "also like")}</span>
               </h2>
-              <a href="/loja" className="font-mono text-[12px] font-medium uppercase tracking-[0.12em] underline decoration-sol decoration-2 underline-offset-4">
+              <a href="/loja" className="text-[14px] font-semibold underline decoration-sol decoration-2 underline-offset-4">
                 {t("Ver toda a loja", "See the whole shop")}
               </a>
             </div>
@@ -320,7 +320,7 @@ function Pagina({ p, todos }: { p: Produto; todos: Produto[] }) {
 function Sanfona({ titulo, aberta = false, children }: { titulo: string; aberta?: boolean; children: ReactNode }) {
   return (
     <details open={aberta} className="group py-1">
-      <summary className="flex cursor-pointer list-none items-center justify-between py-4 font-mono text-[13px] font-medium uppercase tracking-[0.12em] [&::-webkit-details-marker]:hidden">
+      <summary className="flex cursor-pointer list-none items-center justify-between py-4 text-[13px] font-semibold uppercase tracking-[0.14em] [&::-webkit-details-marker]:hidden">
         {titulo}
         <ChevronDown aria-hidden className="h-4 w-4 transition-transform group-open:rotate-180" />
       </summary>
@@ -337,7 +337,7 @@ function Especificacoes({ detalhes }: { detalhes: string[] }) {
   return (
     <div className="space-y-4">
       {tabela.length > 0 && (
-        <dl className="overflow-hidden rounded-2xl bg-bandeja">
+        <dl className="overflow-hidden rounded-lg bg-nevoa">
           {tabela.map((d, i) => (
             <div key={i} className="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] gap-3 px-4 py-3 text-[14.5px] odd:bg-white/60">
               <dt className="text-maré">{d.rotulo}</dt>
@@ -362,11 +362,11 @@ function Especificacoes({ detalhes }: { detalhes: string[] }) {
 function Carregando() {
   return (
     <div className="shell grid gap-8 lg:grid-cols-2" aria-label="Carregando">
-      <div className="aspect-square animate-pulse rounded-painel bg-bandeja" />
+      <div className="aspect-square animate-pulse rounded-cartao bg-nevoa" />
       <div className="space-y-4 pt-4">
         <div className="h-4 w-24 animate-pulse rounded-full bg-bandeja" />
-        <div className="h-12 w-3/4 animate-pulse rounded-2xl bg-bandeja" />
-        <div className="h-14 w-1/2 animate-pulse rounded-2xl bg-bandeja" />
+        <div className="h-12 w-3/4 animate-pulse rounded-lg bg-nevoa" />
+        <div className="h-14 w-1/2 animate-pulse rounded-lg bg-nevoa" />
       </div>
     </div>
   );

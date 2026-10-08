@@ -70,8 +70,8 @@ export default function SeletorIdioma({ claro }: { claro: boolean }) {
         aria-expanded={aberto}
         aria-label={t(`Idioma: ${atual.nome}. Trocar idioma`, `Language: ${atual.nome}. Change language`)}
         onClick={() => setAberto(!aberto)}
-        className={`flex h-10 items-center gap-2 rounded-full px-3 font-mono text-[13px] font-medium uppercase tracking-[0.12em] transition-colors ${
-          claro ? "bg-bandeja hover:bg-pilula" : "bg-white/15 hover:bg-white/25"
+        className={`flex h-10 items-center gap-2 rounded-full px-3 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors ${
+          claro ? "bg-bandeja hover:bg-pilula" : "ring-1 ring-inset ring-white/20 hover:bg-white/10"
         }`}
       >
         <Bandeira opcao={atual} />
@@ -83,7 +83,7 @@ export default function SeletorIdioma({ claro }: { claro: boolean }) {
         <ul
           role="listbox"
           aria-label={t("Escolha o idioma", "Choose language")}
-          className="absolute right-0 top-12 z-50 w-56 rounded-2xl bg-white p-1.5 text-mar shadow-[0_20px_40px_-16px_rgba(6,34,43,0.35)] ring-1 ring-black/5"
+          className="absolute right-0 top-12 z-50 w-56 rounded-cartao bg-white p-1.5 text-mar shadow-[0_20px_40px_-16px_rgba(6,34,43,0.35)] ring-1 ring-black/5"
         >
           {OPCOES.map((o) => (
             <li key={o.id} role="option" aria-selected={o.id === idioma}>

@@ -1,11 +1,12 @@
 import type { Config } from "tailwindcss";
 
 /**
- * Paleta da TS Kite Center, no estilo minimalista da referência Aeline.
+ * Paleta da TS Kite Center.
  *
- * A referência usa quase só branco, cinzas claros e um acento vivo. Aqui o
- * acento é o amarelo da logo (`sol`) e o escuro é o azul fundo do mar, não
- * o preto. O turquesa entra pouco: ícones secundários e o céu das fotos.
+ * Desde 2026-10-08, com a North (northactionsports.com) como referência de
+ * elegância: o preto da North vira o mar do Cumbuco à noite (`abismo`), as
+ * seções alternam escuro e claro e o amarelo da logo (`sol`) segue como
+ * único acento. O turquesa entra pouco: o céu das fotos que faltam.
  */
 const config: Config = {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
@@ -13,6 +14,10 @@ const config: Config = {
     extend: {
       colors: {
         mar: { DEFAULT: "#06222B", 2: "#0B3440" },
+        // Fundo das seções escuras: o mar à noite, no lugar do preto da North
+        abismo: "#03161C",
+        // Fundo das seções claras que precisam se separar do branco
+        nevoa: "#F3F6F6",
         sol: "#E4C73D",
         lagoa: {
           DEFAULT: "#0FA3B8",
@@ -33,6 +38,8 @@ const config: Config = {
       },
       borderRadius: {
         painel: "28px",
+        // Cantos da referência North: discretos, quase retos
+        cartao: "10px",
       },
       backgroundImage: {
         marca: "linear-gradient(100deg, #E4C73D 0%, #7EAE89 45%, #0FA3B8 100%)",

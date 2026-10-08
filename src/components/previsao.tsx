@@ -47,10 +47,11 @@ function WidgetWindguru({ modelo, params, titulo, altura, idioma }: (typeof TABE
   );
 }
 
+/** Seção clara em névoa, para se separar da loja; as tabelas ficam num painel branco só, sem bandeja. */
 export default function Previsao() {
   const { idioma, t } = useIdioma();
   return (
-    <section id="previsao" className="py-16 sm:py-24">
+    <section id="previsao" className="bg-nevoa py-20 sm:py-28">
       <div className="shell">
         <Cabecalho
           rotulo={t("Previsão do vento", "Wind forecast")}
@@ -58,29 +59,27 @@ export default function Previsao() {
             "Vento, ondas e a nota do dia pelo Windguru para os próximos 5 dias, e a maré do Cumbuco.",
             "Wind, waves and the daily rating from Windguru for the next 5 days, plus the Cumbuco tide.",
           )}
+          acao={
+            <Botao href={`https://www.windguru.cz/${SPOT}`} externo variante="cinza">
+              {t("Ver no Windguru", "Open on Windguru")}
+            </Botao>
+          }
         >
           {t("Veja o vento", "Check the wind")} <span className="suave">{t("antes de sair de casa", "before you leave home")}</span>
         </Cabecalho>
 
-        <div className="mx-auto mt-14 max-w-5xl rounded-painel bg-bandeja p-2 sm:p-3">
-          <div className="space-y-3 rounded-3xl bg-white p-3 sm:p-5">
-            {TABELAS.map((tab) => (
-              <WidgetWindguru key={`${tab.modelo}-${idioma}`} {...tab} idioma={idioma} />
-            ))}
-            <Mare />
-          </div>
-          <div className="flex flex-wrap items-center justify-between gap-4 px-3 pb-2 pt-5 sm:px-4">
-            <p className="max-w-md text-sm leading-relaxed text-maré">
-              {t(
-                "Na dúvida se o dia está bom para a sua aula, fale com a equipe: a gente olha a água por você.",
-                "Not sure if it's a good day for your lesson? Ask the team: we'll check the water for you.",
-              )}
-            </p>
-            <Botao href={`https://www.windguru.cz/${SPOT}`} externo variante="cinza">
-              {t("Ver no Windguru", "Open on Windguru")}
-            </Botao>
-          </div>
+        <div className="mt-14 space-y-3 rounded-cartao bg-white p-3 ring-1 ring-mar/5 sm:mt-16 sm:p-6">
+          {TABELAS.map((tab) => (
+            <WidgetWindguru key={`${tab.modelo}-${idioma}`} {...tab} idioma={idioma} />
+          ))}
+          <Mare />
         </div>
+        <p className="mt-6 max-w-xl text-sm leading-relaxed text-maré">
+          {t(
+            "Na dúvida se o dia está bom para a sua aula, fale com a equipe: a gente olha a água por você.",
+            "Not sure if it's a good day for your lesson? Ask the team: we'll check the water for you.",
+          )}
+        </p>
       </div>
     </section>
   );

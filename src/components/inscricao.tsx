@@ -2,7 +2,6 @@ import { useState, type FormEvent, type ReactNode } from "react";
 import { Check, Minus, Plus } from "lucide-react";
 import { linkWhatsApp } from "@/marca";
 import { useIdioma } from "@/idioma";
-import Cabecalho from "./cabecalho";
 import { IconeWhatsApp } from "./icones";
 
 /**
@@ -43,7 +42,7 @@ const PASSOS = {
 };
 
 const campo =
-  "block h-12 w-full rounded-2xl bg-bandeja px-4 text-[16px] outline-none placeholder:text-maré/60 focus:ring-2 focus:ring-mar";
+  "block h-12 w-full rounded-lg bg-nevoa px-4 text-[16px] outline-none placeholder:text-maré/60 focus:ring-2 focus:ring-mar";
 
 function mascararTelefone(valor: string) {
   const d = valor.replace(/\D/g, "").slice(0, 11);
@@ -66,7 +65,7 @@ function Escolha({ id, nome, opcoes, valor, aoEscolher }: { id: string; nome: st
         {opcoes.map((o, i) => (
           <label key={i} className="cursor-pointer">
             <input type="radio" name={id} value={i} checked={valor === i} onChange={() => aoEscolher(i)} className="peer sr-only" />
-            <span className="inline-flex min-h-[44px] items-center rounded-full bg-bandeja px-4 text-[14px] transition-colors hover:bg-pilula peer-checked:bg-mar peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-lagoa">
+            <span className="inline-flex min-h-[44px] items-center rounded-full bg-nevoa px-4 text-[14px] transition-colors hover:bg-pilula peer-checked:bg-mar peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-lagoa">
               {o}
             </span>
           </label>
@@ -127,21 +126,41 @@ export default function Inscricao() {
   }
 
   return (
-    <section id="reservar" className="py-16 sm:py-24">
-      <div className="shell">
-        <Cabecalho
-          rotulo={t("Reservar aula", "Book a lesson")}
-          apoio={t(
-            "Preencha em um minuto. A equipe responde pelo WhatsApp para combinar o dia.",
-            "Fill it in in a minute. The team replies on WhatsApp to set the day.",
-          )}
-        >
-          {t("Sua primeira aula", "Your first lesson")} <span className="suave">{t("começa aqui", "starts here")}</span>
-        </Cabecalho>
+    <section id="reservar" className="bg-nevoa py-20 sm:py-28">
+      <div className="shell grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] lg:gap-16">
+        {/* Esquerda: título e como funciona, em linhas finas; fica parada enquanto o formulário rola */}
+        <div className="lg:sticky lg:top-28 lg:self-start">
+          <p className="rotulo">{t("Reservar aula", "Book a lesson")}</p>
+          <h2 className="titulo mt-4 text-[2.25rem] sm:text-5xl lg:text-[3.6rem]">
+            {t("Sua primeira aula", "Your first lesson")} <span className="suave">{t("começa aqui", "starts here")}</span>
+          </h2>
+          <p className="mt-6 max-w-md text-[15px] leading-relaxed opacity-70 sm:text-base">
+            {t(
+              "Preencha em um minuto. A equipe responde pelo WhatsApp para combinar o dia.",
+              "Fill it in in a minute. The team replies on WhatsApp to set the day.",
+            )}
+          </p>
+          <ol className="mt-10 divide-y divide-mar/10 border-y border-mar/10">
+            {PASSOS[idioma].map((p, i) => (
+              <li key={p.titulo} className="flex gap-5 py-5">
+                <span className="w-6 shrink-0 pt-0.5 text-sm font-semibold tabular-nums text-mar/40">{String(i + 1).padStart(2, "0")}</span>
+                <div>
+                  <p className="font-semibold tracking-[-0.01em]">{p.titulo}</p>
+                  <p className="mt-0.5 text-sm leading-relaxed text-maré">{p.texto}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-6 max-w-md text-sm leading-relaxed text-maré">
+            {t(
+              "Prefere conversar antes? O mesmo WhatsApp tira qualquer dúvida sobre aulas, níveis e equipamento.",
+              "Rather talk first? The same WhatsApp answers any question about lessons, levels and equipment.",
+            )}
+          </p>
+        </div>
 
-        <div className="mx-auto mt-12 max-w-4xl">
-          {/* Formulário em destaque, sem bandeja em volta */}
-          <div className="rounded-painel bg-white p-5 shadow-[0_24px_60px_-28px_rgba(6,34,43,0.35)] ring-1 ring-black/5 sm:p-10">
+        <div>
+          <div className="rounded-cartao bg-white p-5 ring-1 ring-mar/5 sm:p-10">
             {link ? (
               <div role="status" className="flex h-full flex-col items-start justify-center py-6">
                 <span className="flex h-12 w-12 items-center justify-center rounded-full bg-sol">
@@ -159,11 +178,11 @@ export default function Inscricao() {
                     href={link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex h-12 items-center gap-2 rounded-full bg-[#25D366] px-5 font-mono text-[13px] font-medium uppercase tracking-[0.12em] text-white"
+                    className="inline-flex h-12 items-center gap-2 rounded-full bg-[#25D366] px-5 text-[15px] font-semibold text-white"
                   >
                     <IconeWhatsApp className="h-5 w-5" /> {t("Abrir de novo", "Open again")}
                   </a>
-                  <button type="button" onClick={() => setLink("")} className="h-12 rounded-full bg-pilula px-5 font-mono text-[13px] font-medium uppercase tracking-[0.12em]">
+                  <button type="button" onClick={() => setLink("")} className="h-12 rounded-full px-5 text-[15px] font-semibold ring-1 ring-inset ring-mar/20 hover:bg-mar/5">
                     {t("Editar dados", "Edit details")}
                   </button>
                 </div>
@@ -205,7 +224,7 @@ export default function Inscricao() {
                     <p className="mb-2 text-sm font-medium" id="aluno-pessoas">
                       {t("Quantas pessoas", "How many people")}
                     </p>
-                    <div role="group" aria-labelledby="aluno-pessoas" className="flex h-12 items-center justify-between rounded-2xl bg-bandeja px-1.5">
+                    <div role="group" aria-labelledby="aluno-pessoas" className="flex h-12 items-center justify-between rounded-lg bg-nevoa px-1.5">
                       <button type="button" aria-label={t("Menos uma pessoa", "One less person")} disabled={pessoas <= 1} onClick={() => setPessoas(pessoas - 1)} className="flex h-9 w-9 items-center justify-center rounded-full bg-white disabled:opacity-40">
                         <Minus aria-hidden className="h-4 w-4" />
                       </button>
@@ -230,48 +249,25 @@ export default function Inscricao() {
                     value={recado}
                     onChange={(e) => setRecado(e.target.value)}
                     placeholder={t("Ex.: horário preferido, se sabe nadar, dúvidas", "E.g. preferred time, whether you can swim, questions")}
-                    className="block w-full resize-none rounded-2xl bg-bandeja px-4 py-3 text-[16px] outline-none placeholder:text-maré/60 focus:ring-2 focus:ring-mar"
+                    className="block w-full resize-none rounded-lg bg-nevoa px-4 py-3 text-[16px] outline-none placeholder:text-maré/60 focus:ring-2 focus:ring-mar"
                   />
                 </div>
 
                 {erro && (
-                  <p role="alert" className="rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-800">
+                  <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800">
                     {erro}
                   </p>
                 )}
 
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <button type="submit" className="group inline-flex h-12 items-center justify-between gap-3 rounded-full bg-sol pl-5 pr-1.5 font-mono text-[13px] font-medium uppercase tracking-[0.12em] text-mar transition-transform active:scale-[0.97]">
+                  <button type="submit" className="inline-flex h-12 items-center justify-center gap-2.5 rounded-full bg-sol px-6 text-[15px] font-semibold text-mar transition-colors hover:bg-[#EDD35B] active:scale-[0.98]">
+                    <IconeWhatsApp className="h-[18px] w-[18px]" />
                     {t("Enviar pelo WhatsApp", "Send via WhatsApp")}
-                    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-mar text-white">
-                      <IconeWhatsApp className="h-4 w-4" />
-                    </span>
                   </button>
                   <p className="text-xs text-maré">{t("Seus dados vão só para a equipe da TS.", "Your details go only to the TS team.")}</p>
                 </div>
               </form>
             )}
-          </div>
-          {/* Como funciona: faixa escura embaixo do formulário */}
-          <div className="mt-3 rounded-painel bg-mar p-6 text-white sm:p-8">
-            <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-white/70">{t("Como funciona", "How it works")}</p>
-            <ol className="mt-6 grid gap-6 sm:grid-cols-3">
-              {PASSOS[idioma].map((p, i) => (
-                <li key={p.titulo} className="flex gap-4">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sol font-mono text-sm font-medium text-mar">{i + 1}</span>
-                  <div>
-                    <p className="font-medium tracking-[-0.01em]">{p.titulo}</p>
-                    <p className="mt-0.5 text-sm leading-relaxed text-white/75">{p.texto}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-            <p className="mt-6 border-t border-white/10 pt-5 text-sm leading-relaxed text-white/80">
-              {t(
-                "Prefere conversar antes? O mesmo WhatsApp tira qualquer dúvida sobre aulas, níveis e equipamento.",
-                "Rather talk first? The same WhatsApp answers any question about lessons, levels and equipment.",
-              )}
-            </p>
           </div>
         </div>
       </div>

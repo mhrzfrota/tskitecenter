@@ -76,13 +76,13 @@ export default function VentoAgora() {
   return (
     <div id="vento" aria-live="polite" className="flex items-center gap-4">
       <div>
-        <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-white/90">
+        <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/70">
           <span className={`h-1.5 w-1.5 rounded-full ${leitura ? "animate-pulse bg-sol" : "bg-white/40"}`} />
           {t("Cumbuco agora", "Cumbuco now")}
         </p>
         {leitura ? (
           <p className="mt-1 flex items-center gap-2 text-sm text-white">
-            <span className="text-2xl font-medium tracking-[-0.04em]">{leitura.nos}</span>
+            <span className="text-2xl font-semibold tracking-[-0.04em]">{leitura.nos}</span>
             <span>{t("nós · rajadas", "knots · gusts")} {leitura.rajada}</span>
             {/* A seta aponta para onde o vento vai, não de onde vem */}
             <ArrowUp
@@ -99,7 +99,7 @@ export default function VentoAgora() {
         )}
       </div>
       {leitura && (
-        <span className="hidden rounded-full bg-white px-3 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.1em] text-mar lg:inline">
+        <span className="hidden rounded-full px-3 py-1.5 text-[12px] font-semibold text-white ring-1 ring-inset ring-white/25 lg:inline">
           {veredito(leitura.nos, idioma)}
         </span>
       )}

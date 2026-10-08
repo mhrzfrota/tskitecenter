@@ -12,7 +12,8 @@ type Exemplo = { categoria: string; nome: string; foto: string };
 
 
 /**
- * Vitrine da loja: duas fileiras de três, na bandeja cinza.
+ * Vitrine da loja: "Discover the collection" da North. Cabeçalho com o link
+ * para a loja inteira à direita e os produtos soltos no branco, sem bandeja.
  *
  * Os produtos vêm do catálogo fixo (src/loja/catalogo.ts): destaques
  * primeiro, depois a ordem do catálogo. O card é o mesmo da página /loja
@@ -60,7 +61,7 @@ export default function Produtos() {
   const preco = usePreco();
 
   return (
-    <section id="loja" className="py-16 sm:py-24">
+    <section id="loja" className="py-20 sm:py-28">
       <div className="shell">
         <Cabecalho
           rotulo="TS Kite Shop"
@@ -68,23 +69,28 @@ export default function Produtos() {
             "Parceria North Kiteboarding, com quem veleja todo dia para indicar o equipamento certo.",
             "North Kiteboarding partner, with riders who are on the water every day to recommend the right gear.",
           )}
+          acao={
+            <Botao href="/loja" variante="mar">
+              {t("Ver todos os produtos", "See all products")}
+            </Botao>
+          }
         >
           {t("Equipamento de ponta", "Top-level gear")} <span className="suave">{t("para a sua sessão", "for your session")}</span>
         </Cabecalho>
 
         {reais.length > 0 ? (
-          <GradeProdutos produtos={reais} colunas={{ base: 2, lg: 3 }} className="mx-auto mt-14 max-w-5xl" />
+          <GradeProdutos produtos={reais} colunas={{ base: 2, lg: 3 }} className="mt-14 sm:mt-16" />
         ) : (
-        <ul className="mx-auto mt-14 grid max-w-5xl grid-cols-2 gap-2 rounded-painel bg-bandeja p-2 sm:gap-3 sm:p-3 lg:grid-cols-3">
+        <ul className="mt-14 grid grid-cols-2 gap-x-3 gap-y-8 sm:mt-16 sm:gap-x-5 lg:grid-cols-3">
           {EXEMPLOS[idioma].map((p) => (
-                <li key={p.nome} className="group flex flex-col rounded-3xl bg-white p-2 sm:p-3">
-                  <div className="aspect-square overflow-hidden rounded-2xl">
+                <li key={p.nome} className="group flex flex-col">
+                  <div className="aspect-square overflow-hidden rounded-cartao">
                     <div className="h-full w-full transition-transform duration-500 group-hover:scale-[1.03]">
                       <Foto descricao={p.foto} />
                     </div>
                   </div>
-                  <div className="flex flex-1 flex-col px-2 pb-2 pt-4 sm:px-3 sm:pb-3">
-                    <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-maré">{p.categoria}</p>
+                  <div className="flex flex-1 flex-col pt-4">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-maré">{p.categoria}</p>
                     <h3 className="mt-1 text-lg font-medium tracking-[-0.03em] sm:text-xl">{p.nome}</h3>
                     <p className="mt-0.5 text-sm text-maré">{preco(null)}</p>
                     <a
@@ -101,11 +107,6 @@ export default function Produtos() {
         </ul>
         )}
 
-        <div className="mt-10 flex justify-center">
-          <Botao href="/loja" variante="mar">
-            {t("Ver todos os produtos", "See all products")}
-          </Botao>
-        </div>
       </div>
     </section>
   );

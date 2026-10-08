@@ -111,16 +111,15 @@ export default function PaginaLoja() {
     <>
       <Navbar pagina="loja" />
       <main>
-        {/* Topo em painel, como o hero: a navbar transparente lê branco sobre ele */}
-        <section className="p-2 sm:p-3">
-          <div className="relative isolate overflow-hidden rounded-painel bg-ceu">
-            <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(6,34,43,0.45)_0%,rgba(6,34,43,0.05)_100%)]" />
-            <div className="shell pb-12 pt-32 text-white sm:pb-16 sm:pt-40">
+        {/* Topo escuro de borda a borda, emendado na barra, como as páginas de coleção da North */}
+        <section className="escuro">
+          <div>
+            <div className="shell pb-12 pt-32 sm:pb-16 sm:pt-40">
               <p className="rotulo">TS Kite Shop</p>
-              <h1 className="titulo entrar mt-5 max-w-3xl text-[2.5rem] sm:text-6xl">
+              <h1 className="titulo entrar mt-4 max-w-4xl text-[2.5rem] sm:text-6xl lg:text-[4.5rem]">
                 {t("Todos os produtos", "All products")} <span className="suave">{t("da loja", "in the shop")}</span>
               </h1>
-              <p className="entrar mt-5 max-w-xl leading-relaxed text-white/90" style={{ animationDelay: "0.12s" }}>
+              <p className="entrar mt-5 max-w-xl leading-relaxed text-white/70" style={{ animationDelay: "0.12s" }}>
                 {t(
                   "Kites, pranchas, foil e acessórios com a parceria North Kiteboarding. Na dúvida do tamanho, a equipe indica pelo WhatsApp.",
                   "Kites, boards, foil and accessories through our North Kiteboarding partnership. Not sure about sizes? The team will advise you on WhatsApp.",
@@ -144,7 +143,7 @@ export default function PaginaLoja() {
                       type="button"
                       aria-pressed={ativo}
                       onClick={() => setFiltro((f) => ({ ...f, categoria: c.id }))}
-                      className={`min-h-[44px] shrink-0 rounded-full px-4 text-[14px] font-medium transition-colors ${ativo ? "bg-mar text-white" : "bg-pilula text-mar hover:bg-[#D8E2E2]"}`}
+                      className={`min-h-[44px] shrink-0 rounded-full px-4 text-[14px] font-medium transition-colors ${ativo ? "bg-mar text-white" : "text-mar ring-1 ring-inset ring-mar/15 hover:bg-mar/5"}`}
                     >
                       {c.id ? t(c.plural, CATEGORIA_EN_PLURAL[c.id]) : c.plural}
                       {n ? <span className="ml-1.5 opacity-60">{n}</span> : null}
@@ -162,7 +161,7 @@ export default function PaginaLoja() {
                     value={filtro.busca}
                     onChange={(e) => setFiltro((f) => ({ ...f, busca: e.target.value }))}
                     placeholder={t("Buscar produto", "Search products")}
-                    className="h-11 w-full rounded-full bg-bandeja pl-10 pr-4 text-[16px] outline-none focus:ring-2 focus:ring-mar"
+                    className="h-11 w-full rounded-full bg-nevoa pl-10 pr-4 text-[16px] outline-none focus:ring-2 focus:ring-mar"
                   />
                 </label>
                 <label className="relative">
@@ -170,7 +169,7 @@ export default function PaginaLoja() {
                   <select
                     value={ordem}
                     onChange={(e) => setOrdem(e.target.value as Ordem)}
-                    className="h-11 cursor-pointer appearance-none rounded-full bg-bandeja pl-4 pr-9 text-[15px] outline-none focus:ring-2 focus:ring-mar"
+                    className="h-11 cursor-pointer appearance-none rounded-full bg-nevoa pl-4 pr-9 text-[15px] outline-none focus:ring-2 focus:ring-mar"
                   >
                     <option value="destaques">{t("Destaques", "Featured")}</option>
                     <option value="menor">{t("Menor preço", "Lowest price")}</option>
@@ -197,19 +196,19 @@ export default function PaginaLoja() {
 
             {/* Lista */}
             {produtos === null ? (
-              <ul aria-label={t("Carregando produtos", "Loading products")} className="mt-5 grid grid-cols-2 gap-2 rounded-painel bg-bandeja p-2 sm:gap-3 sm:p-3 md:grid-cols-3 xl:grid-cols-4">
+              <ul aria-label={t("Carregando produtos", "Loading products")} className="mt-5 grid grid-cols-2 gap-x-3 gap-y-8 sm:gap-x-5 md:grid-cols-3 xl:grid-cols-4">
                 {Array.from({ length: 8 }, (_, i) => (
-                  <li key={i} className="rounded-3xl bg-white p-2 sm:p-3">
-                    <div className="aspect-square animate-pulse rounded-2xl bg-bandeja" />
-                    <div className="mt-4 h-4 w-2/3 animate-pulse rounded-full bg-bandeja" />
-                    <div className="mb-2 mt-2 h-4 w-1/3 animate-pulse rounded-full bg-bandeja" />
+                  <li key={i}>
+                    <div className="aspect-square animate-pulse rounded-cartao bg-nevoa" />
+                    <div className="mt-4 h-4 w-2/3 animate-pulse rounded-full bg-nevoa" />
+                    <div className="mb-2 mt-2 h-4 w-1/3 animate-pulse rounded-full bg-nevoa" />
                   </li>
                 ))}
               </ul>
             ) : lista.length > 0 ? (
               <GradeProdutos produtos={lista} colunas={{ base: 2, md: 3, xl: 4 }} className="mt-5" />
             ) : (
-              <div className="mt-5 rounded-painel bg-bandeja p-10 text-center">
+              <div className="mt-5 rounded-cartao bg-nevoa p-10 text-center">
                 <p className="titulo text-2xl">
                   {erro
                     ? t("Não foi possível carregar os produtos", "We couldn't load the products")
@@ -223,7 +222,7 @@ export default function PaginaLoja() {
                     : t("Tente outra palavra ou outra categoria.", "Try another word or category.")}
                 </p>
                 {temFiltro && total > 0 && (
-                  <button type="button" onClick={limpar} className="mt-6 h-11 rounded-full bg-mar px-6 font-mono text-[12px] font-medium uppercase tracking-[0.12em] text-white">
+                  <button type="button" onClick={limpar} className="mt-6 h-11 rounded-full bg-mar px-6 text-[14px] font-semibold text-white">
                     {t("Ver todos", "See all")}
                   </button>
                 )}
@@ -231,7 +230,7 @@ export default function PaginaLoja() {
             )}
 
             {/* Não achou */}
-            <div className="mt-10 flex flex-col items-start justify-between gap-5 rounded-painel bg-mar p-6 text-white sm:flex-row sm:items-center sm:p-8">
+            <div className="mt-10 flex flex-col items-start justify-between gap-5 rounded-cartao bg-abismo p-6 text-white sm:flex-row sm:items-center sm:p-10">
               <div>
                 <p className="titulo text-2xl sm:text-3xl">{t("Não achou o que procura?", "Can't find what you need?")}</p>
                 <p className="mt-1 max-w-lg text-sm leading-relaxed text-white/80">
