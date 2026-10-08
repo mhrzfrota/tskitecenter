@@ -1,34 +1,54 @@
+import { useEffect, useRef } from "react";
 import { Star } from "lucide-react";
 import { useIdioma } from "@/idioma";
 import Botao from "./botao";
-import Foto from "./foto";
 import VentoAgora from "./vento-agora";
 
 /**
- * Hero da referência: painel arredondado com margem, foto de céu em tela
+ * Hero da referência: painel arredondado com margem, vídeo da escola em tela
  * cheia, título centralizado com a segunda metade apagada e uma faixa de
  * vidro na base.
  *
- * FALTA: foto ou vídeo real. O céu azul do placeholder é a cor de reserva e
- * mantém a primeira dobra clara enquanto a foto não chega.
+ * Vídeo: original 1008.mov (4K HEVC) convertido para H.264 sem áudio em
+ * public/video: 1080p deitado e um recorte em pé do centro (1080x1920) para
+ * telas em pé, com o mesmo enquadramento que o object-cover daria. Quem pede
+ * menos movimento fica no primeiro quadro.
  */
 export default function Hero() {
   const { t } = useIdioma();
+  const video = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) video.current?.pause();
+  }, []);
+
   return (
     <section id="inicio" className="p-2 sm:p-3">
       <div className="relative isolate flex min-h-[640px] flex-col overflow-hidden rounded-painel h-[calc(100svh-16px)] sm:h-[min(calc(100svh-24px),780px)]">
-        <div className="absolute inset-0 -z-10">
-          <Foto tom="ceu" aviso="nenhum" descricao={t("Kiter no ar no Cumbuco, com céu azul ao fundo", "Kiter in the air in Cumbuco, blue sky behind")} />
-        </div>
-        {/* Sombra suave no topo para o texto branco ler bem sobre qualquer foto */}
-        <div aria-hidden className="absolute inset-x-0 top-0 -z-10 h-2/3 bg-[linear-gradient(180deg,rgba(6,34,43,0.35)_0%,rgba(6,34,43,0)_100%)]" />
+        <video
+          ref={video}
+          aria-hidden
+          className="absolute inset-0 -z-10 h-full w-full bg-ceu object-cover"
+          poster="/video/hero-poster.jpg"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+        >
+          <source src="/video/hero-vertical.mp4" type="video/mp4" media="(orientation: portrait)" />
+          <source src="/video/hero-1080.mp4" type="video/mp4" />
+        </video>
+        {/* Sombra geral e uma mancha mais escura atrás do texto: a areia clara do vídeo apagava o branco */}
+        <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(6,34,43,0.6)_0%,rgba(6,34,43,0.4)_55%,rgba(6,34,43,0.15)_100%)]" />
+        <div aria-hidden className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_50%_at_50%_38%,rgba(6,34,43,0.5)_0%,rgba(6,34,43,0)_70%)]" />
 
-        <div className="shell flex flex-1 flex-col items-center pt-32 text-center text-white sm:pt-40">
+        <div className="shell flex flex-1 flex-col items-center pt-32 text-center text-white [text-shadow:0_2px_20px_rgba(6,34,43,0.55)] sm:pt-40">
           <h1 className="titulo entrar max-w-4xl text-[2.5rem] sm:text-6xl lg:text-[4.1rem]">
             {t("Aprenda kitesurf com quem vive isso", "Learn kitesurfing with locals who live it")}{" "}
-            <span className="suave">{t("todos os dias", "every day")}</span>
+            <span className="opacity-75">{t("todos os dias", "every day")}</span>
           </h1>
-          <p className="entrar mt-6 max-w-xl text-base leading-relaxed text-white/90 sm:text-lg" style={{ animationDelay: "0.12s" }}>
+          <p className="entrar mt-6 max-w-xl text-base font-medium leading-relaxed text-white sm:text-lg" style={{ animationDelay: "0.12s" }}>
             {t(
               "Set e Tomás nasceram no Cumbuco e já formaram mais de 2.000 alunos. Aulas para todos os níveis, downwind, kite trip e foil.",
               "Set and Tomás were born in Cumbuco and have trained over 2,000 students. Lessons for every level, downwind, kite trips and foil.",
