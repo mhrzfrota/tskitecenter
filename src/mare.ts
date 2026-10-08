@@ -62,3 +62,15 @@ export function porDia(lista: Extremo[]): [string, Extremo[]][] {
 export function agoraFortaleza(data = new Date()): string {
   return new Date(data.getTime() - 3 * 3600000).toISOString().slice(0, 16); // UTC-3, sem horário de verão
 }
+
+/** Série com o ajuste aplicado, em minutos (horário local tratado como UTC). */
+export function serie(horas: string[], niveis: (number | null)[], ajuste = AJUSTE_MIN): { t: number; v: number }[] {
+  const pontos: { t: number; v: number }[] = [];
+  horas.forEach((h, i) => {
+    const v = niveis[i];
+    if (v !== null && v !== undefined) pontos.push({ t: paraMin(h) + ajuste, v });
+  });
+  return pontos;
+}
+
+export { paraMin, deMin };

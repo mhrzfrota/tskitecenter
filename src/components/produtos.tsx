@@ -3,7 +3,8 @@ import { linkWhatsApp } from "@/marca";
 import { loja, type Produto as ProdutoLoja } from "@/loja";
 import { useIdioma } from "@/idioma";
 import Botao from "./botao";
-import CardProduto, { botaoConsultar, usePreco } from "./card-produto";
+import { botaoConsultar, usePreco } from "./card-produto";
+import GradeProdutos from "./grade-produtos";
 import Cabecalho from "./cabecalho";
 import Foto from "./foto";
 
@@ -71,10 +72,11 @@ export default function Produtos() {
           {t("Equipamento de ponta", "Top-level gear")} <span className="suave">{t("para a sua sessão", "for your session")}</span>
         </Cabecalho>
 
+        {reais.length > 0 ? (
+          <GradeProdutos produtos={reais} colunas={{ base: 2, lg: 3 }} className="mx-auto mt-14 max-w-5xl" />
+        ) : (
         <ul className="mx-auto mt-14 grid max-w-5xl grid-cols-2 gap-2 rounded-painel bg-bandeja p-2 sm:gap-3 sm:p-3 lg:grid-cols-3">
-          {reais.length > 0
-            ? reais.map((p, i) => <CardProduto key={p.id} p={p} deitado={reais.length % 2 === 1 && i === reais.length - 1} />)
-            : EXEMPLOS[idioma].map((p) => (
+          {EXEMPLOS[idioma].map((p) => (
                 <li key={p.nome} className="group flex flex-col rounded-3xl bg-white p-2 sm:p-3">
                   <div className="aspect-square overflow-hidden rounded-2xl">
                     <div className="h-full w-full transition-transform duration-500 group-hover:scale-[1.03]">
@@ -97,6 +99,7 @@ export default function Produtos() {
                 </li>
               ))}
         </ul>
+        )}
 
         <div className="mt-10 flex justify-center">
           <Botao href="/loja" variante="mar">

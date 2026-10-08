@@ -7,7 +7,8 @@ import Navbar from "@/components/navbar";
 import Rodape from "@/components/rodape";
 import WhatsAppFlutuante from "@/components/whatsapp-flutuante";
 import Botao from "@/components/botao";
-import CardProduto, { CATEGORIA_EN_PLURAL } from "@/components/card-produto";
+import { CATEGORIA_EN_PLURAL } from "@/components/card-produto";
+import GradeProdutos from "@/components/grade-produtos";
 
 type Ordem = "destaques" | "menor" | "maior" | "nome";
 
@@ -206,11 +207,7 @@ export default function PaginaLoja() {
                 ))}
               </ul>
             ) : lista.length > 0 ? (
-              <ul className="mt-5 grid grid-cols-2 gap-2 rounded-painel bg-bandeja p-2 sm:gap-3 sm:p-3 md:grid-cols-3 xl:grid-cols-4">
-                {lista.map((p, i) => (
-                  <CardProduto key={p.id} p={p} ate="md" deitado={lista.length % 2 === 1 && i === lista.length - 1} />
-                ))}
-              </ul>
+              <GradeProdutos produtos={lista} colunas={{ base: 2, md: 3, xl: 4 }} className="mt-5" />
             ) : (
               <div className="mt-5 rounded-painel bg-bandeja p-10 text-center">
                 <p className="titulo text-2xl">

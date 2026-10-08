@@ -1,5 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
-import { formatarPreco, linkProduto, nomeCategoria, nomeDaCor, tonsDaCor, type CategoriaId, type Produto } from "@/loja";
+import { formatarPreco, linkProduto, nomeCategoria, nomeDaCor, proporcaoDaFoto, tonsDaCor, type CategoriaId, type Produto } from "@/loja";
 import { useIdioma } from "@/idioma";
 import FotoLoja from "@/admin/FotoLoja";
 
@@ -67,16 +67,21 @@ export default function CardProduto({ p, deitado = false, ate = "lg" }: { p: Pro
   const d = deitado ? DEITADO[ate] : null;
   const temPreco = p.precoCentavos !== null;
   const cores = p.cores.slice(0, 5);
+  const proporcao = proporcaoDaFoto(p.fotos[0]);
 
   return (
     <li className={`group relative flex rounded-3xl bg-white p-2 transition-shadow hover:shadow-[0_18px_40px_-24px_rgba(6,34,43,0.35)] sm:p-3 ${d ? d.li : "flex-col"}`}>
-      <div className={`relative aspect-square shrink-0 overflow-hidden rounded-2xl ${d ? d.foto : ""}`}>
+      {/* Foto com cenário: o espaço tem a proporção dela, sem sobra nem corte. Recortada: quadrado, pousada no cinza */}
+      <div
+        className={`relative shrink-0 overflow-hidden rounded-2xl ${proporcao ? "" : "aspect-square"} ${d ? d.foto : ""}`}
+        style={proporcao ? { aspectRatio: String(proporcao) } : undefined}
+      >
         <FotoLoja
           id={p.fotos[0]}
           alt={p.nome}
           fundo="bg-bandeja"
           className="h-full w-full"
-          imgClassName="p-[9%] mix-blend-multiply transition-transform duration-500 group-hover:scale-[1.05]"
+          imgClassName={proporcao ? "" : "p-[9%] mix-blend-multiply transition-transform duration-500 group-hover:scale-[1.05]"}
         />
         {!p.disponivel && (
           <span className="absolute left-2 top-2 rounded-full bg-mar px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.1em] text-white">

@@ -146,5 +146,29 @@ export const ehFotoFixa = (id: string) => id.startsWith("/");
 /** Fotos já recortadas (fundo branco). As outras foram tiradas com cenário (grama, plantas). */
 const RECORTADAS = new Set(["/produtos/duotone-fin-box-carbon-30.webp", "/produtos/protetor-brazinco.webp"]);
 
-/** Foto com cenário: a vitrine mostra inteira, sobre uma cópia desfocada dela, em vez de flutuar no cinza. */
-export const fotoComCenario = (id: string) => ehFotoFixa(id) && !RECORTADAS.has(id);
+/** Largura e altura de cada foto do catálogo (medidas dos arquivos em public/produtos). */
+const DIMENSOES: Record<string, [number, number]> = {
+  "/produtos/bolsa-waterproof-10l.webp": [900, 1200],
+  "/produtos/bomba-duotone-xl.webp": [900, 1200],
+  "/produtos/chicken-loop.webp": [1200, 900],
+  "/produtos/duotone-fin-box-carbon-30.webp": [1200, 1200],
+  "/produtos/finger-north.webp": [1200, 900],
+  "/produtos/kit-3-mangueiras.webp": [900, 1200],
+  "/produtos/protetor-brazinco.webp": [294, 304],
+  "/produtos/quilhas-brunotti-40mm.webp": [900, 1200],
+  "/produtos/quilhas-north-40mm.webp": [1200, 900],
+  "/produtos/reparo-alcas-duotone.webp": [1200, 900],
+  "/produtos/trapezio-ride-engine-saber.webp": [900, 1200],
+};
+
+/**
+ * Proporção (largura / altura) da foto com cenário. O espaço da foto no card
+ * e na página do produto segue essa proporção: a foto preenche tudo, sem
+ * sobra e sem corte. Foto recortada ou do painel devolve null e fica no
+ * quadrado com o produto pousado no cinza.
+ */
+export function proporcaoDaFoto(id: string | undefined): number | null {
+  if (!id || !ehFotoFixa(id) || RECORTADAS.has(id)) return null;
+  const d = DIMENSOES[id];
+  return d ? d[0] / d[1] : null;
+}

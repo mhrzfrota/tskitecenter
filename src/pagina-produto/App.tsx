@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode, type TouchEvent } from "react";
 import { Check, ChevronDown, ChevronLeft, ChevronRight, MapPin, MessageCircle, ShieldCheck, Wind } from "lucide-react";
 import { ESCOLA, linkWhatsApp } from "@/marca";
-import { idDoEndereco, linkProduto, loja, nomeCategoria, nomeDaCor, relacionados, separarDetalhe, type Produto } from "@/loja";
+import { idDoEndereco, linkProduto, loja, nomeCategoria, nomeDaCor, proporcaoDaFoto, relacionados, separarDetalhe, type Produto } from "@/loja";
 import { ProvedorIdioma, useIdioma, type Meta } from "@/idioma";
 import Navbar from "@/components/navbar";
 import Rodape from "@/components/rodape";
 import WhatsAppFlutuante from "@/components/whatsapp-flutuante";
 import Botao from "@/components/botao";
-import CardProduto, { Bolinha, CATEGORIA_EN, CATEGORIA_EN_PLURAL, usePreco } from "@/components/card-produto";
+import { Bolinha, CATEGORIA_EN, CATEGORIA_EN_PLURAL, usePreco } from "@/components/card-produto";
+import GradeProdutos from "@/components/grade-produtos";
 import FotoLoja from "@/admin/FotoLoja";
 
 type Estado = { tipo: "carregando" } | { tipo: "ok"; produto: Produto; todos: Produto[] } | { tipo: "nao-encontrado" };
@@ -68,6 +69,7 @@ function Pagina({ p, todos }: { p: Produto; todos: Produto[] }) {
   const sugestoes = useMemo(() => relacionados(p, todos, 4), [p, todos]);
   const categoria = t(nomeCategoria(p.categoria), CATEGORIA_EN[p.categoria]);
   const fotos = p.fotos.length ? p.fotos : [undefined];
+  const proporcao = proporcaoDaFoto(fotos[foto]);
 
   const trocarFoto = (passo: number) => setFoto((f) => (f + passo + fotos.length) % fotos.length);
   const fimToque = (e: TouchEvent) => {
@@ -120,20 +122,23 @@ function Pagina({ p, todos }: { p: Produto; todos: Produto[] }) {
                       onClick={() => setFoto(i)}
                       aria-label={t(`Foto ${i + 1}`, `Photo ${i + 1}`)}
                       aria-current={i === foto}
-                      className={`block h-[72px] w-[72px] overflow-hidden rounded-xl bg-bandeja ring-2 transition-[box-shadow] sm:h-20 sm:w-20 ${i === foto ? "ring-mar" : "ring-transparent hover:ring-mar/25"}`}
+                      // Miniatura na proporção da foto (altura fixa), como a foto grande
+                      style={proporcaoDaFoto(f) ? { aspectRatio: String(proporcaoDaFoto(f)) } : undefined}
+                      className={`block h-[72px] overflow-hidden rounded-xl bg-bandeja ring-2 transition-[box-shadow] sm:h-20 ${proporcaoDaFoto(f) ? "w-auto" : "w-[72px] sm:w-20"} ${i === foto ? "ring-mar" : "ring-transparent hover:ring-mar/25"}`}
                     >
-                      <FotoLoja id={f} alt="" fundo="bg-bandeja" className="h-full w-full" imgClassName="p-1.5 mix-blend-multiply" />
+                      <FotoLoja id={f} alt="" fundo="bg-bandeja" className="h-full w-full" imgClassName={proporcaoDaFoto(f) ? "" : "p-1.5 mix-blend-multiply"} />
                     </button>
                   </li>
                 ))}
               </ul>
             )}
             <div
-              className="relative aspect-square min-w-0 flex-1 overflow-hidden rounded-painel bg-bandeja"
+              className={`relative min-w-0 flex-1 overflow-hidden rounded-painel bg-bandeja ${proporcao ? "" : "aspect-square"}`}
+              style={proporcao ? { aspectRatio: String(proporcao) } : undefined}
               onTouchStart={(e) => (toque.current = e.touches[0].clientX)}
               onTouchEnd={fimToque}
             >
-              <FotoLoja id={fotos[foto]} alt={p.nome} fundo="bg-bandeja" className="h-full w-full" imgClassName="p-[8%] mix-blend-multiply" />
+              <FotoLoja id={fotos[foto]} alt={p.nome} fundo="bg-bandeja" className="h-full w-full" imgClassName={proporcao ? "" : "p-[8%] mix-blend-multiply"} />
               {!p.disponivel && (
                 <span className="absolute left-4 top-4 rounded-full bg-mar px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-white">{t("Esgotado", "Sold out")}</span>
               )}
@@ -304,9 +309,7 @@ function Pagina({ p, todos }: { p: Produto; todos: Produto[] }) {
                 {t("Ver toda a loja", "See the whole shop")}
               </a>
             </div>
-            <ul className="mt-8 grid grid-cols-2 gap-2 rounded-painel bg-bandeja p-2 sm:gap-3 sm:p-3 lg:grid-cols-4">
-              {sugestoes.map((s) => <CardProduto key={s.id} p={s} />)}
-            </ul>
+            <GradeProdutos produtos={sugestoes} colunas={{ base: 2, lg: 4 }} className="mt-8" />
           </div>
         </section>
       )}
