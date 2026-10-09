@@ -109,7 +109,7 @@ function CardAula({ aula }: { aula: Aula }) {
   const destaque = porHora === MENOR_POR_HORA;
   const economia = POR_HORA_AVULSA * aula.horas - aula.preco;
   return (
-    <li className={`flex flex-col rounded-cartao p-5 sm:p-6 ${destaque ? "bg-abismo text-white" : "bg-white ring-1 ring-inset ring-mar/10"}`}>
+    <li className={`flex flex-col rounded-cartao p-5 sm:p-6 ${destaque ? "bg-oceano text-white" : "bg-white ring-1 ring-inset ring-mar/10"}`}>
       {/* Os outros cards reservam a mesma altura, para os preços ficarem na mesma linha */}
       <span
         aria-hidden={!destaque}
@@ -119,11 +119,11 @@ function CardAula({ aula }: { aula: Aula }) {
       >
         {t("Menor valor por hora", "Best value per hour")}
       </span>
-      <p className={`${rotuloMini} ${destaque ? "text-white/70" : "text-maré"}`}>{aula.nome}</p>
+      <p className={`${rotuloMini} ${destaque ? "text-white/85" : "text-maré"}`}>{aula.nome}</p>
       <p className="mt-1 text-sm">{aula.resumo}</p>
 
       <ReguaHoras horas={aula.horas} escuro={destaque} />
-      <p className={`mt-2 text-xs ${destaque ? "text-white/70" : "text-maré"}`}>{aula.horas} {t("horas de aula", "hours of lessons")}</p>
+      <p className={`mt-2 text-xs ${destaque ? "text-white/85" : "text-maré"}`}>{aula.horas} {t("horas de aula", "hours of lessons")}</p>
 
       <p className="titulo mt-5 text-[2.2rem] sm:text-[2.5rem]">{brl(aula.preco)}</p>
       <p className={`text-sm ${destaque ? "text-white/80" : "text-maré"}`}>{brl(porHora)} {t("por hora", "per hour")}</p>

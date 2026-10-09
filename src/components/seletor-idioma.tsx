@@ -71,7 +71,7 @@ export default function SeletorIdioma({ claro }: { claro: boolean }) {
         aria-label={t(`Idioma: ${atual.nome}. Trocar idioma`, `Language: ${atual.nome}. Change language`)}
         onClick={() => setAberto(!aberto)}
         className={`flex h-10 items-center gap-2 rounded-full px-3 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors ${
-          claro ? "bg-bandeja hover:bg-pilula" : "ring-1 ring-inset ring-white/20 hover:bg-white/10"
+          claro ? "bg-nevoa hover:bg-pilula" : "bg-white/15 hover:bg-white/25"
         }`}
       >
         <Bandeira opcao={atual} />

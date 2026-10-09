@@ -230,7 +230,7 @@ export default function PaginaLoja() {
             )}
 
             {/* Não achou */}
-            <div className="mt-10 flex flex-col items-start justify-between gap-5 rounded-cartao bg-abismo p-6 text-white sm:flex-row sm:items-center sm:p-10">
+            <div className="mt-10 flex flex-col items-start justify-between gap-5 rounded-cartao bg-oceano p-6 text-white sm:flex-row sm:items-center sm:p-10">
               <div>
                 <p className="titulo text-2xl sm:text-3xl">{t("Não achou o que procura?", "Can't find what you need?")}</p>
                 <p className="mt-1 max-w-lg text-sm leading-relaxed text-white/80">

@@ -42,7 +42,7 @@ export default function PorQueTs() {
               <span className="suave">{t("e uma família inteira vivendo o vento", "and a whole family living the wind")}</span>
             </h2>
           </div>
-          <p className="text-[15px] leading-relaxed text-white/70 sm:text-base lg:max-w-sm lg:justify-self-end">
+          <p className="text-[15px] leading-relaxed text-white/85 sm:text-base lg:max-w-sm lg:justify-self-end">
             {t(
               "Set e Tomás Teixeira cresceram na praia, competiram e transformaram a paixão numa das maiores escolas do Cumbuco, com alunos do mundo todo.",
               "Set and Tomás Teixeira grew up on this beach, competed, and turned their passion into one of the biggest schools in Cumbuco, with students from all over the world.",
@@ -67,7 +67,7 @@ export default function PorQueTs() {
                   />
                 </div>
                 <figcaption className="mt-4">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/50">{t("Fundador da TS", "TS founder")}</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/85">{t("Fundador da TS", "TS founder")}</p>
                   <p className="titulo mt-1.5 text-[1.4rem] sm:text-[1.9rem]">{irmao.nome}</p>
                 </figcaption>
               </figure>
@@ -78,7 +78,7 @@ export default function PorQueTs() {
             {ETIQUETAS[idioma].map((g) => (
               <div key={g.titulo}>
                 <p className="rotulo">{g.titulo}</p>
-                <ul className="mt-3 divide-y divide-white/10 border-y border-white/10">
+                <ul className="mt-3 divide-y divide-white/20 border-y border-white/20">
                   {g.itens.map((item) => (
                     <li key={item} className="py-3 text-[17px] tracking-[-0.01em]">
                       {item}
@@ -87,22 +87,22 @@ export default function PorQueTs() {
                 </ul>
               </div>
             ))}
-            <p className="text-sm leading-relaxed text-white/60">
+            <p className="text-sm leading-relaxed text-white/80">
               {t("Desde criança no mar do Cumbuco, onde cresceram e competiram.", "In the Cumbuco sea since childhood, where they grew up and competed.")}
             </p>
           </div>
         </div>
 
-        <ul className="mt-20 grid grid-cols-2 border-t border-white/10 lg:grid-cols-4">
+        <ul className="mt-20 grid grid-cols-2 border-t border-white/20 lg:grid-cols-4">
           {NUMEROS(t).map((n, i) => (
             <li
               key={n.rotulo}
-              className={`pt-8 lg:pb-2 ${i % 2 ? "pl-5 sm:pl-8" : ""} ${i > 1 ? "mt-8 border-t border-white/10 lg:mt-0 lg:border-t-0" : ""} ${
-                i > 0 ? "border-l border-white/10 lg:pl-8" : ""
+              className={`pt-8 lg:pb-2 ${i % 2 ? "pl-5 sm:pl-8" : ""} ${i > 1 ? "mt-8 border-t border-white/20 lg:mt-0 lg:border-t-0" : ""} ${
+                i > 0 ? "border-l border-white/20 lg:pl-8" : ""
               } ${i === 2 ? "max-lg:border-l-0" : ""}`}
             >
               <p className="titulo text-4xl sm:text-[3.25rem]">{n.valor}</p>
-              <p className="mt-2 text-sm text-white/60">{n.rotulo}</p>
+              <p className="mt-2 text-sm text-white/80">{n.rotulo}</p>
             </li>
           ))}
         </ul>

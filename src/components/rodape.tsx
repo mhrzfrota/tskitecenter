@@ -13,13 +13,13 @@ export default function Rodape({ pagina = "inicio" }: { pagina?: Pagina }) {
   const { t } = useIdioma();
   const coluna = "text-[12px] font-bold uppercase tracking-[0.14em]";
   return (
-    <footer id="contato" className="escuro border-t border-white/10">
+    <footer id="contato" className="escuro border-t border-white/20">
       <div className="shell grid gap-14 py-16 sm:py-20 lg:grid-cols-[1.2fr_2fr] lg:gap-20">
         <div>
           <p className="titulo text-[2.5rem] sm:text-[3.4rem]">
             {t("Vem pra TS.", "Come ride")} <span className="suave">{t("A água te espera.", "with TS.")}</span>
           </p>
-          <p className="mt-5 max-w-sm leading-relaxed text-white/60">
+          <p className="mt-5 max-w-sm leading-relaxed text-white/80">
             {t("Aprenda kitesurf com quem vive isso todos os dias.", "Learn kitesurfing with locals who live it every day.")}
           </p>
           <Botao href={linkWhatsApp(t("Olá! Vim pelo site da TS Kite Center.", "Hi! I found TS Kite Center through the website."))} externo className="mt-8">
@@ -30,7 +30,7 @@ export default function Rodape({ pagina = "inicio" }: { pagina?: Pagina }) {
         <div className="grid grid-cols-2 gap-10 sm:grid-cols-3">
           <div>
             <p className={coluna}>{t("Navegação", "Navigation")}</p>
-            <ul className="mt-5 space-y-3 text-[15px] text-white/65">
+            <ul className="mt-5 space-y-3 text-[15px] text-white/80">
               {MENU.map((l) => (
                 <li key={l.href}>
                   <a href={linkMenu(l.href, pagina)} className="transition-colors hover:text-white">
@@ -42,7 +42,7 @@ export default function Rodape({ pagina = "inicio" }: { pagina?: Pagina }) {
           </div>
           <div>
             <p className={coluna}>{t("Contato", "Contact")}</p>
-            <ul className="mt-5 space-y-3 text-[15px] text-white/65 [overflow-wrap:anywhere]">
+            <ul className="mt-5 space-y-3 text-[15px] text-white/80 [overflow-wrap:anywhere]">
               {ESCOLA.whatsapps.map((n) => (
                 <li key={n}>
                   <a href={`https://wa.me/${n}`} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-white">
@@ -64,7 +64,7 @@ export default function Rodape({ pagina = "inicio" }: { pagina?: Pagina }) {
           </div>
           <div>
             <p className={coluna}>{t("Endereço", "Address")}</p>
-            <p className="mt-5 text-[15px] leading-relaxed text-white/65">
+            <p className="mt-5 text-[15px] leading-relaxed text-white/80">
               Outro Beach Club
               <br />
               Av. Des. Jurema, 56
@@ -77,8 +77,8 @@ export default function Rodape({ pagina = "inicio" }: { pagina?: Pagina }) {
         </div>
       </div>
 
-      <div className="border-t border-white/10">
-        <div className="shell flex flex-col gap-4 py-6 text-sm text-white/45 sm:flex-row sm:items-center sm:justify-between">
+      <div className="border-t border-white/20">
+        <div className="shell flex flex-col gap-4 py-6 text-sm text-white/85 sm:flex-row sm:items-center sm:justify-between">
           <a href={pagina === "inicio" ? "#inicio" : "/"} className="flex items-center gap-2.5 text-white">
             <img src="/logo-ts.png" alt="" width={28} height={28} loading="lazy" className="h-7 w-7 rounded-full" />
             <span className="font-semibold tracking-[-0.03em]">TS Kite Center</span>

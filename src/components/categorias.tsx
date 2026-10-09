@@ -104,17 +104,17 @@ function Card({ c, destaque, revelar, className = "" }: { c: Categoria; destaque
         </div>
         <div
           aria-hidden
-          className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(3,22,28,0)_35%,rgba(3,22,28,0.55)_65%,rgba(3,22,28,0.92)_100%)]"
+          className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(6,34,43,0)_35%,rgba(6,34,43,0.55)_65%,rgba(6,34,43,0.92)_100%)]"
         />
 
         {/* Largura fixa no texto: o card cresce no hover sem o parágrafo pular de linha */}
         <div className="flex flex-col items-start p-6 text-white sm:p-8">
           <h3 className={`titulo ${destaque ? "text-[2.1rem] sm:text-[2.75rem]" : "text-[1.9rem] sm:text-[2.1rem]"}`}>{c.nome}</h3>
-          <p className={`mt-2 leading-relaxed text-white/75 ${destaque ? "max-w-[30rem] text-[15px] sm:text-base" : "max-w-[22rem] text-[15px]"}`}>{c.texto}</p>
+          <p className={`mt-2 leading-relaxed text-white/85 ${destaque ? "max-w-[30rem] text-[15px] sm:text-base" : "max-w-[22rem] text-[15px]"}`}>{c.texto}</p>
           <a
             href={c.href}
             {...(c.externo && { target: "_blank", rel: "noopener noreferrer" })}
-            className="mt-6 inline-flex h-11 items-center gap-2 rounded-full bg-white/10 px-5 text-[14px] font-semibold ring-1 ring-inset ring-white/25 backdrop-blur-md transition-colors duration-300 hover:bg-sol hover:text-mar hover:ring-sol"
+            className="mt-6 inline-flex h-11 items-center gap-2 rounded-full bg-white/15 px-5 text-[14px] font-semibold ring-1 ring-inset ring-white/25 backdrop-blur-md transition-colors duration-300 hover:bg-sol hover:text-mar hover:ring-sol"
           >
             {c.botao}
             <ArrowRight aria-hidden className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />

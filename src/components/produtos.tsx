@@ -3,8 +3,7 @@ import { linkWhatsApp } from "@/marca";
 import { loja, type Produto as ProdutoLoja } from "@/loja";
 import { useIdioma } from "@/idioma";
 import Botao from "./botao";
-import { botaoConsultar, usePreco } from "./card-produto";
-import GradeProdutos from "./grade-produtos";
+import CardProduto, { botaoConsultar, usePreco } from "./card-produto";
 import Cabecalho from "./cabecalho";
 import Foto from "./foto";
 
@@ -13,7 +12,8 @@ type Exemplo = { categoria: string; nome: string; foto: string };
 
 /**
  * Vitrine da loja: "Discover the collection" da North. Cabeçalho com o link
- * para a loja inteira à direita e os produtos soltos no branco, sem bandeja.
+ * para a loja inteira à direita e os produtos soltos no branco, sem bandeja,
+ * numa grade de cards do mesmo tamanho (2 colunas no celular, 3 no desktop).
  *
  * Os produtos vêm do catálogo fixo (src/loja/catalogo.ts): destaques
  * primeiro, depois a ordem do catálogo. O card é o mesmo da página /loja
@@ -79,7 +79,11 @@ export default function Produtos() {
         </Cabecalho>
 
         {reais.length > 0 ? (
-          <GradeProdutos produtos={reais} colunas={{ base: 2, lg: 3 }} className="mt-14 sm:mt-16" />
+          <ul className="mt-14 grid grid-cols-2 gap-x-3 gap-y-10 sm:mt-16 sm:gap-x-5 lg:grid-cols-3">
+            {reais.map((p) => (
+              <CardProduto key={p.id} p={p} uniforme />
+            ))}
+          </ul>
         ) : (
         <ul className="mt-14 grid grid-cols-2 gap-x-3 gap-y-8 sm:mt-16 sm:gap-x-5 lg:grid-cols-3">
           {EXEMPLOS[idioma].map((p) => (

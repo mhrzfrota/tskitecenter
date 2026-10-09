@@ -23,7 +23,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section id="inicio" className="relative isolate flex h-[100svh] min-h-[640px] flex-col overflow-hidden bg-abismo text-white">
+    <section id="inicio" className="relative isolate flex h-[100svh] min-h-[640px] flex-col overflow-hidden bg-oceano text-white">
       <video
         ref={video}
         aria-hidden
@@ -39,10 +39,10 @@ export default function Hero() {
         <source src="/video/hero-1080.mp4" type="video/mp4" />
       </video>
       {/* Sombras: no topo para o menu, embaixo e à esquerda para o texto (a areia clara do vídeo apagava o branco) */}
-      <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(3,22,28,0.55)_0%,rgba(3,22,28,0)_22%,rgba(3,22,28,0)_42%,rgba(3,22,28,0.85)_100%)]" />
-      <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(3,22,28,0.55)_0%,rgba(3,22,28,0)_70%)]" />
+      <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(6,34,43,0.55)_0%,rgba(6,34,43,0)_22%,rgba(6,34,43,0)_42%,rgba(6,34,43,0.85)_100%)]" />
+      <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(6,34,43,0.55)_0%,rgba(6,34,43,0)_70%)]" />
 
-      <div className="shell flex flex-1 flex-col justify-end pb-10 [text-shadow:0_2px_24px_rgba(3,22,28,0.45)] sm:pb-14">
+      <div className="shell flex flex-1 flex-col justify-end pb-10 [text-shadow:0_2px_24px_rgba(6,34,43,0.45)] sm:pb-14">
         <p className="rotulo entrar !opacity-80">{t("Praia do Cumbuco, Ceará", "Cumbuco Beach, Brazil")}</p>
         {/* Uma ideia por linha a partir do tablet; no celular o texto corre livre */}
         <h1 className="titulo entrar mt-5 text-[2.75rem] sm:text-7xl lg:text-[5.6rem]" style={{ animationDelay: "0.08s" }}>
@@ -67,7 +67,7 @@ export default function Hero() {
       </div>
 
       {/* Pé do hero: prova, vento ao vivo e parceiros numa linha fina */}
-      <div className="border-t border-white/15 bg-abismo/30 backdrop-blur-sm">
+      <div className="border-t border-white/15 bg-oceano/30 backdrop-blur-sm">
         <div className="shell flex flex-wrap items-center gap-x-10 gap-y-4 py-4 sm:py-5">
           <div className="flex items-center gap-3">
             <p className="flex gap-0.5" aria-label={t("5 estrelas", "5 stars")}>
@@ -79,7 +79,7 @@ export default function Hero() {
           </div>
           <span aria-hidden className="hidden h-8 w-px bg-white/15 sm:block" />
           <VentoAgora />
-          <ul className="ml-auto hidden items-center gap-8 text-sm text-white/70 xl:flex">
+          <ul className="ml-auto hidden items-center gap-8 text-sm text-white/85 xl:flex">
             {["Outro Beach Club", "North Kiteboarding", t("Certificação IKO", "IKO certification")].map((p) => (
               <li key={p}>{p}</li>
             ))}

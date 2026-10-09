@@ -4,9 +4,8 @@ import type { Config } from "tailwindcss";
  * Paleta da TS Kite Center.
  *
  * Desde 2026-10-08, com a North (northactionsports.com) como referência de
- * elegância: o preto da North vira o mar do Cumbuco à noite (`abismo`), as
- * seções alternam escuro e claro e o amarelo da logo (`sol`) segue como
- * único acento. O turquesa entra pouco: o céu das fotos que faltam.
+ * elegância: as seções alternam azul (`oceano`, no lugar do preto da North)
+ * e claro, e o amarelo da logo (`sol`) segue como único acento. O turquesa entra pouco: o céu das fotos que faltam.
  */
 const config: Config = {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
@@ -14,8 +13,9 @@ const config: Config = {
     extend: {
       colors: {
         mar: { DEFAULT: "#06222B", 2: "#0B3440" },
-        // Fundo das seções escuras: o mar à noite, no lugar do preto da North
-        abismo: "#03161C",
+        // Fundo das seções escuras: o azul do céu que ficava no hero antes do
+        // vídeo (o topo do gradiente `ceu`). Branco sobre ele: 6,2:1
+        oceano: "#0A6A7C",
         // Fundo das seções claras que precisam se separar do branco
         nevoa: "#F3F6F6",
         sol: "#E4C73D",

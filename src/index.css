@@ -5,7 +5,7 @@
 /*
  * Padrão visual da TS Kite Center (referência: North, adaptada à marca)
  *
- *   Seções ........ alternam abismo (o mar à noite) e branco, separadas por
+ *   Seções ........ alternam oceano (o azul do céu) e branco, separadas por
  *                   linhas finas; foto de borda a borda onde houver foto
  *   Títulos ....... Plus Jakarta Sans 600, letras apertadas; a segunda
  *                   metade da frase vem apagada e mais leve (.suave)
@@ -19,7 +19,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 72px;
+    scroll-padding-top: 96px;
   }
   body {
     @apply bg-white font-sans text-mar antialiased;
@@ -42,9 +42,15 @@
   .suave {
     @apply font-normal opacity-50;
   }
-  /* Seção escura: o mar à noite */
+  /* Seção azul. Sobre ela os apagados sobem um pouco, para o contraste fechar */
   .escuro {
-    @apply bg-abismo text-white;
+    @apply bg-oceano text-white;
+  }
+  .escuro .rotulo {
+    @apply opacity-80;
+  }
+  .escuro .suave {
+    @apply opacity-[0.65];
   }
 }
 

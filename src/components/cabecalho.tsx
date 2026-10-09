@@ -13,7 +13,7 @@ export default function Cabecalho({ rotulo, children, apoio, acao }: { rotulo: s
       </div>
       {(apoio || acao) && (
         <div className="flex flex-col items-start gap-6 lg:max-w-sm lg:justify-self-end">
-          {apoio && <p className="text-[15px] leading-relaxed opacity-70 sm:text-base">{apoio}</p>}
+          {apoio && <p className="text-[15px] leading-relaxed opacity-80 sm:text-base">{apoio}</p>}
           {acao}
         </div>
       )}

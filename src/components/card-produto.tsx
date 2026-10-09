@@ -62,14 +62,20 @@ const DEITADO = {
  * pelo cinza do quadro, e o produto parece pousado nele, sem moldura e sem
  * corte. `deitado` serve para o card que sobra sozinho na última fileira de
  * duas colunas: foto ao lado do texto, ocupando a linha inteira até `ate`.
+ *
+ * `uniforme` (vitrine da página inicial): todo card tem o mesmo tamanho. O
+ * espaço da foto é quadrado e a foto entra inteira dentro dele, com respiro
+ * no fundo névoa (nada é cortado); nome e preço ficam na mesma linha em
+ * todos os cards da fileira.
  */
-export default function CardProduto({ p, deitado = false, ate = "lg" }: { p: Produto; deitado?: boolean; ate?: "md" | "lg" }) {
+export default function CardProduto({ p, deitado = false, ate = "lg", uniforme = false }: { p: Produto; deitado?: boolean; ate?: "md" | "lg"; uniforme?: boolean }) {
   const { t } = useIdioma();
   const preco = usePreco();
   const d = deitado ? DEITADO[ate] : null;
   const temPreco = p.precoCentavos !== null;
   const cores = p.cores.slice(0, 5);
-  const proporcao = proporcaoDaFoto(p.fotos[0]);
+  const proporcao = uniforme ? null : proporcaoDaFoto(p.fotos[0]);
+  const comCenario = proporcaoDaFoto(p.fotos[0]) !== null;
 
   return (
     <li className={`group relative flex ${d ? d.li : "flex-col"}`}>
@@ -83,7 +89,13 @@ export default function CardProduto({ p, deitado = false, ate = "lg" }: { p: Pro
           alt={p.nome}
           fundo="bg-nevoa"
           className="h-full w-full"
-          imgClassName={proporcao ? "transition-transform duration-700 group-hover:scale-[1.03]" : "p-[9%] mix-blend-multiply transition-transform duration-500 group-hover:scale-[1.05]"}
+          imgClassName={
+            proporcao
+              ? "transition-transform duration-700 group-hover:scale-[1.03]"
+              : comCenario
+                ? "p-[7%] transition-transform duration-500 group-hover:scale-[1.03]"
+                : "p-[9%] mix-blend-multiply transition-transform duration-500 group-hover:scale-[1.05]"
+          }
         />
         {!p.disponivel && (
           <span className="absolute left-2 top-2 rounded-full bg-mar px-2.5 py-1 text-[11px] font-semibold text-white">
@@ -98,16 +110,18 @@ export default function CardProduto({ p, deitado = false, ate = "lg" }: { p: Pro
       </div>
       <div className={`flex min-w-0 flex-1 flex-col pt-4 ${d ? d.texto : ""}`}>
         <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-maré">{t(nomeCategoria(p.categoria), CATEGORIA_EN[p.categoria])}</p>
-        <h3 title={p.nome} className="mt-1.5 line-clamp-2 text-[15px] font-semibold leading-snug tracking-[-0.02em] sm:text-lg">
+        <h3 title={p.nome} className={`mt-1.5 line-clamp-2 text-[15px] font-semibold leading-snug tracking-[-0.02em] sm:text-lg ${uniforme ? "min-h-[2lh]" : ""}`}>
           {/* O link cobre o card inteiro */}
           <a href={linkProduto(p.id)} className="outline-none after:absolute after:inset-0 after:rounded-cartao focus-visible:after:ring-2 focus-visible:after:ring-mar">
             {p.nome}
           </a>
         </h3>
-        {p.opcoes.length > 0 && (
+        {p.opcoes.length > 0 ? (
           <p className="mt-1 truncate text-[13px] text-maré">{p.opcoes.slice(0, 4).join(" · ")}{p.opcoes.length > 4 ? ` +${p.opcoes.length - 4}` : ""}</p>
+        ) : (
+          uniforme && <p aria-hidden className="mt-1 text-[13px]">&nbsp;</p>
         )}
-        <div className="mt-3 flex items-center justify-between gap-2">
+        <div className={`flex items-center justify-between gap-2 ${uniforme ? "mt-auto pt-3" : "mt-3"}`}>
           <p className={temPreco ? "whitespace-nowrap text-[1.2rem] font-semibold leading-none tracking-[-0.04em] text-mar sm:text-[1.5rem]" : "text-[15px] font-medium text-maré"}>
             {preco(p.precoCentavos)}
           </p>

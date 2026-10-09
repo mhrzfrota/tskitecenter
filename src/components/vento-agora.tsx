@@ -76,7 +76,7 @@ export default function VentoAgora() {
   return (
     <div id="vento" aria-live="polite" className="flex items-center gap-4">
       <div>
-        <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/70">
+        <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/85">
           <span className={`h-1.5 w-1.5 rounded-full ${leitura ? "animate-pulse bg-sol" : "bg-white/40"}`} />
           {t("Cumbuco agora", "Cumbuco now")}
         </p>
