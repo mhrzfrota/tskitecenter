@@ -1,60 +1,35 @@
-import { useEffect, useState } from "react";
-import { proporcaoDaFoto, type Produto } from "@/loja";
+import type { Produto } from "@/loja";
 import CardProduto from "./card-produto";
 
-type Colunas = { base: number; sm?: number; md?: number; lg?: number; xl?: number };
+type Colunas = { base: 2; md?: 3; lg?: 3 | 4; xl?: 4 };
 
-// Pontos de quebra do Tailwind, do maior para o menor
-const QUEBRAS = [["xl", 1280], ["lg", 1024], ["md", 768], ["sm", 640]] as const;
-
-function contar(c: Colunas) {
-  if (typeof window === "undefined") return c.base;
-  for (const [nome, px] of QUEBRAS) if (c[nome] && window.matchMedia(`(min-width: ${px}px)`).matches) return c[nome]!;
-  return c.base;
-}
-
-function useColunas(c: Colunas) {
-  const [n, setN] = useState(() => contar(c));
-  useEffect(() => {
-    const atualizar = () => setN(contar(c));
-    const listas = QUEBRAS.map(([, px]) => window.matchMedia(`(min-width: ${px}px)`));
-    listas.forEach((m) => m.addEventListener("change", atualizar));
-    atualizar();
-    return () => listas.forEach((m) => m.removeEventListener("change", atualizar));
-  }, [c.base, c.sm, c.md, c.lg, c.xl]); // eslint-disable-line react-hooks/exhaustive-deps
-  return n;
-}
+// Classes completas por ponto de quebra (o Tailwind não monta nome dinâmico)
+const CLASSES = {
+  md: { 3: "md:grid-cols-3" },
+  lg: { 3: "lg:grid-cols-3", 4: "lg:grid-cols-4" },
+  xl: { 4: "xl:grid-cols-4" },
+} as const;
 
 /**
- * Cada card vai para a coluna mais baixa até ali. Altura estimada em
- * larguras de coluna: a foto (1 / proporção; quadrado quando é recortada)
- * mais o texto do card.
- */
-export function distribuir(produtos: Produto[], n: number): Produto[][] {
-  const colunas: Produto[][] = Array.from({ length: n }, () => []);
-  const alturas = Array<number>(n).fill(0);
-  for (const p of produtos) {
-    const i = alturas.indexOf(Math.min(...alturas));
-    colunas[i].push(p);
-    alturas[i] += 1 / (proporcaoDaFoto(p.fotos[0]) ?? 1) + 0.6;
-  }
-  return colunas;
-}
-
-/**
- * Grade de produtos em colunas (estilo Pinterest). Cada foto mantém a
- * própria proporção, então os cards têm alturas diferentes; em colunas
- * eles se encaixam sem buraco entre um e outro.
+ * Grade de produtos com todos os cards do mesmo tamanho, alinhados em
+ * fileiras (vitrine, página da loja e relacionados). Substituiu, em
+ * 2026-10-09, as colunas estilo Pinterest em que cada foto tinha a própria
+ * proporção.
  */
 export default function GradeProdutos({ produtos, colunas, className = "" }: { produtos: Produto[]; colunas: Colunas; className?: string }) {
-  const n = useColunas(colunas);
+  const cols = [
+    "grid-cols-2",
+    colunas.md && CLASSES.md[colunas.md],
+    colunas.lg && CLASSES.lg[colunas.lg],
+    colunas.xl && CLASSES.xl[colunas.xl],
+  ]
+    .filter(Boolean)
+    .join(" ");
   return (
-    <div className={`flex items-start gap-3 sm:gap-5 ${className}`}>
-      {distribuir(produtos, n).map((lista, i) => (
-        <ul key={i} className="flex min-w-0 flex-1 flex-col gap-8 sm:gap-10">
-          {lista.map((p) => <CardProduto key={p.id} p={p} />)}
-        </ul>
+    <ul className={`grid gap-x-3 gap-y-10 sm:gap-x-5 ${cols} ${className}`}>
+      {produtos.map((p) => (
+        <CardProduto key={p.id} p={p} />
       ))}
-    </div>
+    </ul>
   );
 }

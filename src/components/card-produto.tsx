@@ -38,63 +38,36 @@ export function usePreco() {
       : formatarPreco(centavos);
 }
 
-// Classes completas por ponto de quebra (o Tailwind não monta nome dinâmico)
-const DEITADO = {
-  md: {
-    li: "col-span-2 flex-row items-stretch md:col-span-1 md:flex-col",
-    foto: "w-[calc(50%-4px)] sm:w-[calc(50%-6px)] md:w-full",
-    texto: "max-md:justify-center max-md:pl-4 max-md:pt-0",
-  },
-  lg: {
-    li: "col-span-2 flex-row items-stretch lg:col-span-1 lg:flex-col",
-    foto: "w-[calc(50%-4px)] sm:w-[calc(50%-6px)] lg:w-full",
-    texto: "max-lg:justify-center max-lg:pl-4 max-lg:pt-0",
-  },
-};
-
 /**
- * Card de produto da vitrine e da página da loja, sem caixa em volta, como os
- * da North: a foto num fundo névoa e, embaixo, categoria, nome e preço. O
- * card inteiro leva para a página do produto; o preço é o que mais aparece
- * depois da foto.
+ * Card de produto da vitrine, da página da loja e dos relacionados, sem caixa
+ * em volta, como os da North. Todo card tem o mesmo tamanho: foto quadrada e,
+ * embaixo, categoria, nome (duas linhas reservadas) e preço, alinhados em
+ * todos os cards da fileira. O card inteiro leva para a página do produto.
  *
- * As fotos chegam recortadas em fundo branco; o multiply troca esse branco
- * pelo cinza do quadro, e o produto parece pousado nele, sem moldura e sem
- * corte. `deitado` serve para o card que sobra sozinho na última fileira de
- * duas colunas: foto ao lado do texto, ocupando a linha inteira até `ate`.
- *
- * `uniforme` (vitrine da página inicial): todo card tem o mesmo tamanho. O
- * espaço da foto é quadrado e a foto entra inteira dentro dele, com respiro
- * no fundo névoa (nada é cortado); nome e preço ficam na mesma linha em
- * todos os cards da fileira.
+ * Foto com cenário (grama, folhagem) preenche o quadrado, sem faixa em volta:
+ * o recorte só tira fundo, conferido foto a foto em 2026-10-09 (nenhum
+ * produto encosta na borda do quadrado central). Foto recortada em fundo
+ * branco entra inteira, e o multiply troca o branco pelo cinza do quadro.
  */
-export default function CardProduto({ p, deitado = false, ate = "lg", uniforme = false }: { p: Produto; deitado?: boolean; ate?: "md" | "lg"; uniforme?: boolean }) {
+export default function CardProduto({ p }: { p: Produto }) {
   const { t } = useIdioma();
   const preco = usePreco();
-  const d = deitado ? DEITADO[ate] : null;
   const temPreco = p.precoCentavos !== null;
   const cores = p.cores.slice(0, 5);
-  const proporcao = uniforme ? null : proporcaoDaFoto(p.fotos[0]);
   const comCenario = proporcaoDaFoto(p.fotos[0]) !== null;
 
   return (
-    <li className={`group relative flex ${d ? d.li : "flex-col"}`}>
-      {/* Foto com cenário: o espaço tem a proporção dela, sem sobra nem corte. Recortada: quadrado, pousada no cinza */}
-      <div
-        className={`relative shrink-0 overflow-hidden rounded-cartao ${proporcao ? "" : "aspect-square"} ${d ? d.foto : ""}`}
-        style={proporcao ? { aspectRatio: String(proporcao) } : undefined}
-      >
+    <li className="group relative flex flex-col">
+      <div className="relative aspect-square shrink-0 overflow-hidden rounded-cartao">
         <FotoLoja
           id={p.fotos[0]}
           alt={p.nome}
           fundo="bg-nevoa"
           className="h-full w-full"
           imgClassName={
-            proporcao
-              ? "transition-transform duration-700 group-hover:scale-[1.03]"
-              : comCenario
-                ? "p-[7%] transition-transform duration-500 group-hover:scale-[1.03]"
-                : "p-[9%] mix-blend-multiply transition-transform duration-500 group-hover:scale-[1.05]"
+            comCenario
+              ? "!object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+              : "p-[9%] mix-blend-multiply transition-transform duration-500 group-hover:scale-[1.05]"
           }
         />
         {!p.disponivel && (
@@ -108,9 +81,9 @@ export default function CardProduto({ p, deitado = false, ate = "lg", uniforme =
           </span>
         )}
       </div>
-      <div className={`flex min-w-0 flex-1 flex-col pt-4 ${d ? d.texto : ""}`}>
+      <div className="flex min-w-0 flex-1 flex-col pt-4">
         <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-maré">{t(nomeCategoria(p.categoria), CATEGORIA_EN[p.categoria])}</p>
-        <h3 title={p.nome} className={`mt-1.5 line-clamp-2 text-[15px] font-semibold leading-snug tracking-[-0.02em] sm:text-lg ${uniforme ? "min-h-[2lh]" : ""}`}>
+        <h3 title={p.nome} className="mt-1.5 line-clamp-2 min-h-[2lh] text-[15px] font-semibold leading-snug tracking-[-0.02em] sm:text-lg">
           {/* O link cobre o card inteiro */}
           <a href={linkProduto(p.id)} className="outline-none after:absolute after:inset-0 after:rounded-cartao focus-visible:after:ring-2 focus-visible:after:ring-mar">
             {p.nome}
@@ -119,9 +92,9 @@ export default function CardProduto({ p, deitado = false, ate = "lg", uniforme =
         {p.opcoes.length > 0 ? (
           <p className="mt-1 truncate text-[13px] text-maré">{p.opcoes.slice(0, 4).join(" · ")}{p.opcoes.length > 4 ? ` +${p.opcoes.length - 4}` : ""}</p>
         ) : (
-          uniforme && <p aria-hidden className="mt-1 text-[13px]">&nbsp;</p>
+          <p aria-hidden className="mt-1 text-[13px]">&nbsp;</p>
         )}
-        <div className={`flex items-center justify-between gap-2 ${uniforme ? "mt-auto pt-3" : "mt-3"}`}>
+        <div className="mt-auto flex items-center justify-between gap-2 pt-3">
           <p className={temPreco ? "whitespace-nowrap text-[1.2rem] font-semibold leading-none tracking-[-0.04em] text-mar sm:text-[1.5rem]" : "text-[15px] font-medium text-maré"}>
             {preco(p.precoCentavos)}
           </p>
