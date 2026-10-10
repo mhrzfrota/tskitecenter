@@ -5,8 +5,8 @@ import Botao from "./botao";
 import VentoAgora from "./vento-agora";
 
 /**
- * Hero no formato da North: vídeo de borda a borda, título grande ancorado
- * embaixo à esquerda e, no pé, uma linha fina com a prova, o vento ao vivo e
+ * Hero no formato da North: vídeo de borda a borda, conteúdo centralizado
+ * no meio da tela e, no pé, uma linha fina com a prova, o vento ao vivo e
  * os parceiros, sem caixa em volta.
  *
  * Vídeo: original videots.mov (4K HEVC 60fps) convertido para H.264 30fps sem
@@ -38,32 +38,29 @@ export default function Hero() {
         <source src="/video/ts-vertical.mp4" type="video/mp4" media="(orientation: portrait)" />
         <source src="/video/ts-1080.mp4" type="video/mp4" />
       </video>
-      {/* Véu escuro por igual (o céu do pôr do sol é claro) e sombras: no topo para o menu, embaixo e à esquerda para o texto */}
-      <div aria-hidden className="absolute inset-0 -z-10 bg-black/40" />
-      <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(0,0,0,0.55)_0%,rgba(0,0,0,0)_22%,rgba(0,0,0,0)_42%,rgba(0,0,0,0.85)_100%)]" />
-      <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(0,0,0,0.55)_0%,rgba(0,0,0,0)_70%)]" />
+      {/* Véu escuro leve por igual (o céu do pôr do sol é claro) e sombras no topo para o menu e embaixo para o pé */}
+      <div aria-hidden className="absolute inset-0 -z-10 bg-black/25" />
+      <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(0,0,0,0.45)_0%,rgba(0,0,0,0)_22%,rgba(0,0,0,0)_60%,rgba(0,0,0,0.6)_100%)]" />
 
-      <div className="shell flex flex-1 flex-col justify-end pb-10 [text-shadow:0_2px_4px_rgba(0,0,0,0.35),0_4px_32px_rgba(0,0,0,0.6)] sm:pb-14">
+      <div className="shell flex flex-1 flex-col items-center justify-center pt-24 pb-10 text-center [text-shadow:0_2px_4px_rgba(0,0,0,0.35),0_4px_32px_rgba(0,0,0,0.6)]">
         <p className="rotulo entrar">{t("Praia do Cumbuco, Ceará", "Cumbuco Beach, Brazil")}</p>
         {/* Uma ideia por linha a partir do tablet; no celular o texto corre livre */}
-        <h1 className="titulo entrar mt-5 text-[2.75rem] sm:text-7xl lg:text-[5.6rem]" style={{ animationDelay: "0.08s" }}>
+        <h1 className="titulo entrar mt-4 text-[2.25rem] sm:text-5xl lg:text-[4rem]" style={{ animationDelay: "0.08s" }}>
           <span className="sm:block">{t("Aprenda kitesurf", "Learn kitesurfing")}</span>{" "}
           <span className="sm:block">{t("com quem vive isso", "with locals who live it")}</span>{" "}
           <span className="font-normal opacity-90 sm:block">{t("todos os dias", "every day")}</span>
         </h1>
-        <div className="entrar mt-8 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between" style={{ animationDelay: "0.18s" }}>
-          <p className="max-w-md text-base font-medium leading-relaxed text-white sm:text-lg">
-            {t(
-              "Set e Tomás nasceram no Cumbuco e já formaram mais de 2.000 alunos. Aulas para todos os níveis, downwind, kite trip e foil.",
-              "Set and Tomás were born in Cumbuco and have trained over 2,000 students. Lessons for every level, downwind, kite trips and foil.",
-            )}
-          </p>
-          <div className="flex flex-wrap gap-3 [text-shadow:none]">
-            <Botao href="#reservar">{t("Reservar aula", "Book a lesson")}</Botao>
-            <Botao href="#precos" variante="vidro">
-              {t("Ver preços", "See prices")}
-            </Botao>
-          </div>
+        <p className="entrar mt-6 max-w-md text-sm font-medium leading-relaxed text-white sm:text-base" style={{ animationDelay: "0.18s" }}>
+          {t(
+            "Set e Tomás nasceram no Cumbuco e já formaram mais de 2.000 alunos. Aulas para todos os níveis, downwind, kite trip e foil.",
+            "Set and Tomás were born in Cumbuco and have trained over 2,000 students. Lessons for every level, downwind, kite trips and foil.",
+          )}
+        </p>
+        <div className="entrar mt-8 flex flex-wrap justify-center gap-3 [text-shadow:none]" style={{ animationDelay: "0.24s" }}>
+          <Botao href="#reservar">{t("Reservar aula", "Book a lesson")}</Botao>
+          <Botao href="#precos" variante="vidro">
+            {t("Ver preços", "See prices")}
+          </Botao>
         </div>
       </div>
 
