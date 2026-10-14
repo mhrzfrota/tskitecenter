@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { LucideIcon } from "lucide-react";
-import { ArrowRight, Award, Banknote, CreditCard, Info, Package, PiggyBank, QrCode, Shirt, Star, UserRound } from "lucide-react";
+import { ArrowRight, Award, Banknote, Check, CreditCard, Info, Package, QrCode, Shirt, Star, UserRound } from "lucide-react";
 import { linkWhatsApp } from "@/marca";
 import Botao from "./botao";
 import Cabecalho from "./cabecalho";
@@ -17,7 +17,6 @@ type T = <V>(pt: V, en: V) => V;
  * Nada aqui é estimado: tudo sai dos valores da tabela.
  */
 const AVULSA = { horas: 2, preco: 650 };
-const POR_HORA_AVULSA = AVULSA.preco / AVULSA.horas;
 
 const AULAS = (t: T) => [
   { nome: t("Aula avulsa", "Single lesson"), resumo: t("Para experimentar", "To try it out"), ...AVULSA },
@@ -26,7 +25,6 @@ const AULAS = (t: T) => [
   { nome: t("Pacote 12 horas", "12-hour package"), resumo: t("Seis aulas de 2 horas", "Six 2-hour lessons"), horas: 12, preco: 3500 },
 ];
 type Aula = ReturnType<typeof AULAS>[number];
-const MAX_HORAS = 12;
 const MENOR_POR_HORA = Math.min(...AULAS((pt) => pt).map((a) => a.preco / a.horas));
 
 const INCLUSO = (t: T): { icone: LucideIcon; nome: string; explica: string }[] => [
@@ -88,32 +86,23 @@ const reais = (valor: number, idioma: "pt" | "en" = "pt") =>
 
 const rotuloMini = "text-[11px] font-semibold uppercase tracking-[0.16em]";
 
-/** Régua de horas: um tracinho por hora, de 0 a 12, preenchido até o pacote. */
-function ReguaHoras({ horas, escuro }: { horas: number; escuro: boolean }) {
-  return (
-    <div aria-hidden className="flex gap-1">
-      {Array.from({ length: MAX_HORAS }, (_, i) => (
-        <span
-          key={i}
-          className={`h-1.5 flex-1 rounded-full ${i < horas ? "bg-sol" : escuro ? "bg-white/20" : "bg-mar/10"}`}
-        />
-      ))}
-    </div>
-  );
-}
-
 /**
- * Card no padrão das páginas de planos de empresas grandes: nome, preço grande,
- * valor por hora em pílula, economia, botão cheio e os detalhes embaixo. O de
- * menor valor por hora vem no escuro com contorno e selo do sol, para saltar.
+ * Card no padrão das páginas de planos: nome, preço grande, valor por hora,
+ * botão cheio e a lista do que vem no plano com checks. O de menor valor por
+ * hora vem no escuro com contorno e selo do sol, para saltar.
  */
 function CardAula({ aula }: { aula: Aula }) {
   const { idioma, t } = useIdioma();
   const brl = (v: number) => reais(v, idioma);
   const porHora = aula.preco / aula.horas;
   const destaque = porHora === MENOR_POR_HORA;
-  const economia = POR_HORA_AVULSA * aula.horas - aula.preco;
+  const aulas = aula.horas / 2;
   const apoio = destaque ? "text-white/75" : "text-maré";
+  // O que vem em cada plano: as aulas do pacote e o incluso em todas (tabela da escola)
+  const itens = [
+    aulas === 1 ? t("1 aula de 2 horas", "1 two-hour lesson") : t(`${aulas} aulas de 2 horas`, `${aulas} two-hour lessons`),
+    ...INCLUSO(t).map((i) => i.nome),
+  ];
   return (
     <li
       className={`relative flex flex-col rounded-cartao p-6 sm:p-7 ${
@@ -132,27 +121,9 @@ function CardAula({ aula }: { aula: Aula }) {
       <p className="text-[19px] font-semibold tracking-[-0.02em]">{aula.nome}</p>
       <p className={`mt-1 text-sm ${apoio}`}>{aula.resumo}</p>
 
-      <div className="mt-5">
-        <ReguaHoras horas={aula.horas} escuro={destaque} />
-        <p className={`mt-2 text-xs font-medium ${apoio}`}>{aula.horas} {t("horas de aula", "hours of lessons")}</p>
-      </div>
-
       <p className="titulo mt-6 text-[2.75rem] leading-none sm:text-[3rem]">{brl(aula.preco)}</p>
-      <div className="mt-4 flex flex-wrap items-center gap-2">
-        <span className={`rounded-full px-3 py-1 text-[13px] font-semibold ${destaque ? "bg-sol text-mar" : "bg-nevoa text-mar"}`}>
-          {brl(porHora)} / {t("hora", "hour")}
-        </span>
-      </div>
-      {/* Só aparece quando existe economia de verdade (o pacote contra aulas avulsas); a avulsa reserva a altura */}
-      <p className={`mt-3 flex min-h-[1.5rem] items-center gap-1.5 text-sm font-semibold ${destaque ? "text-sol" : "text-lagoa-forte"}`}>
-        {economia > 0 ? (
-          <>
-            <PiggyBank aria-hidden className="h-4 w-4" strokeWidth={2} />
-            {t(`Economize ${brl(economia)}`, `Save ${brl(economia)}`)}
-          </>
-        ) : (
-          <span className={`font-medium ${apoio}`}>{t("Para conhecer o esporte", "A first taste of the sport")}</span>
-        )}
+      <p className={`mt-2 text-sm ${apoio}`}>
+        <span className={`font-semibold ${destaque ? "text-sol" : "text-mar"}`}>{brl(porHora)}</span> {t("por hora", "per hour")}
       </p>
 
       <a
@@ -172,22 +143,17 @@ function CardAula({ aula }: { aula: Aula }) {
         <ArrowRight aria-hidden className="h-4 w-4" />
       </a>
 
-      <dl className={`mt-6 space-y-2.5 border-t pt-5 text-sm ${destaque ? "border-white/15" : "border-mar/10"}`}>
-        <div className="flex items-center justify-between gap-2">
-          <dt className={`flex items-center gap-2 ${apoio}`}>
-            <QrCode aria-hidden className="h-4 w-4" strokeWidth={1.75} />
-            {t("No Pix", "With Pix")} <span className="text-xs">(−5%)</span>
-          </dt>
-          <dd className="font-semibold">{brl(aula.preco * 0.95)}</dd>
-        </div>
-        <div className="flex items-center justify-between gap-2">
-          <dt className={`flex items-center gap-2 ${apoio}`}>
-            <Banknote aria-hidden className="h-4 w-4" strokeWidth={1.75} />
-            {t("Em dinheiro", "In cash")} <span className="text-xs">(−10%)</span>
-          </dt>
-          <dd className="font-semibold">{brl(aula.preco * 0.9)}</dd>
-        </div>
-      </dl>
+      <p className={`mt-6 border-t pt-5 text-[13px] font-semibold ${destaque ? "border-white/15" : "border-mar/10"}`}>{t("O que está incluso", "What's included")}</p>
+      <ul className="mt-3 space-y-2.5 text-[15px]">
+        {itens.map((item) => (
+          <li key={item} className="flex items-start gap-2.5">
+            <span className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full ${destaque ? "bg-sol text-mar" : "bg-lagoa-forte/10 text-lagoa-forte"}`}>
+              <Check aria-hidden className="h-3.5 w-3.5" strokeWidth={3} />
+            </span>
+            {item}
+          </li>
+        ))}
+      </ul>
     </li>
   );
 }
@@ -203,42 +169,36 @@ function QueroAprender() {
         ))}
       </ul>
 
-      <div className="mt-6 grid gap-3 sm:gap-4 lg:grid-cols-[1.4fr_1fr]">
-        <div className="rounded-cartao bg-white p-5 ring-1 ring-inset ring-mar/10 sm:p-6">
-          <p className={`${rotuloMini} text-maré`}>{t("Incluso em todas as aulas", "Included in every lesson")}</p>
-          <ul className="mt-5 grid gap-5 sm:grid-cols-2">
-            {INCLUSO(t).map(({ icone: Icone, nome, explica }) => (
-              <li key={nome} className="flex gap-3">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-nevoa">
-                  <Icone aria-hidden className="h-5 w-5" strokeWidth={1.75} />
-                </span>
-                <div>
-                  <p className="font-medium tracking-[-0.01em]">{nome}</p>
-                  <p className="text-sm text-maré">{explica}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="rounded-cartao bg-white p-5 ring-1 ring-inset ring-mar/10 sm:p-6">
-          <p className={`${rotuloMini} text-maré`}>{t("Formas de pagamento", "Payment options")}</p>
-          <ul className="mt-3 divide-y divide-mar/10">
-            {PAGAMENTO(t).map(({ icone: Icone, forma, detalhe, desconto }) => (
-              <li key={forma} className="flex items-center gap-3 py-3">
-                <Icone aria-hidden className="h-5 w-5 shrink-0 text-maré" strokeWidth={1.75} />
-                <span className="flex-1 text-[15px]">{forma}</span>
-                <span
-                  className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ${
-                    desconto ? "bg-lagoa-forte/10 text-lagoa-forte" : "bg-nevoa text-maré"
-                  }`}
-                >
-                  {detalhe}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
+      {/* Formas de pagamento: o desconto grande, que é o que a pessoa procura */}
+      <div className="mt-10">
+        <p className={`${rotuloMini} text-maré`}>{t("Formas de pagamento", "Payment options")}</p>
+        <ul className="mt-4 grid gap-3 sm:grid-cols-3 sm:gap-4">
+          {PAGAMENTO(t).map(({ icone: Icone, forma, desconto }) => (
+            <li
+              key={forma}
+              className={`flex items-center gap-4 rounded-cartao p-5 sm:flex-col sm:items-start sm:p-6 ${
+                desconto ? "bg-nevoa" : "bg-white ring-1 ring-inset ring-mar/10"
+              }`}
+            >
+              <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-full ${desconto ? "bg-sol text-mar" : "bg-nevoa text-mar"}`}>
+                <Icone aria-hidden className="h-6 w-6" strokeWidth={1.75} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-[17px] font-semibold tracking-[-0.02em]">{forma}</p>
+                <p className={`mt-0.5 text-sm ${desconto ? "text-mar" : "text-maré"}`}>
+                  {desconto ? (
+                    <>
+                      <span className="titulo text-[1.6rem] leading-none text-lagoa-forte">{Math.round(desconto * 100)}%</span>{" "}
+                      {t("de desconto", "off")}
+                    </>
+                  ) : (
+                    t("Valor da tabela", "List price")
+                  )}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </>
   );

@@ -10,6 +10,8 @@ type Categoria = {
   texto: string;
   foto: string;
   src?: string;
+  /** object-position da foto no card (o card tem altura fixa e cresce no hover) */
+  posicao?: string;
   botao: string;
   href: string;
   externo?: boolean;
@@ -53,8 +55,9 @@ const CATEGORIAS = (t: <T>(pt: T, en: T) => T): Categoria[] => [
       "Circuito dos Ventos: viagem guiada pelo litoral cearense, velejando de spot em spot.",
       "Circuito dos Ventos: a guided trip along the Ceará coast, riding from spot to spot.",
     ),
-    foto: t("Instrutor ajustando a barra do aluno na areia", "Instructor adjusting the student's bar on the sand"),
-    src: "/fotos/aula-instrutor-barra.webp",
+    foto: t("Instrutor e aluno com a kite no ar na beira do mar, prancha na areia", "Instructor and student with the kite in the air at the water's edge, board on the sand"),
+    src: "/fotos/aula-kite-praia.webp",
+    posicao: "30% 55%",
     botao: t("Saiba mais", "Learn more"),
     href: linkWhatsApp(t("Olá! Quero saber sobre a Kite Trip, o Circuito dos Ventos.", "Hi! I'd like to know about the Kite Trip (Circuito dos Ventos).")),
     externo: true,
@@ -65,7 +68,9 @@ const CATEGORIAS = (t: <T>(pt: T, en: T) => T): Categoria[] => [
       "Aulas personalizadas de controle da asa, equilíbrio e transições.",
       "Personalized lessons on wing control, balance and transitions.",
     ),
-    foto: t("Aluno de wingfoil sobre a água", "Wingfoil student on the water"),
+    foto: t("Instrutor e alunos de wingfoil com a asa na areia do Cumbuco", "Instructor and wingfoil students holding the wing on Cumbuco beach"),
+    src: "/fotos/wingfoil-asa.webp",
+    posicao: "40% center",
     botao: t("Saiba mais", "Learn more"),
     href: linkWhatsApp(t("Olá! Quero saber sobre as aulas de wingfoil e kite foil.", "Hi! I'd like to know about wingfoil and kite foil lessons.")),
     externo: true,
@@ -76,7 +81,9 @@ const CATEGORIAS = (t: <T>(pt: T, en: T) => T): Categoria[] => [
       "Kites, pranchas e acessórios com a parceria North Kiteboarding, e quem entende para indicar.",
       "Kites, boards and accessories through our North Kiteboarding partnership, with experts to advise you.",
     ),
-    foto: t("Vitrine da loja com kites e pranchas", "Shop display with kites and boards"),
+    foto: t("Kite Duotone aberto no gramado, perto da praia", "Duotone kite laid out on the lawn by the beach"),
+    src: "/fotos/loja-kite-gramado.webp",
+    posicao: "45% 60%",
     botao: t("Ver produtos", "See products"),
     href: "#loja",
   },
@@ -100,7 +107,7 @@ function Card({ c, destaque, revelar, className = "" }: { c: Categoria; destaque
       >
         {/* Foto ocupando o card inteiro, com zoom lento no hover */}
         <div className="absolute inset-0 -z-10 transition-transform duration-[1400ms] ease-out group-hover:scale-[1.06] motion-reduce:transition-none">
-          <Foto tom="ceu" aviso="topo" descricao={c.foto} src={c.src} />
+          <Foto tom="ceu" aviso="topo" descricao={c.foto} src={c.src} posicao={c.posicao} />
         </div>
         <div
           aria-hidden

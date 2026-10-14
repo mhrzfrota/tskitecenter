@@ -5,6 +5,8 @@ type Props = {
   /** O que a foto precisa mostrar. Vira o alt quando a foto real chegar. */
   descricao: string;
   src?: string;
+  /** object-position, para escolher o que fica no quadro quando o card corta a foto */
+  posicao?: string;
   className?: string;
   /** `ceu` para os painéis grandes com texto branco por cima */
   tom?: "claro" | "ceu";
@@ -30,10 +32,10 @@ const AVISO = {
   nenhum: "items-center [&>div]:hidden",
 };
 
-export default function Foto({ descricao, src, className = "", tom = "claro", aviso = "centro" }: Props) {
+export default function Foto({ descricao, src, posicao, className = "", tom = "claro", aviso = "centro" }: Props) {
   const { t } = useIdioma();
   if (src) {
-    return <img src={src} alt={descricao} loading="lazy" decoding="async" className={`h-full w-full object-cover ${className}`} />;
+    return <img src={src} alt={descricao} loading="lazy" decoding="async" style={posicao ? { objectPosition: posicao } : undefined} className={`h-full w-full object-cover ${className}`} />;
   }
   const ceu = tom === "ceu";
   return (

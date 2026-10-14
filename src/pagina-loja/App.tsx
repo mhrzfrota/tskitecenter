@@ -117,7 +117,7 @@ export default function PaginaLoja() {
             src="/fotos/aula-kite-reach.webp"
             alt=""
             aria-hidden
-            fetchPriority="high"
+            {...{ fetchpriority: "high" }}
             className="absolute inset-0 -z-20 h-full w-full object-cover object-[78%_center]"
           />
           {/* Véu: escuro embaixo no celular; da esquerda para a direita no computador, deixando a kite aparecer */}
