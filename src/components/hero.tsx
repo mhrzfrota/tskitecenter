@@ -44,17 +44,18 @@ export default function Hero() {
 
       <div className="shell flex flex-1 flex-col items-center justify-center pt-24 pb-10 text-center [text-shadow:0_2px_4px_rgba(0,0,0,0.35),0_4px_32px_rgba(0,0,0,0.6)]">
         <p className="rotulo entrar">{t("Praia do Cumbuco, Ceará", "Cumbuco Beach, Brazil")}</p>
-        {/* Uma ideia por linha a partir do tablet; no celular o texto corre livre */}
-        <h1 className="titulo entrar mt-4 text-[2.25rem] sm:text-5xl lg:text-[4rem]" style={{ animationDelay: "0.08s" }}>
-          <span className="sm:block">{t("Aprenda kitesurf", "Learn kitesurfing")}</span>{" "}
-          <span className="sm:block">{t("com quem vive isso", "with locals who live it")}</span>{" "}
-          <span className="font-normal opacity-90 sm:block">{t("todos os dias", "every day")}</span>
+        {/* Duas linhas, uma quebra fixa por linha; no celular a fonte acompanha a largura para caber (se não couber, quebra sem vazar) */}
+        <h1 className="titulo entrar mt-4 text-[min(2.25rem,calc((100vw_-_40px)/12.4))] sm:text-[2.75rem] md:text-5xl lg:text-[4rem]" style={{ animationDelay: "0.08s" }}>
+          <span className="block sm:whitespace-nowrap">{t("Aprenda kitesurf com quem", "Learn kitesurfing with locals")}</span>{" "}
+          <span className="block sm:whitespace-nowrap">
+            {t("vive isso", "who live it")} <span className="font-normal opacity-90">{t("todos os dias", "every day")}</span>
+          </span>
         </h1>
-        <p className="entrar mt-6 max-w-md text-sm font-medium leading-relaxed text-white sm:text-base" style={{ animationDelay: "0.18s" }}>
-          {t(
-            "Set e Tomás nasceram no Cumbuco e já formaram mais de 2.000 alunos. Aulas para todos os níveis, downwind, kite trip e foil.",
-            "Set and Tomás were born in Cumbuco and have trained over 2,000 students. Lessons for every level, downwind, kite trips and foil.",
-          )}
+        <p className="entrar mt-6 max-w-md text-sm font-medium leading-relaxed text-white sm:max-w-none sm:text-[15px] md:text-base" style={{ animationDelay: "0.18s" }}>
+          <span className="sm:block">
+            {t("Set e Tomás nasceram no Cumbuco e já formaram mais de 2.000 alunos.", "Set and Tomás were born in Cumbuco and have trained over 2,000 students.")}
+          </span>{" "}
+          <span className="sm:block">{t("Aulas para todos os níveis, downwind, kite trip e foil.", "Lessons for every level, downwind, kite trips and foil.")}</span>
         </p>
         <div className="entrar mt-8 flex flex-wrap justify-center gap-3 [text-shadow:none]" style={{ animationDelay: "0.24s" }}>
           <Botao href="#reservar">{t("Reservar aula", "Book a lesson")}</Botao>

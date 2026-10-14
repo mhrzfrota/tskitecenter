@@ -47,7 +47,7 @@ export default function Navbar({ pagina = "inicio" }: { pagina?: Pagina }) {
     return () => window.removeEventListener("keydown", esc);
   }, []);
 
-  const claro = rolou || aberto || pagina === "produto";
+  const claro = rolou || aberto;
 
   return (
     <header className="fixed inset-x-0 top-3 z-40 px-3 sm:top-4 sm:px-4">

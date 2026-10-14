@@ -16,6 +16,8 @@ const config: Config = {
         // Fundo das seções escuras: o azul do céu que ficava no hero antes do
         // vídeo (o topo do gradiente `ceu`). Branco sobre ele: 6,2:1
         oceano: "#0A6A7C",
+        // O mar à noite: rodapé e topos das páginas internas (branco sobre ele: 17:1)
+        abismo: "#03161C",
         // Fundo das seções claras que precisam se separar do branco
         nevoa: "#F3F6F6",
         sol: "#E4C73D",

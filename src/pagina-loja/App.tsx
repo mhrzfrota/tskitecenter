@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Search, X } from "lucide-react";
+import { ChevronRight, Search, X } from "lucide-react";
 import { linkWhatsApp } from "@/marca";
 import { CATEGORIAS, loja, type CategoriaId, type Produto } from "@/loja";
 import { useIdioma } from "@/idioma";
@@ -111,21 +111,41 @@ export default function PaginaLoja() {
     <>
       <Navbar pagina="loja" />
       <main>
-        {/* Topo escuro de borda a borda, emendado na barra, como as páginas de coleção da North */}
-        <section className="escuro">
-          <div>
-            <div className="shell pb-12 pt-32 sm:pb-16 sm:pt-40">
-              <p className="rotulo">TS Kite Shop</p>
-              <h1 className="titulo entrar mt-4 max-w-4xl text-[2.5rem] sm:text-6xl lg:text-[4.5rem]">
-                {t("Todos os produtos", "All products")} <span className="suave">{t("da loja", "in the shop")}</span>
-              </h1>
-              <p className="entrar mt-5 max-w-xl leading-relaxed text-white/70" style={{ animationDelay: "0.12s" }}>
-                {t(
-                  "Kites, pranchas, foil e acessórios com a parceria North Kiteboarding. Na dúvida do tamanho, a equipe indica pelo WhatsApp.",
-                  "Kites, boards, foil and accessories through our North Kiteboarding partnership. Not sure about sizes? The team will advise you on WhatsApp.",
-                )}
-              </p>
-            </div>
+        {/* Topo com foto (a kite North Reach da escola) sob um véu do mar à noite, emendado na barra */}
+        <section className="relative isolate overflow-hidden bg-abismo text-white">
+          <img
+            src="/fotos/aula-kite-reach.webp"
+            alt=""
+            aria-hidden
+            fetchPriority="high"
+            className="absolute inset-0 -z-20 h-full w-full object-cover object-[78%_center]"
+          />
+          {/* Véu: escuro embaixo no celular; da esquerda para a direita no computador, deixando a kite aparecer */}
+          <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(3,22,28,0.6)_0%,rgba(3,22,28,0.78)_55%,rgba(3,22,28,0.95)_100%)] md:bg-[linear-gradient(90deg,rgba(3,22,28,0.94)_0%,rgba(3,22,28,0.78)_42%,rgba(3,22,28,0.2)_100%)]" />
+          <div className="shell pb-14 pt-32 sm:pb-20 sm:pt-40 lg:pb-24 lg:pt-44">
+            <nav aria-label={t("Você está em", "You are here")} className="flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-white/75">
+              <a href="/" className="hover:text-white">{t("Início", "Home")}</a>
+              <ChevronRight aria-hidden className="h-3 w-3" />
+              <span className="text-white">TS Kite Shop</span>
+            </nav>
+            <h1 className="titulo entrar mt-5 max-w-4xl text-[2.5rem] sm:text-6xl lg:text-[4.5rem]">
+              {t("Todos os produtos", "All products")} <span className="font-normal text-white/70">{t("da loja", "in the shop")}</span>
+            </h1>
+            <p className="entrar mt-5 max-w-xl leading-relaxed text-white/90" style={{ animationDelay: "0.12s" }}>
+              {t(
+                "Kites, pranchas, foil e acessórios com a parceria North Kiteboarding. Na dúvida do tamanho, a equipe indica pelo WhatsApp.",
+                "Kites, boards, foil and accessories through our North Kiteboarding partnership. Not sure about sizes? The team will advise you on WhatsApp.",
+              )}
+            </p>
+            <ul className="entrar mt-8 flex flex-wrap gap-2 text-[13px] font-semibold" style={{ animationDelay: "0.18s" }}>
+              {total > 0 && (
+                <li className="rounded-full bg-sol px-3.5 py-1.5 text-mar">
+                  {total} {t(total === 1 ? "produto" : "produtos", total === 1 ? "product" : "products")}
+                </li>
+              )}
+              <li className="rounded-full bg-white/10 px-3.5 py-1.5 ring-1 ring-inset ring-white/25 backdrop-blur-sm">{t("Parceria North Kiteboarding", "North Kiteboarding partner")}</li>
+              <li className="rounded-full bg-white/10 px-3.5 py-1.5 ring-1 ring-inset ring-white/25 backdrop-blur-sm">{t("Compra pelo WhatsApp", "Buy on WhatsApp")}</li>
+            </ul>
           </div>
         </section>
 

@@ -47,9 +47,11 @@ export default function App() {
   return (
     <ProvedorIdioma meta={meta}>
       <Navbar pagina="produto" />
-      <main className="pt-24 sm:pt-28">
-        {estado.tipo === "carregando" && <Carregando />}
-        {estado.tipo === "nao-encontrado" && <NaoEncontrado />}
+      <main>
+        {/* Sem produto carregado ainda, a faixa escura vazia mantém o menu (transparente) legível */}
+        {estado.tipo !== "ok" && <div aria-hidden className="h-24 bg-abismo sm:h-28" />}
+        {estado.tipo === "carregando" && <div className="pt-8"><Carregando /></div>}
+        {estado.tipo === "nao-encontrado" && <div className="pt-8"><NaoEncontrado /></div>}
         {estado.tipo === "ok" && <Pagina key={estado.produto.id} p={estado.produto} todos={estado.todos} />}
       </main>
       <Rodape pagina="produto" />
@@ -100,17 +102,21 @@ function Pagina({ p, todos }: { p: Produto; todos: Produto[] }) {
 
   return (
     <>
-      <div className="shell">
-        {/* Caminho */}
-        <nav aria-label={t("Você está em", "You are here")} className="flex flex-wrap items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-maré">
-          <a href="/loja" className="hover:text-mar">{t("Loja", "Shop")}</a>
-          <ChevronRight aria-hidden className="h-3 w-3" />
-          <a href={`/loja?categoria=${p.categoria}`} className="hover:text-mar">{t(nomeCategoria(p.categoria), CATEGORIA_EN_PLURAL[p.categoria])}</a>
-          <ChevronRight aria-hidden className="h-3 w-3" />
-          <span className="max-w-[50vw] truncate text-mar">{p.nome}</span>
-        </nav>
+      {/* Faixa escura no topo, como na loja: o menu fica transparente sobre ela e o caminho ganha respiro */}
+      <div className="bg-abismo text-white">
+        <div className="shell pb-6 pt-28 sm:pb-7 sm:pt-32">
+          <nav aria-label={t("Você está em", "You are here")} className="flex flex-wrap items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-white/75">
+            <a href="/loja" className="hover:text-white">{t("Loja", "Shop")}</a>
+            <ChevronRight aria-hidden className="h-3 w-3" />
+            <a href={`/loja?categoria=${p.categoria}`} className="hover:text-white">{t(nomeCategoria(p.categoria), CATEGORIA_EN_PLURAL[p.categoria])}</a>
+            <ChevronRight aria-hidden className="h-3 w-3" />
+            <span className="max-w-[50vw] truncate text-white">{p.nome}</span>
+          </nav>
+        </div>
+      </div>
 
-        <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-14">
+      <div className="shell pt-8 sm:pt-10">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-14">
           {/* Galeria: miniaturas na lateral (no celular, embaixo) */}
           <div className="flex flex-col-reverse gap-3 lg:sticky lg:top-28 lg:flex-row lg:self-start">
             {fotos.length > 1 && (
