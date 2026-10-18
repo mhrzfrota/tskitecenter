@@ -74,12 +74,6 @@ export default function Previsao() {
           ))}
           <Mare />
         </div>
-        <p className="mt-6 max-w-xl text-sm leading-relaxed text-maré">
-          {t(
-            "Na dúvida se o dia está bom para a sua aula, fale com a equipe: a gente olha a água por você.",
-            "Not sure if it's a good day for your lesson? Ask the team: we'll check the water for you.",
-          )}
-        </p>
       </div>
     </section>
   );

@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { linkWhatsApp } from "@/marca";
 import { useIdioma } from "@/idioma";
-import Cabecalho from "./cabecalho";
 import Foto from "./foto";
 
 type Categoria = {
@@ -43,8 +42,9 @@ const CATEGORIAS = (t: <T>(pt: T, en: T) => T): Categoria[] => [
       "Lagoinha → Guajiru e Pecém → Taíba, com 4x4 de apoio, resgate e suporte na água e em terra.",
       "Lagoinha → Guajiru and Pecém → Taíba, with a 4x4 support car, rescue and backup on the water and on land.",
     ),
-    foto: t("Instrutor e aluno com o kite no ar, prontos para entrar no mar", "Instructor and student with the kite in the air, ready to hit the water"),
-    src: "/fotos/aula-kite-no-ar.webp",
+    foto: t("Kitesurfista velejando no mar aberto, levantando espuma com a prancha", "Kitesurfer riding the open sea, kicking up spray with the board"),
+    src: "/fotos/downwind.webp",
+    posicao: "50% 60%",
     botao: t("Saiba mais", "Learn more"),
     href: linkWhatsApp(t("Olá! Quero saber sobre o downwind.", "Hi! I'd like to know about the downwind.")),
     externo: true,
@@ -182,19 +182,11 @@ export default function Categorias() {
     if (el && alvo) el.scrollTo({ left: alvo.offsetLeft - el.offsetLeft - 20, behavior: "smooth" });
   }
 
+  // Só os cards, sem título, sobre fundo branco: no desktop a seção é uma moldura de 8 px em volta deles, como uma galeria
   return (
-    <section id="servicos" className="escuro py-20 sm:py-28">
-      <div className="shell">
-        <Cabecalho
-          rotulo={t("Serviços", "Services")}
-          apoio={t("Escola, viagem, foil e loja no mesmo lugar, na Praia do Cumbuco.", "School, trips, foil and shop in one place, on Cumbuco Beach.")}
-        >
-          {t("Tudo o que a TS oferece", "Everything TS offers")} <span className="suave">{t("dentro e fora da água", "on and off the water")}</span>
-        </Cabecalho>
-      </div>
-
+    <section id="servicos" aria-label={t("Serviços", "Services")} className="bg-white pb-10 pt-5 md:py-2">
       {/* Tablet e desktop: duas fileiras quase de borda a borda; o card sob o mouse se expande */}
-      <div ref={desktop.ref} className="mt-14 hidden flex-col gap-2 px-2 md:flex sm:mt-16">
+      <div ref={desktop.ref} className="hidden flex-col gap-2 px-2 md:flex">
         {FILEIRAS.map((f, fi) => (
           <ul key={fi} className={`flex gap-2 ${f.altura}`}>
             {f.itens.map((i, k) => (
@@ -213,7 +205,7 @@ export default function Categorias() {
       </div>
 
       {/* Celular: carrossel com cards grandes e indicador */}
-      <div className="mt-12 md:hidden">
+      <div className="md:hidden">
         <ul
           ref={celular.ref}
           onScroll={aoRolar}
@@ -238,7 +230,7 @@ export default function Categorias() {
               onClick={() => irPara(i)}
               className="flex h-6 items-center"
             >
-              <span className={`block h-0.5 transition-all duration-500 ${atual === i ? "w-8 bg-sol" : "w-4 bg-white/25"}`} />
+              <span className={`block h-0.5 transition-all duration-500 ${atual === i ? "w-8 bg-mar" : "w-4 bg-mar/20"}`} />
             </button>
           ))}
         </div>
