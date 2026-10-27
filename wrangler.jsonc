@@ -1,0 +1,14 @@
+// Deploy na Cloudflare (Workers com arquivos estáticos). Com este arquivo, o
+// `wrangler deploy` só publica o dist/ e não tenta configurar o Vite sozinho
+// (a configuração automática exige Vite 6, e o projeto está no 5).
+// Rotas limpas: /loja e /admin servem loja.html e admin.html (html_handling);
+// /produto/<id> e os cabeçalhos ficam em public/_redirects e public/_headers,
+// os mesmos do vercel.json.
+{
+  "name": "tskitecenter",
+  "compatibility_date": "2025-10-01",
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash"
+  }
+}

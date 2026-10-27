@@ -13,3 +13,6 @@ dist
 /fotokiteshop.png
 /fotowing.png
 /downwind.png
+
+# Cloudflare (wrangler dev)
+.wrangler
